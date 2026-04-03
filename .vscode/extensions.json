@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "editorconfig.editorconfig",
+    "streetsidesoftware.code-spell-checker",
+    "eamodio.gitlens",
+    "dbaeumer.vscode-eslint",
+    "ms-vscode.vscode-json"
+  ],
+  "unwantedRecommendations": ["hookyqr.beautify"]
+}
