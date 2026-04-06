@@ -24,7 +24,7 @@
     "lint-staged": "latest",
     "prettier": "latest",
     "prettier-plugin-jsdoc": "latest",
-    "vite": "^8.0.3",
+    "vite": "^8.0.5",
     "vitest": "^4.1.2"
   },
   "lint-staged": {
