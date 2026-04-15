@@ -1,78 +1,131 @@
-import { Label, TextInputMask } from "@trussworks/react-uswds";
-import njStateSeal from "@newjersey/njwds/dist/img/nj_state_seal.png";
+import { Label, Logo, TextInputMask } from "@trussworks/react-uswds";
+import { HorizontalDivider } from "./components/HorizontalDivider";
+import { LandingPageFaq } from "./components/LandingPageFaq";
 
-/**
- * Renders the full landing page for the NJ Property Tax Relief status checker.
- *
- * The page introduces the application-review process to residents and displays
- * a USWDS step indicator so they can orient themselves within that process
- * before checking their individual application status.
- */
 export const LandingPage = () => (
   <>
-      <a className="usa-skipnav" href="#main-content">
-        Skip to main content
-      </a>
-      <header className="nj-banner" aria-label="Official government website">
-        <div className="nj-banner__header">
-          <div className="grid-container">
-            <div className="nj-banner__inner">
-              <div>
-                <img src={njStateSeal} className="nj-banner__header-seal" alt="NJ flag" />
+    <main id="main-content">
+      <section className="usa-section">
+        <div className="grid-container">
+          <div>
+            <Logo
+              size="slim"
+              image={
+                <img src="/img/treasury_seal.jpg" width={100} height={100} alt="Treasury logo" />
+              }
+            ></Logo>
+            <h1 className="font-heading-3xl">
+              Property Tax Relief
+              <br />
+              Status Checker
+            </h1>
+          </div>
+          <div className="grid-row grid-gap margin-top-5 margin-bottom-10">
+            <div className="tablet:grid-col-5 border border-dashed">
+              <h2 className="font-heading-l">Enter your Social Security Number and Zip Code</h2>
+              <Label htmlFor="ssn" requiredMarker={true}>
+                SSN/ITIN
+              </Label>
+              <div className="tablet:grid-col-10">
+                <TextInputMask
+                  name="ssn"
+                  id="ssn"
+                  type="text"
+                  mask="___-__-____"
+                  pattern="\d{3}-\d{2}-\d{4}"
+                  required={true}
+                ></TextInputMask>
               </div>
-              <div className="grid-col-fill">
-                <a href="https://nj.gov" target="_blank" rel="noopener">
-                  <span className="usa-sr-only">opens in a new tab.</span>
-                  Official Site of the State of New Jersey
-                </a>
+
+              <Label htmlFor="zipCode" requiredMarker={true}>
+                Zip Code
+              </Label>
+              <div className="tablet:grid-col-10">
+                <TextInputMask
+                  name="zipCode"
+                  id="zipCode"
+                  type="text"
+                  mask="_____"
+                  pattern="\d{5}"
+                  required={true}
+                ></TextInputMask>
               </div>
-              <div className="grid-col-auto">
-                <div className="text-white">
-                  <ul>
-                    <li>
-                      <a href="https://nj.gov/governor/" target="_blank" rel="noopener">
-                        Governor Mikie Sherrill &bull; Lt. Governor Dr. Dale G. Caldwell
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://nj.gov/subscribe/" target="_blank" rel="noopener">
-                        <svg
-                          className="usa-icon nj-banner__mail-icon bottom-neg-2px margin-right-05"
-                          aria-hidden="true"
-                          focusable="false"
-                          role="img"
-                        >
-                          <use href={`/public/img/sprite.svg#mail`}></use>
-                        </svg>
-                        <span className="usa-sr-only">opens in a new tab.</span>
-                        Get Updates
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+              <a
+                href="status"
+                className="usa-button usa-button--small margin-top-5 margin-bottom-3"
+              >
+                Check Status
+              </a>
+            </div>
+            <div className="tablet:grid-col-1"></div>
+            <div className="tablet:grid-col-5">
+              <h2 className="font-heading-md">
+                Check your application status and access other property tax resources
+              </h2>
+              <div className="display-flex flex-align-center margin-bottom-3">
+                <img
+                  className="margin-right-3"
+                  src="/img/clock_rewind.svg"
+                  alt=""
+                  aria-hidden="true"
+                  width={40}
+                  height={40}
+                />
+                <p className="margin-y-0">
+                  <strong>Application status:</strong> Check your claim status and identity
+                  verification status
+                </p>
+              </div>
+              <div className="display-flex flex-align-center margin-bottom-3">
+                <img
+                  className="margin-right-3"
+                  src="/img/dollar_sign.svg"
+                  alt=""
+                  aria-hidden="true"
+                  width={40}
+                  height={40}
+                />
+                <p className="margin-y-0">
+                  <strong>Check tracer:</strong> Request for a check to be stopped due to fraud or
+                  change of mailing address
+                </p>
+              </div>
+              <div className="display-flex flex-align-center margin-bottom-3">
+                <img
+                  className="margin-right-3"
+                  src="/img/folder.svg"
+                  alt=""
+                  aria-hidden="true"
+                  width={40}
+                  height={40}
+                />
+                <p className="margin-y-0">
+                  <strong>Prior year tax records:</strong> Find previous property tax year records
+                </p>
+              </div>
+              <div className="display-flex flex-align-center margin-bottom-3">
+                <img
+                  className="margin-right-3"
+                  src="/img/upload.svg"
+                  alt=""
+                  aria-hidden="true"
+                  width={40}
+                  height={40}
+                />
+                <p className="margin-y-0">
+                  <strong>Upload documents:</strong> Send in requested documents to progress your
+                  application
+                </p>
               </div>
             </div>
           </div>
-        </div>
-      </header>
-  <main id="main-content">
-    <section className="usa-section">
-      <div className="grid-container">
-        <h1>NJ Property Tax Relief Status Checker</h1>
-          <Label htmlFor="ssn" requiredMarker={true}>Social Security Number</Label>
-          <TextInputMask name="ssn" id="ssn" type="text" mask="___-__-____" pattern="\d{3}-\d{2}-\d{4}" required={true}></TextInputMask>
-
-          <Label htmlFor="zipCode" requiredMarker={true}>Zip code</Label>
-          <TextInputMask name="zipCode" id="zipCode" type="text" mask="_____" pattern="\d{5}" required={true}></TextInputMask>
-        <div className="grid-row grid-gap margin-top-5">
-          <div className="tablet:grid-col-6">
-            <a href="#check-status" className="usa-button usa-button--big">
-              Check My Application Status
-            </a>
+          <HorizontalDivider />
+          <div className="grid-row grid-gap margin-top-5">
+            <h2 className="font-heading-l">Frequently Asked Questions (FAQs)</h2>
+            <LandingPageFaq headingLevel="h3" />
           </div>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
   </>
 );
