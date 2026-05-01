@@ -34,7 +34,9 @@
     "@newjersey/njwds": "^2.9.1",
     "@trussworks/react-uswds": "^11.0.0",
     "@vitejs/plugin-react": "^6.0.1",
+    "jsdom": "^29.1.1",
     "react": "^19.2.4",
-    "react-hook-form": "^7.72.1"
+    "react-hook-form": "^7.72.1",
+    "react-router-dom": "^7.14.1"
   }
 }

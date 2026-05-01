@@ -1,0 +1,19 @@
+.horizontal-divider {
+  box-sizing: content-box;
+  height: 0;
+  border-style: inset;
+  border-width: 1px;
+  color: gray;
+}
+
+.footer-bottom a:visited {
+  color: white;
+}
+
+.usa-alert__body {
+  align-items: center;
+}
+
+.usa-alert__text {
+  max-width: fit-content;
+}
