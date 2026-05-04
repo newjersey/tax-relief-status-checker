@@ -1,5 +1,6 @@
-import { Accordion, type HeadingLevel } from "@trussworks/react-uswds";
-import type { AccordionItemProps } from "/node_modules/@trussworks/react-uswds/lib/components/Accordion/Accordion";
+import { Accordion, type HeadingLevel, type AccordionProps } from "@trussworks/react-uswds";
+
+type AccordionItemProps = AccordionProps["items"][number];
 
 export const LandingPageFaq = (props: { headingLevel: HeadingLevel }) => {
   const faqContent: AccordionItemProps[] = [
