@@ -20,6 +20,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@testing-library/react": "^16.3.2",
     "husky": "latest",
     "lint-staged": "latest",
     "prettier": "latest",
