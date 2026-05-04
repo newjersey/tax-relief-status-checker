@@ -29,6 +29,7 @@ export const NjFooter = () => {
                           width="40"
                           height="40"
                           fill="white"
+                          aria-label="Facebook"
                         >
                           <use href="/img/sprite.svg#facebook"></use>
                         </svg>
@@ -47,6 +48,7 @@ export const NjFooter = () => {
                           width="40"
                           height="40"
                           fill="white"
+                          aria-label="Twitter"
                         >
                           <use href="/img/sprite.svg#twitter"></use>
                         </svg>
@@ -65,6 +67,7 @@ export const NjFooter = () => {
                           width="40"
                           height="40"
                           fill="white"
+                          aria-label="YouTube"
                         >
                           <use href="/img/sprite.svg#youtube"></use>
                         </svg>
@@ -83,6 +86,7 @@ export const NjFooter = () => {
                           width="40"
                           height="40"
                           fill="white"
+                          aria-label="Instagram"
                         >
                           <use href="/img/sprite.svg#instagram"></use>
                         </svg>
