@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "test": "vitest",
+    "test": "vitest run && cd lambda && npm run test",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "prepare": "husky"

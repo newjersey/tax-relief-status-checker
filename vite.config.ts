@@ -10,6 +10,7 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: "./vitest.setup.ts",
+    exclude: ["lambda/**", "node_modules/**"],
   },
   server: {
     port: 3000,
