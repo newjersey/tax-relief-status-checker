@@ -7,9 +7,9 @@
   "author": "john@innovation.nj.gov",
   "license": "MIT",
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --platform=node --target=node20 --outfile=dist/index.mjs --format=esm --external:oracledb",
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node20 --outfile=dist/index.mjs --format=esm --external:oracledb --external:@aws-sdk/*",
     "test": "vitest run",
-    "package": "npm run build && cp package.json dist/ && cp -r config dist/ && cd dist && npm ci --omit=dev && zip -r ../lambda.zip . && cd .. && rm -rf dist"
+    "package": "npm run build && cp package.json package-lock.json dist/ && cp -r config dist/ && cd dist && npm ci --omit=dev && zip -r ../lambda.zip . && cd .. && rm -rf dist"
   },
   "dependencies": {
     "oracledb": "^6.0"
@@ -19,7 +19,7 @@
     "@types/aws-lambda": "^8.10.145",
     "@types/node": "^25.9.1",
     "aws-sdk-client-mock": "^4.1.0",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.28.0",
     "typescript": "^5.7.0",
     "vitest": "^3.1.0"
   }
