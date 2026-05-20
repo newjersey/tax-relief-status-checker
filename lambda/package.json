@@ -1,19 +1,26 @@
 {
   "name": "get-ptr-status-api",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "description": "API to get status of Property Tax Relief programs",
   "author": "john@innovation.nj.gov",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
-    "package": "rm -rf dist && mkdir dist && cp index.js package.json package-lock.json dist/ && cp -r config dist/ && cd dist && npm ci --omit=dev && zip -r ../lambda.zip . && cd .. && rm -rf dist"
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node20 --outfile=dist/index.mjs --format=esm --external:oracledb",
+    "test": "vitest run",
+    "package": "npm run build && cp package.json dist/ && cp -r config dist/ && cd dist && npm ci --omit=dev && zip -r ../lambda.zip . && cd .. && rm -rf dist"
   },
   "dependencies": {
     "oracledb": "^6.0"
   },
   "devDependencies": {
     "@aws-sdk/client-secrets-manager": "^3.700.0",
-    "jest": "^29.7.0"
+    "@types/aws-lambda": "^8.10.145",
+    "@types/node": "^25.9.1",
+    "aws-sdk-client-mock": "^4.1.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0"
   }
 }
