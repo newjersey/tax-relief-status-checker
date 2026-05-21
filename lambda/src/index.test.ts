@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { mockClient } from "aws-sdk-client-mock";
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
 
-import { handler } from "./index.ts";
+import { handler, validateInput } from "./index.ts";
 
 const secretsMock = mockClient(SecretsManagerClient);
 const mockExecute = vi.fn();
@@ -58,49 +58,43 @@ beforeEach(() => {
 
 describe("handler input validation", () => {
   it("returns 400 when ssn is missing", async () => {
-    const result = await handler({ zip: "07656" });
-
-    expect(result.statusCode).toBe(400);
-    expect(JSON.parse(result.body).error).toBe("Both ssn and zip are required");
+    const result = validateInput({ zip: "07656" });
+    expect(result.valid).toBe(false);
+    expect(result.error).toBe("Both ssn and zip are required");
   });
 
   it("returns 400 when zip is missing", async () => {
-    const result = await handler({ ssn: "123456789" });
-
-    expect(result.statusCode).toBe(400);
-    expect(JSON.parse(result.body).error).toBe("Both ssn and zip are required");
+    const result = validateInput({ ssn: "123456789" });
+    expect(result.valid).toBe(false);
+    expect(result.error).toBe("Both ssn and zip are required");
   });
 
   it("returns 400 for invalid SSN (not 9 digits)", async () => {
-    const result = await handler({ ssn: "12345", zip: "07656" });
-
-    expect(result.statusCode).toBe(400);
-    expect(JSON.parse(result.body).error).toBe("SSN must be 9 digits");
+    const result = validateInput({ ssn: "12345", zip: "07656" });
+    expect(result.valid).toBe(false);
+    expect(result.error).toBe("SSN must be 9 digits");
   });
 
   it("returns 400 for invalid ZIP (not 5 digits)", async () => {
-    const result = await handler({ ssn: "123456789", zip: "123" });
-
-    expect(result.statusCode).toBe(400);
-    expect(JSON.parse(result.body).error).toBe("ZIP must be 5 digits");
+    const result = validateInput({ ssn: "123456789", zip: "123" });
+    expect(result.valid).toBe(false);
+    expect(result.error).toBe("ZIP must be 5 digits");
   });
 
   it("accepts SSN with hyphens and strips them", async () => {
-    mockExecute.mockResolvedValue({ rows: [] });
-
-    const result = await handler({ ssn: "123-45-6789", zip: "07656" });
-
-    expect(result.statusCode).toBe(200);
+    const result = validateInput({ ssn: "123-45-6789", zip: "07656" });
+    expect(result.valid).toBe(true);
+    expect(result.ssn).toBe("123456789");
+    expect(result.zip).toBe("07656");
   });
 
   it("handles API Gateway proxy format with stringified body", async () => {
-    mockExecute.mockResolvedValue({ rows: [] });
-
-    const result = await handler({
+    const result = validateInput({
       body: JSON.stringify({ ssn: "123456789", zip: "07656" }),
     });
-
-    expect(result.statusCode).toBe(200);
+    expect(result.valid).toBe(true);
+    expect(result.ssn).toBe("123456789");
+    expect(result.zip).toBe("07656");
   });
 });
 
@@ -112,6 +106,12 @@ describe("handler error handling", () => {
 
     expect(result.statusCode).toBe(500);
     expect(JSON.parse(result.body).error).toBe("Internal server error");
+  });
+
+  it("returns 400 when validation fails", async () => {
+    const result = await handler({});
+    expect(result.statusCode).toBe(400);
+    expect(JSON.parse(result.body).error).toBe("Both ssn and zip are required");
   });
 
   it("closes the database connection even on error", async () => {
@@ -152,7 +152,7 @@ describe("handler business logic", () => {
   });
 
   describe("when filer has multiple matching rows in DB", () => {
-    it("eturns 200 and constructs the response", async () => {
+    it("returns 200 and constructs the response", async () => {
       const row2024 = buildMockRow({ RETURN_YEAR_DTE: 2024 });
       const row2025 = buildMockRow({
         RETURN_YEAR_DTE: 2025,

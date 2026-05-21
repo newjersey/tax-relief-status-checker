@@ -45,7 +45,9 @@ interface DatabaseCredentials {
   readonly ORACLE_DB_PASSWORD: string;
 }
 
-const validateInput = (event: APIGatewayProxyEvent | Record<string, unknown>): ValidationResult => {
+export const validateInput = (
+  event: APIGatewayProxyEvent | Record<string, unknown>,
+): ValidationResult => {
   const body = typeof event.body === "string" ? JSON.parse(event.body) : event;
   const { ssn, zip } = body;
 
