@@ -15,10 +15,10 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "husky": "latest",
-    "lint-staged": "latest",
-    "prettier": "latest",
-    "prettier-plugin-jsdoc": "latest"
+    "husky": "9.1.7",
+    "lint-staged": "17.0.5",
+    "prettier": "3.8.3",
+    "prettier-plugin-jsdoc": "1.8.0"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
