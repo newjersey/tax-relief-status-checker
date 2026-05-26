@@ -24,7 +24,7 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "author": {
-    "name": "New Jersey State Office of Innovation",
+    "name": "New Jersey Innovation Authority",
     "url": "https://github.com/newjersey"
   },
   "license": "MIT",

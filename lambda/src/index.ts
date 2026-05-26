@@ -1,7 +1,4 @@
-import {
-  SecretsManagerClient,
-  GetSecretValueCommand,
-} from "@aws-sdk/client-secrets-manager";
+import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
 import oracledb from "oracledb";
 
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";

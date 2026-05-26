@@ -2,6 +2,10 @@
 
 This commit resolves {replace with ticket link placeholder}
 
+## LLM Disclaimer
+
+- Was an LLM used to help write this code? If so, which parts? This helps give context to reviewers.
+
 ## What was done?
 
 - Explain the implementation goals being solved or the feature with the reviewer in mind
