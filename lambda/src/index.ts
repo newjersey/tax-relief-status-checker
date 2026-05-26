@@ -1,4 +1,7 @@
-import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
+import {
+  SecretsManagerClient,
+  GetSecretValueCommand,
+} from "@aws-sdk/client-secrets-manager";
 import oracledb from "oracledb";
 
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
@@ -138,7 +141,10 @@ export const handler = async (
     };
   } catch (err) {
     const error = err as Error;
-    console.error("Query execution failed", { error: error.message, stack: error.stack });
+    console.error("Query execution failed", {
+      error: error.message,
+      stack: error.stack,
+    });
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Internal server error" }),

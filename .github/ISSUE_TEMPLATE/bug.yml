@@ -31,8 +31,7 @@ body:
     id: acceptance-criteria
     attributes:
       label: Acceptance Criteria
-      description:
-        What is/are the requirements for fixing the bug? Please be as detailed as possible.
+      description: What is/are the requirements for fixing the bug? Please be as detailed as possible.
       placeholder: 1. Do this. 2. Do that. 3. See the expected behavior.
     validations:
       required: true

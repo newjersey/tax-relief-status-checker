@@ -6,12 +6,6 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [react()],
   resolve: {},
-  test: {
-    environment: "jsdom",
-    globals: true,
-    setupFiles: "./vitest.setup.ts",
-    exclude: ["lambda/**", "node_modules/**"],
-  },
   server: {
     port: 3000,
   },

@@ -1,0 +1,39 @@
+{
+  "name": "tax-relief-status-checker-webapp",
+  "version": "1.0.0",
+  "description": "Webapp for NJ residents to check the status of their property tax refund",
+  "homepage": "https://github.com/newjersey/tax-relief-status-checker#readme",
+  "bugs": {
+    "url": "https://github.com/newjersey/tax-relief-status-checker/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/newjersey/tax-relief-status-checker.git"
+  },
+  "license": "MIT",
+  "author": "New Jersey State Office of Innovation",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "test": "vitest run",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@newjersey/njwds": "^2.9.1",
+    "@trussworks/react-uswds": "^11.0.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "jsdom": "^29.1.1",
+    "react": "^19.2.4",
+    "react-hook-form": "^7.72.1",
+    "react-router-dom": "^7.15.1",
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^25.9.1",
+    "vite": "^8.0.3",
+    "vitest": "^4.1.2"
+  }
+}

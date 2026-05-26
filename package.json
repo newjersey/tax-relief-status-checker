@@ -1,45 +1,35 @@
 {
-  "name": "innovation-repo-template",
-  "version": "0.3.0",
-  "description": "Template repository for the New Jersey State Office of Innovation",
-  "repository": "github:newjersey/innovation-repo-template",
-  "homepage": "https://github.com/newjersey/innovation-repo-template",
-  "bugs": "https://github.com/newjersey/innovation-repo-template/issues",
+  "name": "tax-relief-status-checker",
+  "version": "1.0.0",
+  "description": "App for NJ residents to check the status of their property tax refund",
+  "repository": "github:newjersey/tax-relief-status-checker",
+  "homepage": "https://github.com/newjersey/tax-relief-status-checker#readme",
+  "bugs": "https://github.com/newjersey/tax-relief-status-checker/issues",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "test": "vitest run && cd lambda && npm i && npm run test",
+    "dev": "cd webapp && vite",
+    "build": "cd webapp && tsc -b && vite build",
+    "package": "cd lambda && npm run package",
+    "test": "vitest run",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "prepare": "husky"
   },
-  "keywords": [],
+  "dependencies": {
+    "husky": "latest",
+    "lint-staged": "latest",
+    "prettier": "latest",
+    "prettier-plugin-jsdoc": "latest"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
   "author": {
     "name": "New Jersey State Office of Innovation",
     "url": "https://github.com/newjersey"
   },
   "license": "MIT",
-  "devDependencies": {
-    "@testing-library/react": "^16.3.2",
-    "@types/node": "^25.9.1",
-    "husky": "latest",
-    "lint-staged": "latest",
-    "prettier": "latest",
-    "prettier-plugin-jsdoc": "latest",
-    "vite": "^8.0.3",
-    "vitest": "^4.1.2"
-  },
-  "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
-  },
-  "dependencies": {
-    "@newjersey/njwds": "^2.9.1",
-    "@trussworks/react-uswds": "^11.0.0",
-    "@vitejs/plugin-react": "^6.0.1",
-    "jsdom": "^29.1.1",
-    "react": "^19.2.4",
-    "react-hook-form": "^7.72.1",
-    "react-router-dom": "^7.15.1",
-    "typescript": "^6.0.3"
-  }
+  "workspaces": [
+    "webapp",
+    "lambda"
+  ]
 }
