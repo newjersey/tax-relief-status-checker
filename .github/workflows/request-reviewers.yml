@@ -11,7 +11,7 @@ jobs:
     secrets: inherit
     permissions: {}
     with:
-      include_teams: "innovation-engineering"
+      include_teams: "innovation-engineering-resx"
       number_of_reviewers: 2
       channel_id: "C0590CD1EE8"
   pr-show:
