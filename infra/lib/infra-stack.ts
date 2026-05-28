@@ -3,6 +3,7 @@ import type { StackProps } from "aws-cdk-lib";
 import type { Construct } from "constructs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
+import * as iam from "aws-cdk-lib/aws-iam";
 import * as path from "path";
 import { fileURLToPath } from "url";
 
@@ -31,6 +32,7 @@ export interface InfraStackProps extends StackProps {
   readonly vpcId: string;
   readonly connectString: string;
   readonly credentialsName: string;
+  readonly secretArn: string;
 }
 
 /**
@@ -64,6 +66,17 @@ export class InfraStack extends Stack {
       },
       ...vpcConfig,
     });
+
+    const customPolicy = new iam.Policy(this, "LambdaCustomPolicy", {
+      statements: [
+        new iam.PolicyStatement({
+          actions: ["secretsmanager:GetSecretValue"],
+          resources: [props.secretArn],
+        }),
+      ],
+    });
+
+    this.lambdaFunction.role?.attachInlinePolicy(customPolicy);
   }
 
   /**

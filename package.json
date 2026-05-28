@@ -9,6 +9,8 @@
     "dev": "cd webapp && vite",
     "build": "cd webapp && tsc -b && vite build",
     "package": "cd lambda && npm run package",
+    "deploy:dev": "cd infra && cdk deploy -c stage=dev",
+    "deploy:prod": "cd infra && cdk deploy -c stage=prod",
     "test": "vitest run",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
