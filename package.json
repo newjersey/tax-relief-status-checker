@@ -30,6 +30,7 @@
   "license": "MIT",
   "workspaces": [
     "webapp",
-    "lambda"
+    "lambda",
+    "infra"
   ]
 }

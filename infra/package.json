@@ -1,0 +1,23 @@
+{
+  "name": "tax-relief-status-checker-infra",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "AWS CDK infrastructure for the Property Tax Relief Status API",
+  "scripts": {
+    "build": "tsc",
+    "cdk": "cdk",
+    "synth": "cdk synth",
+    "deploy": "cdk deploy",
+    "diff": "cdk diff"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.200.0",
+    "constructs": "10.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.21",
+    "tsx": "^4.22.3",
+    "typescript": "5.7.3"
+  }
+}
