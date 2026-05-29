@@ -27,20 +27,6 @@ export const NjHeader = () => {
                         Governor Mikie Sherrill &bull; Lt. Governor Dr. Dale G. Caldwell
                       </a>
                     </li>
-                    <li>
-                      <a href="https://nj.gov/subscribe/" target="_blank" rel="noopener">
-                        <svg
-                          className="usa-icon nj-banner__mail-icon bottom-neg-2px margin-right-05"
-                          aria-hidden="true"
-                          focusable="false"
-                          role="img"
-                        >
-                          <use href={`/img/sprite.svg#mail`}></use>
-                        </svg>
-                        <span className="usa-sr-only">opens in a new tab.</span>
-                        Get Updates
-                      </a>
-                    </li>
                   </ul>
                 </div>
               </div>
