@@ -7,8 +7,6 @@ import * as iam from "aws-cdk-lib/aws-iam";
 import * as path from "path";
 import { fileURLToPath } from "url";
 
-import type { StageName } from "./stage-config.ts";
-
 const DIRNAME = path.dirname(fileURLToPath(import.meta.url));
 
 /** Duration in seconds before the Lambda function times out. */
@@ -22,13 +20,7 @@ const LAMBDA_MEMORY_MB = 512;
  * function.
  */
 export interface InfraStackProps extends StackProps {
-  /** The deployment stage this stack belongs to. */
-  readonly stageName: StageName;
-
-  /**
-   * An existing VPC to deploy the Lambda function into. When provided, the Lambda will be placed in
-   * the VPC's private subnets and a VPC endpoint for Secrets Manager will be created.
-   */
+  readonly stageName: string;
   readonly vpcId: string;
   readonly connectString: string;
   readonly credentialsName: string;
