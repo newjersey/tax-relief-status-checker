@@ -8,29 +8,17 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 
 const DIRNAME = path.dirname(fileURLToPath(import.meta.url));
-
-/** Duration in seconds before the Lambda function times out. */
 const LAMBDA_TIMEOUT_SECONDS = 5;
-
-/** Memory allocated to the Lambda function in megabytes. */
 const LAMBDA_MEMORY_MB = 512;
 
-/**
- * Configuration for the infrastructure stack. Allows optional VPC placement for the Lambda
- * function.
- */
 export interface InfraStackProps extends StackProps {
   readonly stageName: string;
   readonly vpcId: string;
   readonly connectString: string;
   readonly credentialsName: string;
-  readonly secretArn: string;
+  readonly dbCredentialsSecretArn: string;
 }
 
-/**
- * CDK stack defining the Property Tax Relief Status API Lambda function. Supports optional VPC
- * placement with a Secrets Manager VPC endpoint.
- */
 export class InfraStack extends Stack {
   /** The Lambda function serving the Property Tax Relief Status API. */
   public readonly lambdaFunction: lambda.Function;
@@ -63,7 +51,7 @@ export class InfraStack extends Stack {
       statements: [
         new iam.PolicyStatement({
           actions: ["secretsmanager:GetSecretValue"],
-          resources: [props.secretArn],
+          resources: [props.dbCredentialsSecretArn],
         }),
       ],
     });
@@ -71,20 +59,16 @@ export class InfraStack extends Stack {
     this.lambdaFunction.role?.attachInlinePolicy(customPolicy);
   }
 
-  /**
-   * Builds VPC configuration for the Lambda function. When a VPC is provided, places the Lambda in
-   * private subnets and creates a Secrets Manager VPC endpoint.
-   */
   private buildVpcConfig(
     vpc: ec2.IVpc,
   ): Pick<lambda.FunctionProps, "vpc" | "vpcSubnets" | "securityGroups"> {
-    const securityGroup = new ec2.SecurityGroup(this, "LambdaSecurityGroup", {
+    const lambdaSecurityGroup = new ec2.SecurityGroup(this, "LambdaSecurityGroup", {
       vpc,
       description: "Security group for the Property Tax Relief Status API Lambda",
       allowAllOutbound: true,
     });
 
-    const endpointSecurityGroup = new ec2.SecurityGroup(
+    const secretsManagerEndpointSecurityGroup = new ec2.SecurityGroup(
       this,
       "SecretsManagerEndpointSecurityGroup",
       {
@@ -94,8 +78,8 @@ export class InfraStack extends Stack {
       },
     );
 
-    endpointSecurityGroup.addIngressRule(
-      securityGroup,
+    secretsManagerEndpointSecurityGroup.addIngressRule(
+      lambdaSecurityGroup,
       ec2.Port.tcp(443),
       "Allow HTTPS from Lambda security group",
     );
@@ -104,13 +88,13 @@ export class InfraStack extends Stack {
       vpc,
       service: ec2.InterfaceVpcEndpointAwsService.SECRETS_MANAGER,
       privateDnsEnabled: true,
-      securityGroups: [endpointSecurityGroup],
+      securityGroups: [secretsManagerEndpointSecurityGroup],
     });
 
     return {
       vpc,
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
-      securityGroups: [securityGroup],
+      securityGroups: [lambdaSecurityGroup],
     };
   }
 }
