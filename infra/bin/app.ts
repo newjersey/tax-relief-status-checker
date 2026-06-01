@@ -8,7 +8,7 @@ const app = new cdk.App();
 const stageName = app.node.tryGetContext("stage");
 if (stageName == null || typeof stageName !== "string" || stageName === "") {
   throw new Error(
-    "Context argument 'stage' must be provided to the CDK command (e.g. `... stage=resx-sandbox`)",
+    "Context argument 'stage' must be provided to the CDK command (e.g. `... stage=resx-sandbox`). Valid stages are [dev, prod].",
   );
 }
 
