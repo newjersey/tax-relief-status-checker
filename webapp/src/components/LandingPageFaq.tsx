@@ -104,9 +104,9 @@ export const LandingPageFaq = (props: { headingLevel: HeadingLevel }) => {
                 <td></td>
                 <td>
                   Timing and amount are subject to the{" "}
-                  <a href="https://www.nj.gov/treasury/omb/">Fiscal Year 2027 State Budget</a>,
-                  which the state legislature is expected to finalize by July 1. Payments start
-                  going out next year in February (2027). They are paid out quarterly.
+                  <a href="https://reportcard.nj.gov/">Fiscal Year 2027 State Budget</a>, which the
+                  state legislature is expected to finalize by July 1. Payments start going out next
+                  year in February (2027). They are paid out quarterly.
                 </td>
               </tr>
               <tr>
