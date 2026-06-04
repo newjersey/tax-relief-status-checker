@@ -23,7 +23,7 @@
   "dependencies": {
     "@newjersey/njwds": "2.9.1",
     "@trussworks/react-uswds": "11.0.0",
-    "@vitejs/plugin-react": "6.0.1",
+    "@vitejs/plugin-react": "6.0.2",
     "jsdom": "29.1.1",
     "react": "19.2.6",
     "react-dom": "19.2.6",
