@@ -37,7 +37,7 @@ export const STAGE_CONFIGURATIONS: Record<string, StageConfig> = {
     connectString: "TAX2_TAXU",
     credentialsName: "TAX2_CREDS_STAGING",
     secretArn: "arn:aws:secretsmanager:us-east-1:539590994798:secret:TAX2_CREDS_STAGING-eNohgJ",
-    allowedOrigins: ["*"],
+    allowedOrigins: ["https://amplifyapp.com"],
   },
   prod: {
     stageName: "prod",
