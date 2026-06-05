@@ -6,7 +6,7 @@ export const NjHeader = () => {
       <a className="usa-skipnav" href="#main-content">
         Skip to main content
       </a>
-      <header className="nj-banner" aria-label="Official government website">
+      <header className="nj-banner" aria-label="Official government website" id="nj-header">
         <div className="nj-banner__header">
           <div className="grid-container">
             <div className="nj-banner__inner">
@@ -25,20 +25,6 @@ export const NjHeader = () => {
                     <li>
                       <a href="https://nj.gov/governor/" target="_blank" rel="noopener">
                         Governor Mikie Sherrill &bull; Lt. Governor Dr. Dale G. Caldwell
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://nj.gov/subscribe/" target="_blank" rel="noopener">
-                        <svg
-                          className="usa-icon nj-banner__mail-icon bottom-neg-2px margin-right-05"
-                          aria-hidden="true"
-                          focusable="false"
-                          role="img"
-                        >
-                          <use href={`/img/sprite.svg#mail`}></use>
-                        </svg>
-                        <span className="usa-sr-only">opens in a new tab.</span>
-                        Get Updates
                       </a>
                     </li>
                   </ul>
