@@ -61,7 +61,7 @@ export class InfraStack extends Stack {
       new iam.Policy(this, "InvokeLambdaPolicy", {
         statements: [
           new iam.PolicyStatement({
-            actions: ["lambda:InvokeFunctionUrl"],
+            actions: ["lambda:InvokeFunctionUrl", "lambda:InvokeFunction"],
             resources: [this.lambdaFunction.functionArn],
           }),
         ],
