@@ -5,14 +5,14 @@ export const NjFooter = () => {
     <>
       <footer className="usa-footer">
         <div className="grid-container usa-footer__return-to-top">
-          <a href="#">Return to top</a>
+          <a href="#nj-header">Return to top</a>
         </div>
         <div className="footer-social padding-5" style={{ backgroundColor: "#E5C53C" }}>
           <div className="grid-container">
             <div className="grid-row">
               <div className="usa-footer__logo grid-row mobile-lg:grid-col-6 mobile-lg:grid-gap-2">
                 <div className="mobile-lg:grid-col-auto">
-                  <h3 className="usa-footer__logo-heading">
+                  <h2 className="usa-footer__logo-heading">
                     <a
                       href="https://www.nj.gov/treasury/taxation/"
                       target="_blank"
@@ -21,7 +21,7 @@ export const NjFooter = () => {
                     >
                       Division of Taxation
                     </a>
-                  </h3>
+                  </h2>
                 </div>
               </div>
               <div className="mobile-lg:grid-col-6 grid-col">

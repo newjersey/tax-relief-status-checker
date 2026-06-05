@@ -62,7 +62,10 @@ export const LandingPageFaq = (props: { headingLevel: HeadingLevel }) => {
             full address of the property you applied for:
           </p>
           <ul>
-            <li>Call: 1-888-238-1233 (Mondays to Fridays 8:30 a.m. to 5:30 p.m.)</li>
+            <li>
+              Call: <a href="tel:18882381233">1-888-238-1233</a> (Mondays to Fridays 8:30 a.m. to
+              5:30 p.m.)
+            </li>
             <li>
               Email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
             </li>
@@ -95,7 +98,7 @@ export const LandingPageFaq = (props: { headingLevel: HeadingLevel }) => {
             <tbody>
               <tr>
                 <td>
-                  <strong>JUL-SEP</strong>
+                  <strong className="text-uppercase">July-September</strong>
                 </td>
                 <td>
                   Payments start going out on July 15. If you applied before May 1, you can expect
@@ -111,7 +114,7 @@ export const LandingPageFaq = (props: { headingLevel: HeadingLevel }) => {
               </tr>
               <tr>
                 <td>
-                  <strong>SEPT-OCT</strong>
+                  <strong className="text-uppercase">September-October</strong>
                 </td>
                 <td>
                   If you applied between May 1 and June 1, you can expect to get your payment
@@ -125,7 +128,7 @@ export const LandingPageFaq = (props: { headingLevel: HeadingLevel }) => {
               </tr>
               <tr>
                 <td>
-                  <strong>NOV</strong>
+                  <strong className="text-uppercase">November</strong>
                 </td>
                 <td>
                   If you applied between June 2 and September 1, you can expect to get your payment
@@ -136,7 +139,7 @@ export const LandingPageFaq = (props: { headingLevel: HeadingLevel }) => {
               </tr>
               <tr>
                 <td>
-                  <strong>DEC</strong>
+                  <strong className="text-uppercase">December</strong>
                 </td>
                 <td>
                   If you applied between September 2 and October 31, you can expect to get your
@@ -158,8 +161,8 @@ export const LandingPageFaq = (props: { headingLevel: HeadingLevel }) => {
       content: (
         <p>
           If you have any questions or if processing has taken longer than expected, call our help
-          line at 1-888-238-1233 (Mondays to Fridays 8:30 a.m. to 5:30 p.m.) or visit a Regional
-          Information Center (RIC),{" "}
+          line at <a href="tel:18882381233">1-888-238-1233</a> (Mondays to Fridays 8:30 a.m. to 5:30
+          p.m.) or visit a Regional Information Center (RIC),{" "}
           <a href="https://nj.gov/treasury/taxation/contact-office.shtml#:~:text=We%20can%20assist%20you%20or%20your%20businesses%20with,assistance%20from%208%3A30%20a.m.%20to%204%3A30%20p.m.%2C%20Monday-Friday.">
             find a location
           </a>{" "}
