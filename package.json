@@ -6,8 +6,8 @@
   "homepage": "https://github.com/newjersey/tax-relief-status-checker#readme",
   "bugs": "https://github.com/newjersey/tax-relief-status-checker/issues",
   "scripts": {
-    "dev": "cd webapp && vite",
-    "build": "cd webapp && tsc -b && vite build",
+    "dev": "cd webapp && next dev --port 3000",
+    "build": "cd webapp && next build",
     "package": "cd lambda && npm run package",
     "deploy:dev": "cd infra && cdk deploy -c stage=dev",
     "deploy:prod": "cd infra && cdk deploy -c stage=prod",
