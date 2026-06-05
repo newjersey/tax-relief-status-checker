@@ -1,14 +1,11 @@
 import { redirect } from "next/navigation";
-import { Alert, Logo } from "@trussworks/react-uswds";
+import { Logo } from "@trussworks/react-uswds";
 import Link from "next/link";
 
-/** Props provided by Next.js for pages with query parameters. */
 interface StatusPageProps {
-  /** URL search parameters passed to the page. */
   readonly searchParams: Promise<{ readonly ssn?: string; readonly date?: string }>;
 }
 
-/** Status page displaying the user's application receipt date. */
 const StatusPage = async ({ searchParams }: StatusPageProps) => {
   const params = await searchParams;
   const maskedSsn = params.ssn;
@@ -20,9 +17,6 @@ const StatusPage = async ({ searchParams }: StatusPageProps) => {
 
   return (
     <main id="main-content">
-      <Alert type="info" slim={true} headingLevel="h2" noIcon={true}>
-        Please allow 24 hours for system updates.
-      </Alert>
       <section className="usa-section">
         <div className="grid-container">
           <div style={{ textAlign: "right" }}>
@@ -63,8 +57,8 @@ const StatusPage = async ({ searchParams }: StatusPageProps) => {
           <div className="margin-top-4">
             <p className="font-heading-xl">Your application was received on {applicationDate}.</p>
             <p>
-              Please allow time for our agents to review and process your application. Check back in
-              2 weeks for an update.
+              Please allow time for your application to be reviewed. There's nothing you need to do
+              right now. If you applied early in the year, check back in early summer for an update.
             </p>
           </div>
         </div>
