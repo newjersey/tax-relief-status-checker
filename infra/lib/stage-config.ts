@@ -22,6 +22,9 @@ export interface StageConfig {
 
   /** The arn for the credentials secret in AWS Secrets Manager */
   readonly secretArn: string;
+
+  /** The CORS origins that are allowed to access the Lambda */
+  readonly allowedOrigins: string[];
 }
 
 /** Stage configurations keyed by stage name. */
@@ -34,6 +37,7 @@ export const STAGE_CONFIGURATIONS: Record<string, StageConfig> = {
     connectString: "TAX2_TAXU",
     credentialsName: "TAX2_CREDS_STAGING",
     secretArn: "arn:aws:secretsmanager:us-east-1:539590994798:secret:TAX2_CREDS_STAGING-eNohgJ",
+    allowedOrigins: ["*"],
   },
   prod: {
     stageName: "prod",
@@ -43,5 +47,6 @@ export const STAGE_CONFIGURATIONS: Record<string, StageConfig> = {
     connectString: "TAX2_PROD",
     credentialsName: "TAX2_CREDS_PROD",
     secretArn: "arn:aws:secretsmanager:us-east-1:973370773553:secret:TAX2_CREDS_PROD-GpFZD1",
+    allowedOrigins: ["https://propertytaxreliefstatus.nj.gov/"],
   },
 };

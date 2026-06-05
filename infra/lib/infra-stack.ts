@@ -17,6 +17,7 @@ export interface InfraStackProps extends StackProps {
   readonly connectString: string;
   readonly credentialsName: string;
   readonly dbCredentialsSecretArn: string;
+  readonly allowedOrigins: string[];
 }
 
 export class InfraStack extends Stack {
@@ -46,6 +47,26 @@ export class InfraStack extends Stack {
       },
       ...vpcConfig,
     });
+
+    this.lambdaFunction.addFunctionUrl({
+      authType: lambda.FunctionUrlAuthType.AWS_IAM,
+      cors: { allowedOrigins: props.allowedOrigins },
+    });
+
+    const amplifyIamRole = new iam.Role(this, "amplifyIamRole", {
+      assumedBy: new iam.ServicePrincipal("amplify.amazonaws.com"),
+    });
+
+    amplifyIamRole.attachInlinePolicy(
+      new iam.Policy(this, "InvokeLambdaPolicy", {
+        statements: [
+          new iam.PolicyStatement({
+            actions: ["lambda:InvokeFunctionUrl"],
+            resources: [this.lambdaFunction.functionArn],
+          }),
+        ],
+      }),
+    );
 
     const customPolicy = new iam.Policy(this, "LambdaCustomPolicy", {
       statements: [

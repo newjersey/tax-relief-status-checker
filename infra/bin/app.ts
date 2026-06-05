@@ -33,4 +33,5 @@ new InfraStack(app, `PropertyTaxReliefStatusApi-${stage.stageName}`, {
   connectString: stage.connectString,
   credentialsName: stage.credentialsName,
   dbCredentialsSecretArn: stage.secretArn,
+  allowedOrigins: stage.allowedOrigins,
 });
