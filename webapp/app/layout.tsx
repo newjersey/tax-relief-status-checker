@@ -16,7 +16,7 @@ const RootLayout = ({ children }: { readonly children: React.ReactNode }) => (
   <html lang="en">
     <body>
       <NjHeader />
-      <Alert className="margin-0" type="info" noIcon={true} headingLevel="h1">
+      <Alert className="margin-0" id="beta-banner" type="info" noIcon={true} headingLevel="h1">
         <strong>This tool is in beta.</strong> This means it is actively being worked on with new
         features coming soon.
       </Alert>

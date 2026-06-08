@@ -10,10 +10,10 @@
   color: white;
 }
 
-.usa-alert__body {
+#beta-banner .usa-alert__body {
   align-items: center;
 }
 
-.usa-alert__text {
+#beta-banner .usa-alert__text {
   max-width: fit-content;
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Label, Logo, TextInputMask, Form, Button } from "@trussworks/react-uswds";
@@ -35,9 +36,21 @@ const formatDate = (isoDate: string): string => {
   return `${month}/${day}/${year}`;
 };
 
+/** Expands a USWDS accordion item by ID and scrolls it into view. */
+const expandFaqAccordionItem = (itemId: string) => {
+  const button = document.querySelector<HTMLButtonElement>(`button[aria-controls="${itemId}"]`);
+  if (!button) return;
+
+  if (button.getAttribute("aria-expanded") !== "true") {
+    button.click();
+  }
+
+  button.scrollIntoView({ behavior: "smooth", block: "start" });
+};
+
 const LandingPage = () => {
   const router = useRouter();
-  const [apiError, setApiError] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<ReactNode | null>(null);
 
   const {
     register,
@@ -63,7 +76,9 @@ const LandingPage = () => {
 
       if (!response.ok) {
         setApiError(
-          "We are having an issue checking on your application status. Please try again later.",
+          <p className="usa-alert__text maxw-tablet">
+            We are having an issue checking on your application status. Please try again later.
+          </p>,
         );
         return;
       }
@@ -75,7 +90,39 @@ const LandingPage = () => {
       const record2025 = body.records.find((r) => r.return_year === "2025");
 
       if (!record2025) {
-        setApiError("No 2025 application found for the SSN and ZIP code provided.");
+        setApiError(
+          <>
+            <h2 className="usa-alert__heading">No 2025 application found</h2>
+            <p className="usa-alert__text">
+              We couldn't find any records matching the SSN or ITIN and zip code you entered. Some
+              reasons why:
+            </p>
+            <ul>
+              <li>
+                <strong>Identity mismatch</strong>: The SSN/ITIN and zip code you filed on your
+                application is different than the one you entered in this tool.
+              </li>
+              <li>
+                <strong>It's too soon</strong>: For online applications, it can take up to 3 weeks.
+                For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants,
+                check back in the Fall.
+              </li>
+            </ul>
+            <p className="usa-alert__text">
+              For a full list of reasons, check out the{" "}
+              <a
+                href="#faq_no_2025_application_found"
+                onClick={(e) => {
+                  e.preventDefault();
+                  expandFaqAccordionItem("faq_no_2025_application_found");
+                }}
+              >
+                FAQ section
+              </a>
+              .
+            </p>
+          </>,
+        );
         return;
       }
 
@@ -88,7 +135,11 @@ const LandingPage = () => {
 
       router.push(`/status?${params.toString()}`);
     } catch {
-      setApiError("Something went wrong while checking your status. Please try again.");
+      setApiError(
+        <p className="usa-alert__text maxw-tablet">
+          We are having an issue checking on your application status. Please try again later.
+        </p>,
+      );
     }
   };
 
@@ -111,9 +162,7 @@ const LandingPage = () => {
               className="usa-alert usa-alert--error usa-alert--slim margin-bottom-3"
               role="alert"
             >
-              <div className="usa-alert__body">
-                <p className="usa-alert__text">{apiError}</p>
-              </div>
+              <div className="usa-alert__body">{apiError}</div>
             </div>
           )}
 
