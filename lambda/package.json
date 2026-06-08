@@ -12,8 +12,8 @@
     "package": "npm run build && cp package.json ../package-lock.json dist/ && cp -r config dist/ && cd dist && npm ci --omit=dev && zip -r ../lambda.zip . && cd .. && rm -rf dist"
   },
   "dependencies": {
-    "@types/oracledb": "6.10.4",
-    "oracledb": "6.10.0"
+    "@types/oracledb": "7.0.0",
+    "oracledb": "7.0.0"
   },
   "devDependencies": {
     "@aws-sdk/client-secrets-manager": "3.1063.0",
