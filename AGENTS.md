@@ -392,6 +392,12 @@ Tests must be deterministic. A test whose outcome depends on timing, network ava
 order, or any source of non-determinism is an unreliable test. Unreliable tests erode confidence in
 the test suite. Fix or quarantine non-deterministic tests; do not tolerate them.
 
+Unit tests must be concise. Focus on testing the core functionality and error handling paths. Do not
+write redundant test cases that exercise the same code path with trivially different inputs. If a
+test case does not cover a meaningfully distinct scenario — a different branch, an edge case that
+could plausibly fail, or an error condition — it does not belong in the test suite. Fewer focused
+tests are better than many overlapping tests.
+
 ## Dependencies
 
 Every dependency added to this project is a long-term commitment. Before adding a dependency,

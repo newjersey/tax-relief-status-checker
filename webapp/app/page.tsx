@@ -7,7 +7,9 @@ import { Label, Logo, TextInputMask, Form, Button } from "@trussworks/react-uswd
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import { HorizontalDivider } from "@/components/HorizontalDivider";
-import { LandingPageFaq } from "@/components/LandingPageFaq";
+import { LandingPageFaq, expandFaqAccordionItem } from "@/components/LandingPageFaq";
+import { maskSsn } from "@/app/utils/maskSsn";
+import { formatDate } from "@/app/utils/formatDate";
 
 /** Form data collected from the user. */
 interface UserData {
@@ -20,33 +22,6 @@ interface StatusRecord {
   readonly return_year: string;
   readonly application_date: string;
 }
-
-/** Masks the SSN for display — shows only the last four digits. */
-const maskSsn = (ssn: string): string => {
-  const digits = ssn.replace(/-/g, "");
-  return `***-**-${digits.slice(5)}`;
-};
-
-/** Formats an ISO date string (e.g. 2026-03-19T00:00:00.000Z) as MM/DD/YYYY. */
-const formatDate = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(date.getUTCDate()).padStart(2, "0");
-  const year = String(date.getUTCFullYear());
-  return `${month}/${day}/${year}`;
-};
-
-/** Expands a USWDS accordion item by ID and scrolls it into view. */
-const expandFaqAccordionItem = (itemId: string) => {
-  const button = document.querySelector<HTMLButtonElement>(`button[aria-controls="${itemId}"]`);
-  if (!button) return;
-
-  if (button.getAttribute("aria-expanded") !== "true") {
-    button.click();
-  }
-
-  button.scrollIntoView({ behavior: "smooth", block: "start" });
-};
 
 const LandingPage = () => {
   const router = useRouter();

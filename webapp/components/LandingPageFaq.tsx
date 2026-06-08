@@ -1,5 +1,17 @@
 import { Accordion, type HeadingLevel, type AccordionProps } from "@trussworks/react-uswds";
 
+/** Expands a USWDS accordion item by ID and scrolls it into view. */
+export const expandFaqAccordionItem = (itemId: string) => {
+  const button = document.querySelector<HTMLButtonElement>(`button[aria-controls="${itemId}"]`);
+  if (!button) return;
+
+  if (button.getAttribute("aria-expanded") !== "true") {
+    button.click();
+  }
+
+  button.scrollIntoView({ behavior: "smooth", block: "start" });
+};
+
 type AccordionItemProps = AccordionProps["items"][number];
 
 /** Props for the LandingPageFaq component. */
