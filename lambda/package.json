@@ -12,16 +12,16 @@
     "package": "npm run build && cp package.json ../package-lock.json dist/ && cp -r config dist/ && cd dist && npm ci --omit=dev && zip -r ../lambda.zip . && cd .. && rm -rf dist"
   },
   "dependencies": {
-    "@types/oracledb": "6.10.4",
-    "oracledb": "6.10.0"
+    "@types/oracledb": "7.0.0",
+    "oracledb": "7.0.0"
   },
   "devDependencies": {
-    "@aws-sdk/client-secrets-manager": "3.1037.0",
+    "@aws-sdk/client-secrets-manager": "3.1063.0",
     "@types/aws-lambda": "8.10.145",
     "@types/node": "25.9.1",
     "aws-sdk-client-mock": "4.1.0",
     "esbuild": "0.28.0",
-    "typescript": "5.7.3",
+    "typescript": "6.0.3",
     "vitest": "4.1.8"
   }
 }
