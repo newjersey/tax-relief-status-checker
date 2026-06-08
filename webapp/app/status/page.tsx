@@ -3,12 +3,17 @@ import { Logo } from "@trussworks/react-uswds";
 import Link from "next/link";
 
 interface StatusPageProps {
-  readonly searchParams: Promise<{ readonly ssn?: string; readonly date?: string }>;
+  readonly searchParams: Promise<{
+    readonly ssn?: string;
+    readonly zipCode?: string;
+    readonly date?: string;
+  }>;
 }
 
 const StatusPage = async ({ searchParams }: StatusPageProps) => {
   const params = await searchParams;
   const maskedSsn = params.ssn;
+  const zipCode = params.zipCode;
   const applicationDate = params.date;
 
   if (!maskedSsn || !applicationDate) {
@@ -50,6 +55,16 @@ const StatusPage = async ({ searchParams }: StatusPageProps) => {
               <div className="tablet:grid-col-3">
                 <p>
                   SSN/ITIN: <strong>{maskedSsn}</strong>
+                </p>
+              </div>
+              <div className="tablet:grid-col-3">
+                <p>
+                  Zip Code: <strong>{zipCode}</strong>
+                </p>
+              </div>{" "}
+              <div className="tablet:grid-col-3">
+                <p>
+                  Tax Year: <strong>2025</strong>
                 </p>
               </div>
             </div>

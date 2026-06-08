@@ -105,6 +105,7 @@ const LandingPage = () => {
       const formattedDate = formatDate(record2025.application_date);
       const params = new URLSearchParams({
         ssn: maskedSsn,
+        zipCode: data.zipCode,
         date: formattedDate,
       });
 
