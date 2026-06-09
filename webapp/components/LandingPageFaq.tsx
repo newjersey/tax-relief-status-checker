@@ -1,8 +1,23 @@
 import { Accordion, type HeadingLevel, type AccordionProps } from "@trussworks/react-uswds";
 
+export const expandFaqAccordionItem = (itemId: string) => {
+  const button = document.querySelector<HTMLButtonElement>(`button[aria-controls="${itemId}"]`);
+  if (!button) return;
+
+  if (button.getAttribute("aria-expanded") !== "true") {
+    button.click();
+  }
+
+  button.scrollIntoView({ behavior: "smooth", block: "start" });
+};
+
 type AccordionItemProps = AccordionProps["items"][number];
 
-export const LandingPageFaq = (props: { headingLevel: HeadingLevel }) => {
+interface LandingPageFaqProps {
+  readonly headingLevel: HeadingLevel;
+}
+
+export const LandingPageFaq = (props: LandingPageFaqProps) => {
   const faqContent: AccordionItemProps[] = [
     {
       title: "When can I expect my paper application to show up in this online tool?",
@@ -17,7 +32,7 @@ export const LandingPageFaq = (props: { headingLevel: HeadingLevel }) => {
       headingLevel: props.headingLevel,
     },
     {
-      title: "I applied but I keep getting “No 2025 application found”. Why?",
+      title: "I applied but I keep getting \u201CNo 2025 application found\u201D. Why?",
       content: (
         <>
           <p>Some common reasons this might be happening:</p>
@@ -27,9 +42,9 @@ export const LandingPageFaq = (props: { headingLevel: HeadingLevel }) => {
               application is different than the one you entered in this tool.
             </li>
             <li>
-              <strong>It's too soon</strong>: For online applications, it can take up to 3 weeks.
-              For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants, check
-              back in the Fall.
+              <strong>It&apos;s too soon</strong>: For online applications, it can take up to 3
+              weeks. For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants,
+              check back in the Fall.
             </li>
             <li>
               <strong>Forgot to press submit</strong>: If you filed your 2025 application online you
@@ -53,7 +68,7 @@ export const LandingPageFaq = (props: { headingLevel: HeadingLevel }) => {
       headingLevel: props.headingLevel,
     },
     {
-      title: "What if I need to update something after I've submitted my application?",
+      title: "What if I need to update something after I\u2019ve submitted my application?",
       content: (
         <>
           <p>
