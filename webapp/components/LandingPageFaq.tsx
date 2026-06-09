@@ -1,6 +1,5 @@
 import { Accordion, type HeadingLevel, type AccordionProps } from "@trussworks/react-uswds";
 
-/** Expands a USWDS accordion item by ID and scrolls it into view. */
 export const expandFaqAccordionItem = (itemId: string) => {
   const button = document.querySelector<HTMLButtonElement>(`button[aria-controls="${itemId}"]`);
   if (!button) return;
@@ -14,13 +13,10 @@ export const expandFaqAccordionItem = (itemId: string) => {
 
 type AccordionItemProps = AccordionProps["items"][number];
 
-/** Props for the LandingPageFaq component. */
 interface LandingPageFaqProps {
-  /** Heading level to use for each FAQ item title. */
   readonly headingLevel: HeadingLevel;
 }
 
-/** Accordion-style FAQ section for the landing page. */
 export const LandingPageFaq = (props: LandingPageFaqProps) => {
   const faqContent: AccordionItemProps[] = [
     {

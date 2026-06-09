@@ -4,7 +4,7 @@ import Link from "next/link";
 
 interface StatusPageProps {
   readonly searchParams: Promise<{
-    readonly ssn?: string;
+    readonly lastFourSsnDigits?: string;
     readonly zipCode?: string;
     readonly date?: string;
   }>;
@@ -12,11 +12,11 @@ interface StatusPageProps {
 
 const StatusPage = async ({ searchParams }: StatusPageProps) => {
   const params = await searchParams;
-  const maskedSsn = params.ssn;
+  const lastFourSsnDigits = params.lastFourSsnDigits;
   const zipCode = params.zipCode;
   const applicationDate = params.date;
 
-  if (!maskedSsn || !applicationDate) {
+  if (!lastFourSsnDigits || !applicationDate || !zipCode) {
     redirect("/");
   }
 
@@ -54,7 +54,7 @@ const StatusPage = async ({ searchParams }: StatusPageProps) => {
             <div className="grid-row">
               <div className="tablet:grid-col-3">
                 <p>
-                  SSN/ITIN: <strong>{maskedSsn}</strong>
+                  SSN/ITIN: <strong>***-**-{lastFourSsnDigits}</strong>
                 </p>
               </div>
               <div className="tablet:grid-col-3">

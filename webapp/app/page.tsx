@@ -101,10 +101,10 @@ const LandingPage = () => {
         return;
       }
 
-      const maskedSsn = maskSsn(data.ssn);
+      const lastFourSsnDigits = maskSsn(data.ssn);
       const formattedDate = formatDate(record2025.application_date);
       const params = new URLSearchParams({
-        ssn: maskedSsn,
+        lastFourSsnDigits: lastFourSsnDigits,
         zipCode: data.zipCode,
         date: formattedDate,
       });
