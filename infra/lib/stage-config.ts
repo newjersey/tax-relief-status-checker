@@ -47,6 +47,6 @@ export const STAGE_CONFIGURATIONS: Record<string, StageConfig> = {
     connectString: "TAX2_PROD",
     credentialsName: "TAX2_CREDS_PROD",
     secretArn: "arn:aws:secretsmanager:us-east-1:973370773553:secret:TAX2_CREDS_PROD-GpFZD1",
-    allowedOrigins: ["https://propertytaxreliefstatus.nj.gov/"],
+    allowedOrigins: ["https://propertytaxreliefstatus.nj.gov"],
   },
 };
