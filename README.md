@@ -1,52 +1,92 @@
-# Innovation Repository Template
+# Project Name
 
-This repository serves as a template for creating new repositories within the New Jersey State
-Office of Innovation. It provides a standardized structure and guidelines to follow when developing
-software or documents.
-
-To get started with this repository, have an Innovation GitHub admin clone this template repository
-for you. We'll need the following information from you:
-
-- the intended name for the GitHub repository
-- the visibility of the repository (public, private, internal)
-- the permissions for the repository, either:
-  - explicit permissions for the new repository
-  - another repository from which we can mirror the permissions
+This project allows NJ residents to look up their PAS-1 property tax relief status.
 
 ## Table of Contents
 
-1. [Using](#using)
-2. [Contributing](#contributing)
-3. [License](#license)
-4. [Acknowledgements](#acknowledgements)
+1. [Architecture](#architecture)
+2. [Installation](#installation)
+3. [Usage](#usage)
+4. [Contributing](#contributing)
+5. [License](#license)
+6. [Contact](#contact)
+7. [Acknowledgements](#acknowledgements)
 
-## Using
+## Architecture
 
-Once this template is mirrored to the new repository, you'll need to perform the following steps:
+This monorepo involves a NextJS frontend (/webapp), a AWS Lambda function API Backend (/lambda), and
+a AWS CDK Infrastructure As Code (/infra) packages.
 
-- Delete this `README.md` file, then rename the `README.template.md` file to take its place.
-- Pin the major versions of the packages in `package.json`.
-  - `npm`: `npm update --save`
-  - `yarn` doesn't do this. Reinstall each of the packages.
-  - `pnpm`: `pnpm up -L`
-- Modify the `package.json` file to set the appropriate version and repository information.
-- Update the supported versions in `SECURITY.md`.
+### Built With
+
+- [AWS CDK](link-to-framework)
+- [Tool Name](link-to-tool)
+- [Database Name](link-to-database)
+
+## Installation
+
+Provide step-by-step guidance on how to install your project. This could include dependencies,
+environment setup, etc.
+
+```bash
+# Clone this repository
+git clone https://github.com/newjersey/tax-relief-status-checker
+
+# Go into the repository
+cd tax-relief-status-checker
+
+# Install dependencies
+npm install
+```
+
+## Usage
+
+Running the web app locally
+
+```bash
+npm run dev
+```
+
+Building the lambda locally
+
+```bash
+npm run package
+```
+
+Deploying resources using CDK
+
+```bash
+export AWS_ACCESS_KEY_ID
+export AWS_SECRET_ACCESS_KEY
+export AWS_SESSION_TOKEN
+npm run deploy:dev
+```
 
 ## Contributing
 
-Contributions are welcome!
+Contributions are what make the open-source community such an amazing place to learn, inspire, and
+create. Any contributions you make are greatly appreciated.
 
-1. Clone the repository (`gh repo clone newjersey/innovation-repo-template`)
-2. Create your feature branch (`git checkout -b your_gh_username/NewConfig`)
-3. Commit your changes (`git commit -S -m 'Change some config'`)
-4. Push to the Branch (`git push origin your_gh_username/NewConfig`)
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a pull request
-6. Post to `#engineering-all` for feedback
 
-## Acknowledgements
+## License
 
-Credit goes to [Sanni](https://github.com/sannidhishukla) for kicking off the conversation that led
-to this template repository.
+This project is licensed under the MIT license. For more information, see [LICENSE](LICENSE).
+
+## Contact
+
+If you want to get in touch with the Office of Innovation team, please email us at
+[team@innovation.nj.gov](mailto:team@innovation.nj.gov).
+
+### Join the Office of Innovation!
+
+If you are excited to design and deliver modern policies and services to improve the lives of all
+New Jerseyans, you should
+[join the New Jersey State Office of Innovation](https://innovation.nj.gov/join.html)!
 
 ## Disclaimer
 
