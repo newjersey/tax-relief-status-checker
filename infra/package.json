@@ -8,7 +8,8 @@
     "build": "tsc",
     "cdk": "cdk",
     "synth": "cdk synth",
-    "deploy": "cdk deploy",
+    "deploy:dev": "cdk deploy -c stage=dev",
+    "deploy:prod": "cdk deploy -c stage=prod",
     "diff": "cdk diff"
   },
   "dependencies": {
@@ -16,7 +17,7 @@
     "constructs": "10.6.0"
   },
   "devDependencies": {
-    "@types/node": "22.15.21",
+    "@types/node": "25.9.1",
     "tsx": "4.22.3",
     "typescript": "6.0.3"
   }
