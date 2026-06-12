@@ -45,6 +45,7 @@ export class InfraStack extends Stack {
         CONNECT_STRING: props.connectString,
         DB_CREDS_SECRET_NAME: props.credentialsName,
       },
+      reservedConcurrentExecutions: 5,
       ...vpcConfig,
     });
 
