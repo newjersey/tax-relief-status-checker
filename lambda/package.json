@@ -20,7 +20,7 @@
     "@types/aws-lambda": "8.10.145",
     "@types/node": "25.9.1",
     "aws-sdk-client-mock": "4.1.0",
-    "esbuild": "0.28.0",
+    "esbuild": "0.28.1",
     "typescript": "6.0.3",
     "vitest": "4.1.8"
   }
