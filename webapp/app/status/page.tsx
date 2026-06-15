@@ -33,24 +33,6 @@ const StatusPage = async ({ searchParams }: StatusPageProps) => {
             </Link>
           </div>
           <div>
-            <div>
-              <Logo
-                size="slim"
-                image={
-                  <img
-                    src="/img/nj_taxation_logo.png"
-                    width={100}
-                    height={100}
-                    alt="Treasury logo"
-                  />
-                }
-              />
-              <h1 className="font-heading-3xl">
-                Property Tax Relief
-                <br />
-                Status Checker
-              </h1>
-            </div>
             <div className="grid-row">
               <div className="tablet:grid-col-3">
                 <p>

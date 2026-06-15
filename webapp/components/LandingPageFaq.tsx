@@ -1,4 +1,4 @@
-import { Accordion, type HeadingLevel, type AccordionProps } from "@trussworks/react-uswds";
+import { Accordion, type HeadingLevel, type AccordionProps, Table } from "@trussworks/react-uswds";
 
 export const expandFaqAccordionItem = (itemId: string) => {
   const button = document.querySelector<HTMLButtonElement>(`button[aria-controls="${itemId}"]`);
@@ -101,13 +101,13 @@ export const LandingPageFaq = (props: LandingPageFaqProps) => {
             payment(s) from each program. Your payment will be delayed if there is an issue with
             your application, or if we need additional information from you.
           </p>
-          <table className="usa-table">
+          <Table className="usa-table" bordered={true} scrollable={true}>
             <thead>
               <tr>
-                <th>Month</th>
-                <th>Senior Freeze</th>
-                <th>ANCHOR</th>
-                <th>Stay NJ</th>
+                <th className="width-card">Month</th>
+                <th className="width-mobile">Senior Freeze</th>
+                <th className="width-mobile">ANCHOR</th>
+                <th className="width-mobile">Stay NJ</th>
               </tr>
             </thead>
             <tbody>
@@ -164,7 +164,7 @@ export const LandingPageFaq = (props: LandingPageFaqProps) => {
                 <td></td>
               </tr>
             </tbody>
-          </table>
+          </Table>
         </>
       ),
       expanded: false,

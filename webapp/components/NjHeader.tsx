@@ -10,7 +10,7 @@ export const NjHeader = () => (
     <a className="usa-skipnav" href="#main-content">
       Skip to main content
     </a>
-    <header className="nj-banner" aria-label="Official government website" id="nj-header">
+    <section className="nj-banner" aria-label="Official government website" id="nj-header">
       <div className="nj-banner__header">
         <div className="grid-container">
           <div className="nj-banner__inner">
@@ -37,6 +37,6 @@ export const NjHeader = () => (
           </div>
         </div>
       </div>
-    </header>
+    </section>
   </>
 );
