@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Label, Logo, TextInputMask, Form, Button } from "@trussworks/react-uswds";
+import { Label, TextInputMask, Form, Button } from "@trussworks/react-uswds";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import { LandingPageFaq, expandFaqAccordionItem } from "@/components/LandingPageFaq";
@@ -120,18 +120,8 @@ const LandingPage = () => {
 
   return (
     <main id="main-content">
-      <section className="usa-section">
+      <section className="usa-section padding-top-2">
         <div className="grid-container">
-          <div className="tablet:grid-col-6">
-            <Logo
-              size="slim"
-              image={
-                <img src="/img/nj_taxation_logo.png" width={90} height={90} alt="Treasury logo" />
-              }
-            />
-            <h1 className="font-heading-2xl">Property Tax Relief Status Checker</h1>
-          </div>
-
           {apiError && (
             <div
               className="usa-alert usa-alert--error usa-alert--slim margin-bottom-3"
@@ -141,11 +131,13 @@ const LandingPage = () => {
             </div>
           )}
 
-          <div className="grid-row grid-gap margin-top-5 margin-bottom-10">
+          <div className="grid-row grid-gap margin-bottom-10">
             <div className="tablet:grid-col-6">
-              <h2>This website is checking your 2025 PAS&#8209;1 application status</h2>
+              <h1 className="font-heading-lg">
+                This website is checking your 2025 PAS&#8209;1 application status
+              </h1>
               <Form onSubmit={handleSubmit(onSubmit)} className="maxw-full" noValidate>
-                <h3>Enter your SSN or ITN and Zip Code</h3>
+                <p className="text-bold font-heading-md">Enter your SSN or ITN and Zip Code</p>
                 <Label htmlFor="ssn" requiredMarker={true}>
                   Social Security or Individual Taxpayer Identification Number
                 </Label>
@@ -153,10 +145,12 @@ const LandingPage = () => {
                   <TextInputMask
                     id="ssn"
                     type="text"
+                    autoComplete=""
                     mask="###-##-####"
                     pattern="\d{3}-\d{2}-\d{4}"
                     required={true}
                     aria-invalid={errors.ssn ? "true" : "false"}
+                    aria-describedby={errors.ssn ? "ssnErrorMessage" : undefined}
                     {...register("ssn", {
                       required: "This question is required",
                       pattern: {
@@ -179,10 +173,12 @@ const LandingPage = () => {
                   <TextInputMask
                     id="zipCode"
                     type="text"
+                    autoComplete="postal-code"
                     mask="#####"
                     pattern="\d{5}"
                     required={true}
                     aria-invalid={errors.zipCode ? "true" : "false"}
+                    aria-describedby={errors.zipCode ? "zipCodeErrorMessage" : undefined}
                     {...register("zipCode", {
                       required: "This question is required",
                       minLength: {
@@ -215,6 +211,9 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+      <div className="grid-container usa-footer__return-to-top">
+        <a href="#nj-header">Return to top</a>
+      </div>
     </main>
   );
 };

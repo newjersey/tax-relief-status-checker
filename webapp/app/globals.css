@@ -17,3 +17,12 @@
 #beta-banner .usa-alert__text {
   max-width: fit-content;
 }
+
+.usa-prose > .usa-table-container--scrollable td {
+  white-space: wrap;
+}
+
+.usa-table-container--scrollable table {
+  table-layout: fixed;
+  width: 100%;
+}
