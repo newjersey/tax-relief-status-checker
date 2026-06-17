@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { Logo } from "@trussworks/react-uswds";
 import Link from "next/link";
 
 interface StatusPageProps {
