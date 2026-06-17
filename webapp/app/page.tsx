@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Label, Logo, TextInputMask, Form, Button } from "@trussworks/react-uswds";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
-import { HorizontalDivider } from "@/components/HorizontalDivider";
 import { LandingPageFaq, expandFaqAccordionItem } from "@/components/LandingPageFaq";
 import { maskSsn } from "@/app/utils/maskSsn";
 import { formatDate } from "@/app/utils/formatDate";
@@ -144,7 +143,7 @@ const LandingPage = () => {
 
           <div className="grid-row grid-gap margin-top-5 margin-bottom-10">
             <div className="tablet:grid-col-6">
-              <h2>This tool is for checking your 2025 PAS-1 application status</h2>
+              <h2>This website is checking your 2025 PAS-1 application status</h2>
               <Form onSubmit={handleSubmit(onSubmit)} className="maxw-full" noValidate>
                 <h3>Enter your SSN or ITN and Zip Code</h3>
                 <Label htmlFor="ssn" requiredMarker={true}>
@@ -210,7 +209,6 @@ const LandingPage = () => {
               </Form>
             </div>
           </div>
-          <HorizontalDivider />
           <div className="grid-row grid-gap margin-top-5">
             <h2 className="font-heading-l">Frequently Asked Questions (FAQs)</h2>
             <LandingPageFaq headingLevel="h3" />
