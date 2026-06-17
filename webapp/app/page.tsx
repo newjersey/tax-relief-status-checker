@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Label, Logo, TextInputMask, Form, Button } from "@trussworks/react-uswds";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
-import { HorizontalDivider } from "@/components/HorizontalDivider";
 import { LandingPageFaq, expandFaqAccordionItem } from "@/components/LandingPageFaq";
 import { maskSsn } from "@/app/utils/maskSsn";
 import { formatDate } from "@/app/utils/formatDate";
@@ -78,13 +77,13 @@ const LandingPage = () => {
                 application is different than the one you entered in this tool.
               </li>
               <li>
-                <strong>It's too soon</strong>: For online applications, it can take up to 3 weeks.
-                For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants,
-                check back in the Fall.
+                <strong>It's too soon</strong>: For online applications, it can take up to 3 weeks
+                for an application to show up on this website. For paper applications, it can take
+                up to 12 weeks. For ANCHOR-only applicants, check back in the fall of 2026.
               </li>
             </ul>
             <p className="usa-alert__text">
-              For a full list of reasons, check out the{" "}
+              Find the{" "}
               <a
                 href="#faq_no_2025_application_found"
                 onClick={(e) => {
@@ -92,9 +91,9 @@ const LandingPage = () => {
                   expandFaqAccordionItem("faq_no_2025_application_found");
                 }}
               >
-                FAQ section
-              </a>
-              .
+                full list of other possible reasons
+              </a>{" "}
+              your application is not showing up
             </p>
           </>,
         );
@@ -144,11 +143,11 @@ const LandingPage = () => {
 
           <div className="grid-row grid-gap margin-top-5 margin-bottom-10">
             <div className="tablet:grid-col-6">
-              <h2>This tool is for checking your 2025 PAS-1 application status</h2>
+              <h2>This website is checking your 2025 PAS&#8209;1 application status</h2>
               <Form onSubmit={handleSubmit(onSubmit)} className="maxw-full" noValidate>
-                <h3>Enter your Social Security Number (SSN) and Zip Code</h3>
+                <h3>Enter your SSN or ITN and Zip Code</h3>
                 <Label htmlFor="ssn" requiredMarker={true}>
-                  SSN or Individual Taxpayer Identification Number (ITIN)
+                  Social Security or Individual Taxpayer Identification Number
                 </Label>
                 <div className="tablet:grid-col-10">
                   <TextInputMask
@@ -162,7 +161,7 @@ const LandingPage = () => {
                       required: "This question is required",
                       pattern: {
                         value: /\d{3}-\d{2}-\d{4}/,
-                        message: "Entered value does not match social security number format",
+                        message: "SSN or ITIN number entered must have nine digits",
                       },
                     })}
                   />
@@ -174,7 +173,7 @@ const LandingPage = () => {
                 </div>
 
                 <Label htmlFor="zipCode" requiredMarker={true}>
-                  Zip code you filed with
+                  Zip code you submitted with your application
                 </Label>
                 <div className="tablet:grid-col-10">
                   <TextInputMask
@@ -210,7 +209,6 @@ const LandingPage = () => {
               </Form>
             </div>
           </div>
-          <HorizontalDivider />
           <div className="grid-row grid-gap margin-top-5">
             <h2 className="font-heading-l">Frequently Asked Questions (FAQs)</h2>
             <LandingPageFaq headingLevel="h3" />
