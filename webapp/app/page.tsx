@@ -77,9 +77,9 @@ const LandingPage = () => {
                 application is different than the one you entered in this tool.
               </li>
               <li>
-                <strong>It's too soon</strong>: For online applications, it can take up to 3 weeks.
-                For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants,
-                check back in the Fall.
+                <strong>It's too soon</strong>: For online applications, it can take up to 3 weeks
+                for an application to show up on this website. For paper applications, it can take
+                up to 12 weeks. For ANCHOR-only applicants, check back in the fall of 2026.
               </li>
             </ul>
             <p className="usa-alert__text">

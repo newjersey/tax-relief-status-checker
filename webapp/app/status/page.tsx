@@ -72,8 +72,8 @@ const StatusPage = async ({ searchParams }: StatusPageProps) => {
           <div className="margin-top-4">
             <p className="font-heading-xl">Your application was received on {applicationDate}.</p>
             <p>
-              Please allow time for your application to be reviewed. There's nothing you need to do
-              right now. If you applied early in the year, check back in early summer for an update.
+              Your application is being reviewed. No action is needed right now. If you applied
+              early this year, please check back in early summer.
             </p>
           </div>
         </div>
