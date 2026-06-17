@@ -84,7 +84,7 @@ const LandingPage = () => {
               </li>
             </ul>
             <p className="usa-alert__text">
-              For a full list of reasons, check out the{" "}
+              Find the{" "}
               <a
                 href="#faq_no_2025_application_found"
                 onClick={(e) => {
@@ -92,9 +92,9 @@ const LandingPage = () => {
                   expandFaqAccordionItem("faq_no_2025_application_found");
                 }}
               >
-                FAQ section
-              </a>
-              .
+                full list of other possible reasons
+              </a>{" "}
+              your application is not showing up
             </p>
           </>,
         );
