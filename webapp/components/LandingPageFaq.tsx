@@ -20,7 +20,7 @@ interface LandingPageFaqProps {
 export const LandingPageFaq = (props: LandingPageFaqProps) => {
   const faqContent: AccordionItemProps[] = [
     {
-      title: "When can I expect my paper application to show up in this online tool?",
+      title: "When can I expect my application to show up?",
       content: (
         <p>
           For online applications, it can take up to 3 weeks before a status shows up. For paper

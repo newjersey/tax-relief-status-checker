@@ -146,9 +146,9 @@ const LandingPage = () => {
             <div className="tablet:grid-col-6">
               <h2>This tool is for checking your 2025 PAS-1 application status</h2>
               <Form onSubmit={handleSubmit(onSubmit)} className="maxw-full" noValidate>
-                <h3>Enter your Social Security Number (SSN) and Zip Code</h3>
+                <h3>Enter your SSN or ITN and Zip Code</h3>
                 <Label htmlFor="ssn" requiredMarker={true}>
-                  SSN or Individual Taxpayer Identification Number (ITIN)
+                  Social Security or Individual Taxpayer Identification Number
                 </Label>
                 <div className="tablet:grid-col-10">
                   <TextInputMask
@@ -162,7 +162,7 @@ const LandingPage = () => {
                       required: "This question is required",
                       pattern: {
                         value: /\d{3}-\d{2}-\d{4}/,
-                        message: "Entered value does not match social security number format",
+                        message: "SSN or ITIN number entered must have nine digits",
                       },
                     })}
                   />
@@ -174,7 +174,7 @@ const LandingPage = () => {
                 </div>
 
                 <Label htmlFor="zipCode" requiredMarker={true}>
-                  Zip code you filed with
+                  Zip code you submitted with your application
                 </Label>
                 <div className="tablet:grid-col-10">
                   <TextInputMask
