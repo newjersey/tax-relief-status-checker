@@ -143,7 +143,7 @@ const LandingPage = () => {
 
           <div className="grid-row grid-gap margin-top-5 margin-bottom-10">
             <div className="tablet:grid-col-6">
-              <h2>This website is checking your 2025 PAS-1 application status</h2>
+              <h2>This website is checking your 2025 PAS&#8209;1 application status</h2>
               <Form onSubmit={handleSubmit(onSubmit)} className="maxw-full" noValidate>
                 <h3>Enter your SSN or ITN and Zip Code</h3>
                 <Label htmlFor="ssn" requiredMarker={true}>
