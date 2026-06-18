@@ -1,3 +1,4 @@
+import { logGAEvent } from "@/app/utils/analytics";
 import { Accordion, type HeadingLevel, type AccordionProps, Table } from "@trussworks/react-uswds";
 
 export const expandFaqAccordionItem = (itemId: string) => {
@@ -12,12 +13,10 @@ export const expandFaqAccordionItem = (itemId: string) => {
 };
 
 const fireEventWhenFaqOpened = (faqId: string) => {
-  if (typeof window.gtag === "function") {
-    const button = document.querySelector<HTMLButtonElement>(`button[aria-controls="${faqId}"]`);
-    const isExpanded = button?.getAttribute("aria-expanded") === "true";
-    if (!isExpanded) {
-      window.gtag("event", `${faqId}_opened`);
-    }
+  const button = document.querySelector<HTMLButtonElement>(`button[aria-controls="${faqId}"]`);
+  const isExpanded = button?.getAttribute("aria-expanded") === "true";
+  if (!isExpanded) {
+    logGAEvent(`${faqId}_opened`);
   }
 };
 
