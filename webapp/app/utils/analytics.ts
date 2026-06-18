@@ -30,6 +30,4 @@ export const logGAEvent = (eventName: string): void => {
   if (typeof window.gtag === "function") {
     window.gtag("event", eventName, params);
   }
-
-  console.log("Analytics Event:", eventName, params);
 };
