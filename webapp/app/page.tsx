@@ -22,6 +22,12 @@ interface StatusRecord {
   readonly application_date: string;
 }
 
+const returnToTop = () => {
+  const topOfPage = document.querySelector(`#nj-header`);
+  if (!topOfPage) return;
+  topOfPage.scrollIntoView({ behavior: "smooth", block: "start" });
+};
+
 const LandingPage = () => {
   const router = useRouter();
   const [apiError, setApiError] = useState<ReactNode | null>(null);
@@ -54,6 +60,7 @@ const LandingPage = () => {
             We are having an issue checking on your application status. Please try again later.
           </p>,
         );
+        returnToTop();
         return;
       }
 
@@ -97,6 +104,7 @@ const LandingPage = () => {
             </p>
           </>,
         );
+        returnToTop();
         return;
       }
 
@@ -115,6 +123,7 @@ const LandingPage = () => {
           We are having an issue checking on your application status. Please try again later.
         </p>,
       );
+      returnToTop();
     }
   };
 
