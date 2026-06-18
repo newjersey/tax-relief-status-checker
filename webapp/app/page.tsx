@@ -9,7 +9,7 @@ import type { SubmitHandler } from "react-hook-form";
 import { LandingPageFaq, expandFaqAccordionItem } from "@/components/LandingPageFaq";
 import { maskSsn } from "@/app/utils/maskSsn";
 import { formatDate } from "@/app/utils/formatDate";
-import { setSessionId } from "./utils/analytics";
+import { logGAEvent, setSessionId } from "./utils/analytics";
 
 /** Form data collected from the user. */
 interface UserData {
@@ -58,6 +58,7 @@ const LandingPage = () => {
             We are having an issue checking on your application status. Please try again later.
           </p>,
         );
+        logGAEvent(`api_error`);
         return;
       }
 
@@ -101,6 +102,7 @@ const LandingPage = () => {
             </p>
           </>,
         );
+        logGAEvent(`api_200_record_not_found`);
         return;
       }
 
@@ -111,7 +113,7 @@ const LandingPage = () => {
         zipCode: data.zipCode,
         date: formattedDate,
       });
-
+      logGAEvent(`api_200_record_found`);
       router.push(`/status?${params.toString()}`);
     } catch {
       setApiError(
@@ -119,6 +121,7 @@ const LandingPage = () => {
           We are having an issue checking on your application status. Please try again later.
         </p>,
       );
+      logGAEvent(`api_error`);
     }
   };
 
