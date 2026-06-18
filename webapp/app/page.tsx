@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Label, TextInputMask, Form, Button } from "@trussworks/react-uswds";
 import { useForm } from "react-hook-form";
@@ -9,6 +9,7 @@ import type { SubmitHandler } from "react-hook-form";
 import { LandingPageFaq, expandFaqAccordionItem } from "@/components/LandingPageFaq";
 import { maskSsn } from "@/app/utils/maskSsn";
 import { formatDate } from "@/app/utils/formatDate";
+import { setSessionId } from "./utils/analytics";
 
 /** Form data collected from the user. */
 interface UserData {
@@ -24,6 +25,9 @@ interface StatusRecord {
 
 const LandingPage = () => {
   const router = useRouter();
+  useEffect(() => {
+    setSessionId();
+  }, []);
   const [apiError, setApiError] = useState<ReactNode | null>(null);
 
   const {
