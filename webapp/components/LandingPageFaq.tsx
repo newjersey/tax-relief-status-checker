@@ -39,7 +39,7 @@ export const LandingPageFaq = (props: LandingPageFaqProps) => {
           <ul>
             <li>
               <strong>Identity mismatch</strong>: The SSN/ITIN and zip code you filed on your
-              application is different than the one you entered in this tool.
+              application is different than the one you just entered.
             </li>
             <li>
               <strong>It&apos;s too soon</strong>: For online applications, it can take up to 3
