@@ -11,6 +11,16 @@ export const expandFaqAccordionItem = (itemId: string) => {
   button.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
+const fireEventWhenFaqOpened = (faqId: string) => {
+  if (typeof window.gtag === "function") {
+    const button = document.querySelector<HTMLButtonElement>(`button[aria-controls="${faqId}"]`);
+    const isExpanded = button?.getAttribute("aria-expanded") === "true";
+    if (!isExpanded) {
+      window.gtag("event", `${faqId}_opened`);
+    }
+  }
+};
+
 type AccordionItemProps = AccordionProps["items"][number];
 
 interface LandingPageFaqProps {
@@ -28,8 +38,9 @@ export const LandingPageFaq = (props: LandingPageFaqProps) => {
         </p>
       ),
       expanded: false,
-      id: "faq_when_paper_application_viewable",
+      id: "faq_when_can_i_expect_my_application_status",
       headingLevel: props.headingLevel,
+      handleToggle: () => fireEventWhenFaqOpened("faq_when_can_i_expect_my_application_status"),
     },
     {
       title: "I applied but I keep getting \u201CNo 2025 application found\u201D. Why?",
@@ -66,6 +77,7 @@ export const LandingPageFaq = (props: LandingPageFaqProps) => {
       expanded: false,
       id: "faq_no_2025_application_found",
       headingLevel: props.headingLevel,
+      handleToggle: () => fireEventWhenFaqOpened("faq_no_2025_application_found"),
     },
     {
       title: "What if I need to update something after I\u2019ve submitted my application?",
@@ -90,6 +102,7 @@ export const LandingPageFaq = (props: LandingPageFaqProps) => {
       expanded: false,
       id: "faq_update_after_submission",
       headingLevel: props.headingLevel,
+      handleToggle: () => fireEventWhenFaqOpened("faq_update_after_submission"),
     },
     {
       title: "When can I expect to receive payments?",
@@ -170,6 +183,7 @@ export const LandingPageFaq = (props: LandingPageFaqProps) => {
       expanded: false,
       id: "faq_when_can_i_expect_to_receive_payments",
       headingLevel: props.headingLevel,
+      handleToggle: () => fireEventWhenFaqOpened("faq_when_can_i_expect_to_receive_payments"),
     },
     {
       title: "My application is taking too long. Who do I contact?",
@@ -187,6 +201,7 @@ export const LandingPageFaq = (props: LandingPageFaqProps) => {
       expanded: false,
       id: "faq_application_taking_too_long",
       headingLevel: props.headingLevel,
+      handleToggle: () => fireEventWhenFaqOpened("faq_application_taking_too_long"),
     },
   ];
 
