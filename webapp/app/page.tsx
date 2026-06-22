@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Label, TextInputMask, Form, Button } from "@trussworks/react-uswds";
 import { useForm } from "react-hook-form";
@@ -9,6 +9,7 @@ import type { SubmitHandler } from "react-hook-form";
 import { LandingPageFaq, expandFaqAccordionItem } from "@/components/LandingPageFaq";
 import { maskSsn } from "@/app/utils/maskSsn";
 import { formatDate } from "@/app/utils/formatDate";
+import { logGAEvent, setSessionId } from "./utils/analytics";
 
 /** Form data collected from the user. */
 interface UserData {
@@ -30,6 +31,9 @@ const returnToTop = () => {
 
 const LandingPage = () => {
   const router = useRouter();
+  useEffect(() => {
+    setSessionId();
+  }, []);
   const [apiError, setApiError] = useState<ReactNode | null>(null);
 
   const {
@@ -60,6 +64,7 @@ const LandingPage = () => {
             We are having an issue checking on your application status. Please try again later.
           </p>,
         );
+        logGAEvent(`api_error`);
         returnToTop();
         return;
       }
@@ -104,6 +109,7 @@ const LandingPage = () => {
             </p>
           </>,
         );
+        logGAEvent(`api_200_record_not_found`);
         returnToTop();
         return;
       }
@@ -115,7 +121,7 @@ const LandingPage = () => {
         zipCode: data.zipCode,
         date: formattedDate,
       });
-
+      logGAEvent(`api_200_record_found`);
       router.push(`/status?${params.toString()}`);
     } catch {
       setApiError(
@@ -123,6 +129,7 @@ const LandingPage = () => {
           We are having an issue checking on your application status. Please try again later.
         </p>,
       );
+      logGAEvent(`api_error`);
       returnToTop();
     }
   };
