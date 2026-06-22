@@ -23,6 +23,12 @@ interface StatusRecord {
   readonly application_date: string;
 }
 
+const returnToTop = () => {
+  const topOfPage = document.querySelector(`#nj-header`);
+  if (!topOfPage) return;
+  topOfPage.scrollIntoView({ behavior: "smooth", block: "start" });
+};
+
 const LandingPage = () => {
   const router = useRouter();
   useEffect(() => {
@@ -59,6 +65,7 @@ const LandingPage = () => {
           </p>,
         );
         logGAEvent(`api_error`);
+        returnToTop();
         return;
       }
 
@@ -74,12 +81,12 @@ const LandingPage = () => {
             <h2 className="usa-alert__heading">No 2025 application found</h2>
             <p className="usa-alert__text">
               We couldn't find any records matching the SSN or ITIN and zip code you entered. Some
-              reasons why:
+              common reasons why:
             </p>
             <ul>
               <li>
                 <strong>Identity mismatch</strong>: The SSN/ITIN and zip code you filed on your
-                application is different than the one you entered in this tool.
+                application is different than the one you just entered.
               </li>
               <li>
                 <strong>It's too soon</strong>: For online applications, it can take up to 3 weeks
@@ -103,6 +110,7 @@ const LandingPage = () => {
           </>,
         );
         logGAEvent(`api_200_record_not_found`);
+        returnToTop();
         return;
       }
 
@@ -122,6 +130,7 @@ const LandingPage = () => {
         </p>,
       );
       logGAEvent(`api_error`);
+      returnToTop();
     }
   };
 
