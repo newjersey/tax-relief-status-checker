@@ -5,6 +5,17 @@ import { StatusCheckerHeader } from "@/components/StatusCheckerHeader";
 import "@newjersey/njwds/dist/css/styles.css";
 import "./globals.css";
 import Script from "next/script";
+import { FeedbackWidget } from "@/components/FeedbackWidget";
+
+// NJ: Tells TypeScript that <feedback-widget> is a valid custom element.
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace JSX {
+    interface IntrinsicElements {
+      "feedback-widget": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    }
+  }
+}
 
 /** {@link https://nextjs.org/docs/app/api-reference/functions/generate-metadata} */
 export const metadata: Metadata = {
@@ -33,6 +44,7 @@ const RootLayout = ({ children }: { readonly children: React.ReactNode }) => (
       <NjHeader />
       <StatusCheckerHeader />
       {children}
+      <FeedbackWidget />
       <NjFooter />
     </body>
   </html>
