@@ -33,8 +33,7 @@
     "react-dom": "19.2.6",
     "react-hook-form": "7.80.0",
     "react-router-dom": "7.17.0",
-    "typescript": "6.0.3",
-    "uuid": "14.0.0"
+    "typescript": "6.0.3"
   },
   "devDependencies": {
     "@testing-library/react": "16.3.2",

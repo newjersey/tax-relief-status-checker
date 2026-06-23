@@ -6,6 +6,8 @@ import "@newjersey/njwds/dist/css/styles.css";
 import "./globals.css";
 import Script from "next/script";
 
+const TRACKING_ID = process.env.STAGE == "production" ? "G-KMSDMG9NFN" : "G-DEV";
+
 /** {@link https://nextjs.org/docs/app/api-reference/functions/generate-metadata} */
 export const metadata: Metadata = {
   title: "NJ Property Tax Relief — Application Status",
