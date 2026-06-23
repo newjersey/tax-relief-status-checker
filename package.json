@@ -18,7 +18,7 @@
     "lockfile": "rm -rf webapp/node_modules lambda/node_modules infra/node_modules node_modules package-lock.json && npm install"
   },
   "dependencies": {
-    "@newjersey/feedback-widget": "^0.7.1",
+    "@newjersey/feedback-widget": "0.6.0",
     "husky": "9.1.7",
     "lint-staged": "17.0.5",
     "prettier": "3.8.3",
