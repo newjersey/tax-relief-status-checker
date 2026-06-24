@@ -5,6 +5,7 @@ import { StatusCheckerHeader } from "@/components/StatusCheckerHeader";
 import "@newjersey/njwds/dist/css/styles.css";
 import "./globals.css";
 import Script from "next/script";
+import { FeedbackWidget } from "@/components/FeedbackWidget";
 
 /** {@link https://nextjs.org/docs/app/api-reference/functions/generate-metadata} */
 export const metadata: Metadata = {
@@ -37,6 +38,7 @@ const RootLayout = ({ children }: { readonly children: React.ReactNode }) => (
       <NjHeader />
       <StatusCheckerHeader />
       {children}
+      <FeedbackWidget />
       <NjFooter />
     </body>
   </html>
