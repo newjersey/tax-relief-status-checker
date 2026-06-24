@@ -6,7 +6,7 @@ import { render } from "@testing-library/react";
 describe("layout for all pages", () => {
   it("does not include Google Tag Manager for dev", () => {
     vi.stubEnv("STAGE", "dev");
-    const { asFragment, getByText } = render(
+    const { asFragment } = render(
       <RootLayout>
         <div></div>
       </RootLayout>,
@@ -21,7 +21,7 @@ describe("layout for all pages", () => {
 
   it("does include Google Tag Manager for prod", () => {
     vi.stubEnv("STAGE", "dev");
-    const { asFragment, getByText } = render(
+    const { asFragment } = render(
       <RootLayout>
         <div></div>
       </RootLayout>,
@@ -34,3 +34,5 @@ describe("layout for all pages", () => {
   `);
   });
 });
+
+console.log("layout.test.tsx: test file loaded");
