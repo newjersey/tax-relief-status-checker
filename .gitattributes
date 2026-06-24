@@ -1,0 +1,2 @@
+# Exclude from diff
+package-lock.json diff
