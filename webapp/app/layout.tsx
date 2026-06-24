@@ -17,18 +17,22 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { readonly children: React.ReactNode }) => (
   <html lang="en">
     <head>
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-KMSDMG9NFN"
-        strategy="afterInteractive"
-      />
-      <Script strategy="afterInteractive">
-        {`
+      {process.env.ENABLE_ANALYTICS == "true" && (
+        <>
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-KMSDMG9NFN"
+            strategy="afterInteractive"
+          />
+          <Script strategy="afterInteractive">
+            {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'G-KMSDMG9NFN');
         `}
-      </Script>
+          </Script>
+        </>
+      )}
     </head>
     <body>
       <NjHeader />
