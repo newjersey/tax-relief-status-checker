@@ -31,7 +31,7 @@ const returnToTop = () => {
 
 const LandingPage = () => {
   const router = useRouter();
-  const [apiError, setApiError] = useState<ReactNode | null>(null);
+  const [alertContent, setAlertContent] = useState<ReactNode | null>(null);
 
   const {
     register,
@@ -46,7 +46,7 @@ const LandingPage = () => {
   });
 
   const onSubmit: SubmitHandler<UserData> = async (data) => {
-    setApiError(null);
+    setAlertContent(null);
 
     try {
       const response = await fetch("/api/status", {
@@ -56,7 +56,7 @@ const LandingPage = () => {
       });
 
       if (!response.ok) {
-        setApiError(
+        setAlertContent(
           <p className="usa-alert__text maxw-tablet">
             We are having an issue checking on your application status. Please try again later.
           </p>,
@@ -73,7 +73,7 @@ const LandingPage = () => {
       const record2025 = body.records.find((r) => r.return_year === "2025");
 
       if (!record2025) {
-        setApiError(
+        setAlertContent(
           <>
             <h2 className="usa-alert__heading">No 2025 application found</h2>
             <p className="usa-alert__text">
@@ -121,7 +121,7 @@ const LandingPage = () => {
       logGAEvent(`api_200_record_found`);
       router.push(`/status?${params.toString()}`);
     } catch {
-      setApiError(
+      setAlertContent(
         <p className="usa-alert__text maxw-tablet">
           We are having an issue checking on your application status. Please try again later.
         </p>,
@@ -135,12 +135,12 @@ const LandingPage = () => {
     <main id="main-content">
       <section className="usa-section padding-top-2">
         <div className="grid-container">
-          {apiError && (
+          {alertContent && (
             <div
               className="usa-alert usa-alert--error usa-alert--slim margin-bottom-3"
               role="alert"
             >
-              <div className="usa-alert__body">{apiError}</div>
+              <div className="usa-alert__body">{alertContent}</div>
             </div>
           )}
 
