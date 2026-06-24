@@ -6,8 +6,6 @@ import "@newjersey/njwds/dist/css/styles.css";
 import "./globals.css";
 import Script from "next/script";
 
-const TRACKING_ID = process.env.STAGE == "production" ? "G-KMSDMG9NFN" : "G-DEV";
-
 /** {@link https://nextjs.org/docs/app/api-reference/functions/generate-metadata} */
 export const metadata: Metadata = {
   title: "NJ Property Tax Relief — Application Status",
@@ -18,18 +16,22 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { readonly children: React.ReactNode }) => (
   <html lang="en">
     <head>
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-KMSDMG9NFN"
-        strategy="afterInteractive"
-      />
-      <Script strategy="afterInteractive">
-        {`
+      {process.env.ENABLE_ANALYTICS == "true" && (
+        <>
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-KMSDMG9NFN"
+            strategy="afterInteractive"
+          />
+          <Script strategy="afterInteractive">
+            {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'G-KMSDMG9NFN');
         `}
-      </Script>
+          </Script>
+        </>
+      )}
     </head>
     <body>
       <NjHeader />

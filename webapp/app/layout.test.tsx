@@ -4,33 +4,25 @@ import RootLayout from "./layout";
 import { render } from "@testing-library/react";
 
 describe("layout for all pages", () => {
-  it("does not include Google Tag Manager for dev", () => {
-    vi.stubEnv("STAGE", "dev");
-    const { asFragment } = render(
+  it("does not include Google Tag Manager when env variable is set to false", () => {
+    vi.stubEnv("ENABLE_ANALYTICS", "false");
+    render(
       <RootLayout>
         <div></div>
       </RootLayout>,
+      { container: document.head },
     );
-    expect(asFragment()).toMatchInlineSnapshot(`
-    <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-KMSDMG9NFN"
-        strategy="afterInteractive"
-      />
-  `);
+    expect(document.head.textContent).not.toMatch("gtag");
   });
 
-  it("does include Google Tag Manager for prod", () => {
-    vi.stubEnv("STAGE", "dev");
-    const { asFragment } = render(
+  it("does include Google Tag Manager when env variable is set to true", () => {
+    vi.stubEnv("ENABLE_ANALYTICS", "true");
+    render(
       <RootLayout>
         <div></div>
       </RootLayout>,
+      { container: document.head },
     );
-    expect(asFragment()).toMatchInlineSnapshot(`
-    <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-KMSDMG9NFN"
-        strategy="afterInteractive"
-      />
-  `);
+    expect(document.head.textContent).toMatch("gtag");
   });
 });
