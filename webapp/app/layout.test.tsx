@@ -34,5 +34,3 @@ describe("layout for all pages", () => {
   `);
   });
 });
-
-console.log("layout.test.tsx: test file loaded");
