@@ -20,6 +20,8 @@ const fireEventWhenFaqOpened = (faqId: string) => {
   }
 };
 
+type AccordionItemContent = Omit<AccordionItemProps, "headingLevel">;
+
 type AccordionItemProps = AccordionProps["items"][number];
 
 interface LandingPageFaqProps {
@@ -27,10 +29,16 @@ interface LandingPageFaqProps {
 }
 
 export const LandingPageFaq = (props: LandingPageFaqProps) => {
-  return <Accordion multiselectable={true} items={faqContent} />;
+  const faqProps: AccordionItemProps[] = FaqContent.map((faqItem) => {
+    return {
+      ...faqItem,
+      headingLevel: props.headingLevel,
+    };
+  });
+  return <Accordion multiselectable={true} items={faqProps} />;
 };
 
-export const faqContent: AccordionItemProps[] = [
+export const FaqContent: AccordionItemContent[] = [
   {
     title: "When can I expect my application to show up?",
     content: (
@@ -41,7 +49,6 @@ export const faqContent: AccordionItemProps[] = [
     ),
     expanded: false,
     id: "faq_when_can_i_expect_my_application_status",
-    headingLevel: props.headingLevel,
     handleToggle: () => fireEventWhenFaqOpened("faq_when_can_i_expect_my_application_status"),
   },
   {
@@ -77,7 +84,6 @@ export const faqContent: AccordionItemProps[] = [
     ),
     expanded: false,
     id: "faq_no_2025_application_found",
-    headingLevel: props.headingLevel,
     handleToggle: () => fireEventWhenFaqOpened("faq_no_2025_application_found"),
   },
   {
@@ -102,7 +108,6 @@ export const faqContent: AccordionItemProps[] = [
     ),
     expanded: false,
     id: "faq_update_after_submission",
-    headingLevel: props.headingLevel,
     handleToggle: () => fireEventWhenFaqOpened("faq_update_after_submission"),
   },
   {
@@ -183,7 +188,6 @@ export const faqContent: AccordionItemProps[] = [
     ),
     expanded: false,
     id: "faq_when_can_i_expect_to_receive_payments",
-    headingLevel: props.headingLevel,
     handleToggle: () => fireEventWhenFaqOpened("faq_when_can_i_expect_to_receive_payments"),
   },
   {
@@ -201,7 +205,6 @@ export const faqContent: AccordionItemProps[] = [
     ),
     expanded: false,
     id: "faq_application_taking_too_long",
-    headingLevel: props.headingLevel,
     handleToggle: () => fireEventWhenFaqOpened("faq_application_taking_too_long"),
   },
 ];

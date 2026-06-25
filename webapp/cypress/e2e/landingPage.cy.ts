@@ -1,11 +1,10 @@
-import { Button } from "@trussworks/react-uswds";
-import { LandingPageFaq } from "@/components/LandingPageFaq";
+import { FaqContent } from "@/components/LandingPageFaq";
 
 const fillField = (fieldName: string, value: string): undefined => {
   cy.get(`input[name="${fieldName}"]`).type(value);
 };
 
-const expandAccordion = (answerID: string, questionText: string): undefined => {
+const runAccordionTests = (questionText: string, answerID: string): undefined => {
   cy.contains("button", questionText).click();
   cy.get(`div[id="${answerID}"]`).should("be.visible");
 };
@@ -46,10 +45,7 @@ it("should display an error message when the user enters malformatted Zip", () =
 
 it("should expand the accordion FAQ when clicked", () => {
   cy.visit("/");
-  expandAccordion(
-    "faq_when_can_i_expect_my_application_status",
-    "When can I expect my application to show up?",
-  );
+  for (const faq of FaqContent) {
+    runAccordionTests(faq.title as string, faq.id);
+  }
 });
-
-it("should fire metrics when in a prod environment", () => {});
