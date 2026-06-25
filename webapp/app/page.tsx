@@ -60,7 +60,7 @@ const LandingPage = () => {
 
       if (!response.ok) {
         setApiError(
-          <p className="usa-alert__text maxw-tablet">
+          <p className="usa-alert__text maxw-tablet" id="tryAgainErrorMessage">
             We are having an issue checking on your application status. Please try again later.
           </p>,
         );
@@ -125,7 +125,7 @@ const LandingPage = () => {
       router.push(`/status?${params.toString()}`);
     } catch {
       setApiError(
-        <p className="usa-alert__text maxw-tablet">
+        <p className="usa-alert__text maxw-tablet" id="tryAgainErrorMessage">
           We are having an issue checking on your application status. Please try again later.
         </p>,
       );

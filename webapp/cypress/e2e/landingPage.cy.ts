@@ -49,3 +49,27 @@ it("should expand the accordion FAQ when clicked", () => {
     runAccordionTests(faq.title as string, faq.id);
   }
 });
+
+it("should display we are having trouble checking on your application when status API is not configured", () => {
+  cy.visit("/");
+  fillField("ssn", "123456789");
+  fillField("zipCode", "00000");
+  cy.intercept("POST", "/api/status", {
+    statusCode: 503,
+    body: { error: "Status API is not configured." },
+  });
+  cy.get(`button[type="submit"]`).click();
+  cy.get('p[id="tryAgainErrorMessage"]').should("be.visible");
+});
+
+it("should display we are having trouble checking on your application when it fails to reach api", () => {
+  cy.visit("/");
+  fillField("ssn", "123456789");
+  fillField("zipCode", "00000");
+  cy.intercept("POST", "/api/status", {
+    statusCode: 502,
+    body: { error: "Failed to reach the status service." },
+  });
+  cy.get(`button[type="submit"]`).click();
+  cy.get('p[id="tryAgainErrorMessage"]').should("be.visible");
+});
