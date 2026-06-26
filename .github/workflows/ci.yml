@@ -2,8 +2,7 @@ name: ci
 
 on:
   pull_request:
-    types:
-      - opened
+    branches: ["main"]
   push:
     branches:
       - "main"
@@ -16,4 +15,4 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
   e2e-tests:
-    uses: ./.github/workflows/ene_to_end_tests.yml
+    uses: ./.github/workflows/end_to_end_tests.yml
