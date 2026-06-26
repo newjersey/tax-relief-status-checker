@@ -16,6 +16,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Start the development application
-        run: npm run dev & npx wait-on http://localhost:3000/
+        run: cd webapp && npm run dev && npx wait-on http://localhost:3000/
       - name: Run cypress tests
         run: npx cypress run
