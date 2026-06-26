@@ -6,7 +6,7 @@ on:
       - "main"
   push:
     branches:
-      - "main"
+      - "84-e2e-testing"
 
 jobs:
   prettier:
@@ -15,3 +15,5 @@ jobs:
     uses: ./.github/workflows/unit_tests.yml
   build:
     uses: ./.github/workflows/build.yml
+  e2e-tests:
+    uses: ./.github/workflows/ene_to_end_tests.yml
