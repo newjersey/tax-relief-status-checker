@@ -46,7 +46,7 @@ it("should display an error message when the user enters malformatted SSN", () =
 it("should display an error message when the user enters malformatted Zip", () => {
   cy.visit("/");
   fillField("zipCode", "1");
-  cy.get(`button[type="submit"]`).click();
+  cy.contains("button", `Check Status`).click();
   const zipError = cy.get(`span[id="zipCodeErrorMessage"]`);
   zipError.should("be.visible");
   zipError.should("contain.text", "Zip code must have five digits");
