@@ -2,11 +2,11 @@ name: ci
 
 on:
   pull_request:
-    branches:
-      - "84-e2e-testing"
+    types:
+      - opened
   push:
     branches:
-      - "84-e2e-testing"
+      - "main"
 
 jobs:
   prettier:
