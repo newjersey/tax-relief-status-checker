@@ -9,6 +9,15 @@ const runAccordionTests = (questionText: string, answerID: string): undefined =>
   cy.get(`div[id="${answerID}"]`).should("be.visible");
 };
 
+const mockSSN = "123456789";
+const mockZip = "00000";
+
+const fillAndSubmit = () => {
+  cy.visit("/");
+  fillField("ssn", mockSSN);
+  fillField("zipCode", mockZip);
+};
+
 it("should allow the user to visit the webpage", () => {
   cy.visit("/");
   cy.window().its("scrollY").should("equal", 0); // The page view should be at the top
@@ -50,26 +59,62 @@ it("should expand the accordion FAQ when clicked", () => {
   }
 });
 
-it("should display we are having trouble checking on your application when status API is not configured", () => {
-  cy.visit("/");
-  fillField("ssn", "123456789");
-  fillField("zipCode", "00000");
+it("should an error message when api returns a 500 error", () => {
+  fillAndSubmit();
   cy.intercept("POST", "/api/status", {
-    statusCode: 503,
+    statusCode: 500,
     body: { error: "Status API is not configured." },
   });
   cy.get(`button[type="submit"]`).click();
-  cy.get('p[id="tryAgainErrorMessage"]').should("be.visible");
+  cy.contains(
+    "p",
+    "We are having an issue checking on your application status. Please try again later.",
+  ).should("be.visible");
 });
 
-it("should display we are having trouble checking on your application when it fails to reach api", () => {
-  cy.visit("/");
-  fillField("ssn", "123456789");
-  fillField("zipCode", "00000");
+it("should display an error message when api returns a 400 error", () => {
+  fillAndSubmit();
   cy.intercept("POST", "/api/status", {
-    statusCode: 502,
-    body: { error: "Failed to reach the status service." },
+    statusCode: 400,
+    body: { error: "Invalid request body." },
   });
   cy.get(`button[type="submit"]`).click();
-  cy.get('p[id="tryAgainErrorMessage"]').should("be.visible");
+  cy.contains(
+    "p",
+    "We are having an issue checking on your application status. Please try again later.",
+  ).should("be.visible");
+});
+
+it("should display api alert if records is empty in a 200 response", () => {
+  fillAndSubmit();
+  cy.intercept("POST", "/api/status", {
+    statusCode: 200,
+    body: { records: [] },
+  });
+  cy.get(`button[type="submit"]`).click();
+  cy.contains("h2", "No 2025 application found").should("be.visible");
+});
+
+it("should display status page if records has an object in a 200 response", () => {
+  fillAndSubmit();
+  cy.intercept("POST", "/api/status", {
+    statusCode: 200,
+    body: { records: [{ return_year: "2025", application_date: "2026-03-19T00:00:00.000Z" }] },
+  });
+  cy.get(`button[type="submit"]`).click();
+
+  //assert we get to the right page
+  cy.url().should("include", "/status");
+  cy.contains("p", "Your application was received on").should("be.visible");
+
+  //assert status page has expected info
+  cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
+  cy.contains("p", mockSSN.slice(-4)).should("be.visible");
+  cy.contains("p", "Zip Code:").should("be.visible");
+  cy.contains("p", mockZip).should("be.visible");
+  cy.contains("p", "Tax Year: 2025").should("be.visible");
+
+  //assert logout button takes back to landing page
+  cy.contains("Log out").click();
+  cy.contains("h1", "This website is checking your 2025 PAS");
 });
