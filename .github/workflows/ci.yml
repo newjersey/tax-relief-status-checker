@@ -3,7 +3,7 @@ name: ci
 on:
   pull_request:
     branches:
-      - "main"
+      - "84-e2e-testing"
   push:
     branches:
       - "84-e2e-testing"
