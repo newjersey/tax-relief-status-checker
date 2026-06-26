@@ -18,4 +18,4 @@ jobs:
       - name: Start the development application
         run: cd webapp && npm run dev & npx wait-on http://localhost:3000/
       - name: Run cypress tests
-        run: npx cypress run
+        run: cd webapp && npx cypress run
