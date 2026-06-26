@@ -33,6 +33,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v7
         with:
-          working-directory: webapp
+          #working-directory: webapp
+          build: npm run build
           start: npm run dev
           wait-on: "http://localhost:3000/"
