@@ -37,7 +37,7 @@ it("should display an error message when the user tries to submit empty fields",
 it("should display an error message when the user enters malformatted SSN", () => {
   cy.visit("/");
   fillField("ssn", "1");
-  cy.get(`button[type="submit"]`).click();
+  cy.contains("button", `Check Status`).click();
   const ssnError = cy.get(`span[id="ssnErrorMessage"]`);
   ssnError.should("be.visible");
   ssnError.should("contain.text", "SSN or ITIN number entered must have nine digits");
@@ -65,7 +65,7 @@ it("should an error message when api returns a 500 error", () => {
     statusCode: 500,
     body: { error: "Status API is not configured." },
   });
-  cy.get(`button[type="submit"]`).click();
+  cy.contains("button", `Check Status`).click();
   cy.contains(
     "p",
     "We are having an issue checking on your application status. Please try again later.",
@@ -78,7 +78,7 @@ it("should display an error message when api returns a 400 error", () => {
     statusCode: 400,
     body: { error: "Invalid request body." },
   });
-  cy.get(`button[type="submit"]`).click();
+  cy.contains("button", `Check Status`).click();
   cy.contains(
     "p",
     "We are having an issue checking on your application status. Please try again later.",
@@ -91,7 +91,7 @@ it("should display api alert if records is empty in a 200 response", () => {
     statusCode: 200,
     body: { records: [] },
   });
-  cy.get(`button[type="submit"]`).click();
+  cy.contains("button", `Check Status`).click();
   cy.contains("h2", "No 2025 application found").should("be.visible");
 });
 
@@ -101,7 +101,7 @@ it("should display status page if records has an object in a 200 response", () =
     statusCode: 200,
     body: { records: [{ return_year: "2025", application_date: "2026-03-19T00:00:00.000Z" }] },
   });
-  cy.get(`button[type="submit"]`).click();
+  cy.contains("button", `Check Status`).click();
 
   //assert we get to the right page
   cy.url().should("include", "/status");
@@ -115,6 +115,6 @@ it("should display status page if records has an object in a 200 response", () =
   cy.contains("p", "Tax Year: 2025").should("be.visible");
 
   //assert logout button takes back to landing page
-  cy.contains("Log out").click();
+  cy.contains("a", "Log out").click();
   cy.contains("h1", "This website is checking your 2025 PAS");
 });
