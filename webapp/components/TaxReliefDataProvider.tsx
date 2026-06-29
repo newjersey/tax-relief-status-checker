@@ -9,25 +9,23 @@ export interface TaxReliefStatusData {
   readonly applicationDate: string;
 }
 
-const TaxReliefStatusContext = createContext<{
+const TaxReliefData = createContext<{
   dataStore: TaxReliefStatusData | null;
   setDataStore: (data: TaxReliefStatusData | null) => void;
 } | null>(null);
 
-export const TaxReliefStatusProvider = ({ children }: { children: ReactNode }) => {
+export const TaxReliefDataProvider = ({ children }: { children: ReactNode }) => {
   const [dataStore, setDataStore] = useState<TaxReliefStatusData | null>(null);
 
   return (
-    <TaxReliefStatusContext.Provider value={{ dataStore, setDataStore }}>
-      {children}
-    </TaxReliefStatusContext.Provider>
+    <TaxReliefData.Provider value={{ dataStore, setDataStore }}>{children}</TaxReliefData.Provider>
   );
 };
 
 export const useDataStore = () => {
-  const context = useContext(TaxReliefStatusContext);
+  const context = useContext(TaxReliefData);
   if (!context) {
-    throw new Error("useStatusData must be used within a StatusProvider");
+    throw new Error("useDataStore must be used within a TaxReliefDataProvider");
   }
   return context;
 };

@@ -10,7 +10,7 @@ import { LandingPageFaq, expandFaqAccordionItem } from "@/components/LandingPage
 import { maskSsn } from "@/app/utils/maskSsn";
 import { formatDate } from "@/app/utils/formatDate";
 import { logGAEvent } from "./utils/analytics";
-import { useDataStore } from "./dataStore";
+import { useDataStore } from "../components/TaxReliefDataProvider";
 
 /** Form data collected from the user. */
 interface UserData {
