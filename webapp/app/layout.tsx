@@ -6,6 +6,7 @@ import "@newjersey/njwds/dist/css/styles.css";
 import "./globals.css";
 import Script from "next/script";
 import { FeedbackWidget } from "@/components/FeedbackWidget";
+import { TaxReliefStatusProvider } from "./dataStore";
 
 /** {@link https://nextjs.org/docs/app/api-reference/functions/generate-metadata} */
 export const metadata: Metadata = {
@@ -35,11 +36,13 @@ const RootLayout = ({ children }: { readonly children: React.ReactNode }) => (
       )}
     </head>
     <body>
-      <NjHeader />
-      <StatusCheckerHeader />
-      {children}
-      <FeedbackWidget />
-      <NjFooter />
+      <TaxReliefStatusProvider>
+        <NjHeader />
+        <StatusCheckerHeader />
+        {children}
+        <FeedbackWidget />
+        <NjFooter />
+      </TaxReliefStatusProvider>
     </body>
   </html>
 );
