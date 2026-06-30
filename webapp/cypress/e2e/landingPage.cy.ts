@@ -113,7 +113,7 @@ it("should display api alert if records is empty in a 200 response", () => {
   fillFields();
   cy.intercept("POST", "/api/status", {
     statusCode: 200,
-    body: { records: [] },
+    fixture: "v1_api_empty_records.json",
   });
   cy.contains("button", `Check Status`).click();
   cy.contains("h2", "No 2025 application found").should("be.visible");
@@ -130,7 +130,7 @@ it("should display status page if records has an object in a 200 response", () =
   fillFields();
   cy.intercept("POST", "/api/status", {
     statusCode: 200,
-    body: { records: [{ return_year: "2025", application_date: "2026-03-19T00:00:00.000Z" }] },
+    fixture: "v1_api_found_records.json",
   });
   cy.contains("button", `Check Status`).click();
 
