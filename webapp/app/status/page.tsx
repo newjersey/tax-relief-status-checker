@@ -15,7 +15,13 @@ const StatusPage = () => {
     }
   }, [dataStore, router]);
 
-  const { lastFourSsnDigits, zipCode, applicationDate } = dataStore!;
+  // Next.js prerenders client components during the build,
+  // returning null here allows it to render only client-side
+  if (!dataStore) {
+    return null;
+  }
+
+  const { lastFourSsnDigits, zipCode, applicationDate } = dataStore;
 
   return (
     <main id="main-content">
