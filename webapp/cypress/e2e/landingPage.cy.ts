@@ -4,11 +4,6 @@ const fillField = (fieldName: string, value: string): undefined => {
   cy.get(`input[name="${fieldName}"]`).type(value);
 };
 
-const runAccordionTests = (questionText: string, answerID: string): undefined => {
-  cy.contains("button", questionText).click();
-  cy.get(`div[id="${answerID}"]`).should("be.visible");
-};
-
 const mockSSN = "123456789";
 const mockZip = "00000";
 
@@ -25,7 +20,7 @@ beforeEach(() => {
 });
 
 it("should allow the user to visit the webpage", () => {
-  cy.window().its("scrollY").should("equal", 0);
+  cy.contains("h1", "This website is checking your 2025 PAS");
 });
 
 it("should display an error message when the user tries to submit empty fields", () => {
@@ -54,15 +49,18 @@ it("should display an error message when the user enters malformatted Zip", () =
   zipError.should("contain.text", "Zip code must have five digits");
 });
 
-it("should expand the accordion FAQ when clicked", () => {
+it("should expand/collapse the accordion FAQ when clicked", () => {
   for (const faq of FaqContent) {
-    runAccordionTests(faq.title as string, faq.id);
+    cy.contains("button", faq.title as string).click();
+    cy.get(`div[id="${faq.id}"]`).should("be.visible");
     cy.get("@gtag").should(
       "have.been.calledWith",
       "event",
       `${faq.id}_opened`,
       Cypress.sinon.match.any,
     );
+    cy.contains("button", faq.title as string).click();
+    cy.get(`div[id="${faq.id}"]`).should("not.be.visible");
   }
 });
 
