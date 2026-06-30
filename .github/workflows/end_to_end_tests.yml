@@ -20,5 +20,6 @@ jobs:
         with:
           working-directory: webapp
           install: false
-          start: npm run dev
+          build: next build
+          start: next start
           wait-on: "http://localhost:3000/"
