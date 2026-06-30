@@ -66,7 +66,7 @@ it("should expand the accordion FAQ when clicked", () => {
   }
 });
 
-it("should an error message when api returns a 500 error", () => {
+it("should display an error message when api returns a 500 error", () => {
   fillFields();
   cy.intercept("POST", "/api/status", {
     statusCode: 500,
