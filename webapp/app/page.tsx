@@ -10,6 +10,7 @@ import { LandingPageFaq, expandFaqAccordionItem } from "@/components/LandingPage
 import { maskSsn } from "@/app/utils/maskSsn";
 import { formatDate } from "@/app/utils/formatDate";
 import { logGAEvent } from "./utils/analytics";
+import { useDataStore } from "@/components/TaxReliefDataProvider";
 
 /** Form data collected from the user. */
 interface UserData {
@@ -31,6 +32,7 @@ const returnToTop = () => {
 
 const LandingPage = () => {
   const router = useRouter();
+  const { setDataStore } = useDataStore();
   const [alertContent, setAlertContent] = useState<ReactNode | null>(null);
 
   const {
@@ -113,13 +115,14 @@ const LandingPage = () => {
 
       const lastFourSsnDigits = maskSsn(data.ssn);
       const formattedDate = formatDate(record2025.application_date);
-      const params = new URLSearchParams({
+      setDataStore({
         lastFourSsnDigits: lastFourSsnDigits,
         zipCode: data.zipCode,
-        date: formattedDate,
+        applicationDate: formattedDate,
       });
+
       logGAEvent(`api_200_record_found`);
-      router.push(`/status?${params.toString()}`);
+      router.push("/status");
     } catch {
       setAlertContent(
         <p className="usa-alert__text maxw-tablet">

@@ -1,23 +1,21 @@
-import { redirect } from "next/navigation";
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useDataStore } from "@/components/TaxReliefDataProvider";
 import Link from "next/link";
 
-interface StatusPageProps {
-  readonly searchParams: Promise<{
-    readonly lastFourSsnDigits?: string;
-    readonly zipCode?: string;
-    readonly date?: string;
-  }>;
-}
+const StatusPage = () => {
+  const router = useRouter();
+  const { dataStore } = useDataStore();
 
-const StatusPage = async ({ searchParams }: StatusPageProps) => {
-  const params = await searchParams;
-  const lastFourSsnDigits = params.lastFourSsnDigits;
-  const zipCode = params.zipCode;
-  const applicationDate = params.date;
+  useEffect(() => {
+    if (!dataStore) {
+      router.replace("/");
+    }
+  }, [dataStore, router]);
 
-  if (!lastFourSsnDigits || !applicationDate || !zipCode) {
-    redirect("/");
-  }
+  const { lastFourSsnDigits, zipCode, applicationDate } = dataStore!;
 
   return (
     <main id="main-content">
