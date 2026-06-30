@@ -205,3 +205,4 @@ $RECYCLE.BIN/
 lambda/config
 lambda/lambda.zip
 infra/cdk.out
+webapp/cypress/screenshots

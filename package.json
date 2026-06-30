@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "cd webapp && next dev --port 3000",
     "build": "cd webapp && next build",
+    "cypress": "cd webapp && cypress run",
     "package": "cd lambda && npm run package",
     "deploy:dev": "cd infra && cdk deploy -c stage=dev",
     "deploy:prod": "cd infra && cdk deploy -c stage=prod",
