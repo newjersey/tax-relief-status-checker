@@ -33,20 +33,35 @@ it("should display an error message when the user tries to submit empty fields",
   zipError.should("contain.text", "This question is required");
 });
 
-it("should display an error message when the user enters malformatted SSN", () => {
+it("displays SSN error messages properly", () => {
+  cy.get(`button[type="submit"]`).click();
+  cy.get(`#ssnErrorMessage`).should("be.visible");
+  cy.get(`#ssnErrorMessage`).should("contain.text", "This question is required");
+
   fillField("ssn", "1");
   cy.contains("button", `Check Status`).click();
-  const ssnError = cy.get(`span[id="ssnErrorMessage"]`);
-  ssnError.should("be.visible");
-  ssnError.should("contain.text", "SSN or ITIN number entered must have nine digits");
+  cy.get(`#ssnErrorMessage`).should("be.visible");
+  cy.get(`#ssnErrorMessage`).should(
+    "contain.text",
+    "SSN or ITIN number entered must have nine digits",
+  );
+
+  fillField("ssn", "23456789");
+  cy.get("#ssnErrorMessage").should("not.exist");
 });
 
-it("should display an error message when the user enters malformatted Zip", () => {
+it("displays Zip Code error messages properly", () => {
+  cy.get(`button[type="submit"]`).click();
+  cy.get(`#zipCodeErrorMessage`).should("be.visible");
+  cy.get(`#zipCodeErrorMessage`).should("contain.text", "This question is required");
+
   fillField("zipCode", "1");
   cy.contains("button", `Check Status`).click();
-  const zipError = cy.get(`span[id="zipCodeErrorMessage"]`);
-  zipError.should("be.visible");
-  zipError.should("contain.text", "Zip code must have five digits");
+  cy.get(`#zipCodeErrorMessage`).should("be.visible");
+  cy.get(`#zipCodeErrorMessage`).should("contain.text", "Zip code must have five digits");
+
+  fillField("zipCode", "2345");
+  cy.get("#zipCodeErrorMessage").should("not.exist");
 });
 
 it("should expand/collapse the accordion FAQ when clicked", () => {
