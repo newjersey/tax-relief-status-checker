@@ -118,7 +118,7 @@ const LandingPage = () => {
       setDataStore({
         lastFourSsnDigits: lastFourSsnDigits,
         zipCode: data.zipCode,
-        applicationDate: formattedDate,
+        applicationDateString: formattedDate,
       });
 
       logGAEvent(`api_200_record_found`);

@@ -21,7 +21,7 @@ const StatusPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, applicationDate } = dataStore;
+  const { lastFourSsnDigits, zipCode, applicationDateString } = dataStore;
 
   return (
     <main id="main-content">
@@ -55,7 +55,9 @@ const StatusPage = () => {
             </div>
           </div>
           <div className="margin-top-4">
-            <p className="font-heading-xl">Your application was received on {applicationDate}</p>
+            <p className="font-heading-xl">
+              Your application was received on {applicationDateString}
+            </p>
             <p>
               Your application is being reviewed. No action is needed right now. If you applied
               early this year, please check back in early summer.
