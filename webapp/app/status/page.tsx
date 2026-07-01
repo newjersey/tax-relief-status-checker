@@ -1,23 +1,27 @@
-import { redirect } from "next/navigation";
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useDataStore } from "@/components/TaxReliefDataProvider";
 import Link from "next/link";
 
-interface StatusPageProps {
-  readonly searchParams: Promise<{
-    readonly lastFourSsnDigits?: string;
-    readonly zipCode?: string;
-    readonly date?: string;
-  }>;
-}
+const StatusPage = () => {
+  const router = useRouter();
+  const { dataStore } = useDataStore();
 
-const StatusPage = async ({ searchParams }: StatusPageProps) => {
-  const params = await searchParams;
-  const lastFourSsnDigits = params.lastFourSsnDigits;
-  const zipCode = params.zipCode;
-  const applicationDate = params.date;
+  useEffect(() => {
+    if (!dataStore) {
+      router.replace("/");
+    }
+  }, [dataStore, router]);
 
-  if (!lastFourSsnDigits || !applicationDate || !zipCode) {
-    redirect("/");
+  // Next.js prerenders client components during the build,
+  // returning null here allows it to render only client-side
+  if (!dataStore) {
+    return null;
   }
+
+  const { lastFourSsnDigits, zipCode, applicationDateString } = dataStore;
 
   return (
     <main id="main-content">
@@ -51,7 +55,9 @@ const StatusPage = async ({ searchParams }: StatusPageProps) => {
             </div>
           </div>
           <div className="margin-top-4">
-            <p className="font-heading-xl">Your application was received on {applicationDate}</p>
+            <p className="font-heading-xl">
+              Your application was received on {applicationDateString}
+            </p>
             <p>
               Your application is being reviewed. No action is needed right now. If you applied
               early this year, please check back in early summer.
