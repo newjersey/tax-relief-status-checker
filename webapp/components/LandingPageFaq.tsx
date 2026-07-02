@@ -136,7 +136,7 @@ export const FaqContent: AccordionItemContent[] = [
               </td>
               <td>
                 Payments start going out on July 15. If you applied before May 1, you can expect to
-                get your payment between July 15 and September 15.
+                get your payment between July 15 and September 1.
               </td>
               <td></td>
               <td>
