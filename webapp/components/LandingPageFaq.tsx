@@ -97,8 +97,8 @@ export const FaqContent: AccordionItemContent[] = [
         </p>
         <ul>
           <li>
-            Call: <a href="tel:18882381233">1-888-238-1233</a> (Mondays to Fridays 8:30 a.m. to 5:30
-            p.m.)
+            Call: <a href="tel:+18882381233">1-888-238-1233</a> (Mondays to Fridays 8:30 a.m. to
+            5:30 p.m.)
           </li>
           <li>
             Email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
@@ -152,10 +152,10 @@ export const FaqContent: AccordionItemContent[] = [
               </td>
               <td>
                 If you applied between May 1 and June 1, you can expect to get your payment between
-                September 1 and October 1.
+                September 15 and October 1.
               </td>
               <td>
-                Payments start going out on September 1. You can expect to get your payment before
+                Payments start going out on September 15. You can expect to get your payment before
                 December 1.
               </td>
               <td></td>
@@ -193,15 +193,22 @@ export const FaqContent: AccordionItemContent[] = [
   {
     title: "My application is taking too long. Who do I contact?",
     content: (
-      <p>
-        If you have any questions or if processing has taken longer than expected, call our help
-        line at <a href="tel:18882381233">1-888-238-1233</a> (Mondays to Fridays 8:30 a.m. to 5:30
-        p.m.) or visit a Regional Information Center (RIC),{" "}
-        <a href="https://nj.gov/treasury/taxation/contact-office.shtml#:~:text=We%20can%20assist%20you%20or%20your%20businesses%20with,assistance%20from%208%3A30%20a.m.%20to%204%3A30%20p.m.%2C%20Monday-Friday.">
-          find a location
-        </a>{" "}
-        near you.
-      </p>
+      <>
+        <p>
+          If you have any questions or if processing has taken longer than expected, reach out to us
+          directly via phone or email. In order for us to locate your record, be ready to provide
+          your full name and the full address of the property you applied for:
+        </p>
+        <ul>
+          <li>
+            Call: <a href="tel:+18882381233">1-888-238-1233</a> (Mondays to Fridays 8:30 a.m. to
+            5:30 p.m.)
+          </li>
+          <li>
+            Email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
+          </li>
+        </ul>
+      </>
     ),
     expanded: false,
     id: "faq_application_taking_too_long",
