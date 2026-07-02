@@ -165,7 +165,7 @@ export const FaqContent: AccordionItemContent[] = [
                 <strong className="text-uppercase">November</strong>
               </td>
               <td>
-                If you applied between June 2 and September 1, you can expect to get your payment
+                If you applied between June 2 and September 15, you can expect to get your payment
                 between November 2 and January 2, 2027.
               </td>
               <td></td>
