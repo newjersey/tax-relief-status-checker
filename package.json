@@ -22,7 +22,7 @@
     "@newjersey/feedback-widget": "0.6.0",
     "husky": "9.1.7",
     "lint-staged": "17.0.5",
-    "prettier": "3.8.3",
+    "prettier": "3.9.4",
     "prettier-plugin-jsdoc": "1.8.0"
   },
   "lint-staged": {
