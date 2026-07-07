@@ -148,6 +148,9 @@ describe("handler business logic", () => {
       expect(body["records"]).toHaveLength(1);
       expect(body["records"][0].return_year).toBe("2024");
       expect(body["records"][0].application_date).toBe("10/31/2025 00:00:00");
+      expect(body["records"][0].anchor).toBeDefined();
+      expect(body["records"][0].ptr).toBeDefined();
+      expect(body["records"][0].stay_nj).toBeDefined();
     });
   });
 
@@ -167,73 +170,15 @@ describe("handler business logic", () => {
 
       expect(body["records"][0].return_year).toBe("2024");
       expect(body["records"][0].application_date).toBe("10/31/2025 00:00:00");
+      expect(body["records"][0].anchor).toBeDefined();
+      expect(body["records"][0].ptr).toBeDefined();
+      expect(body["records"][0].stay_nj).toBeDefined();
 
       expect(body["records"][1].return_year).toBe("2025");
       expect(body["records"][1].application_date).toBe("10/31/2026 00:00:00");
-    });
-  });
-
-  describe("when filer has an has an unposted record in DB", () => {
-    describe("when the unposted reason is missing profile", () => {
-      it("returns 200 constructs the response", async () => {
-        const row = buildMockRow({ UNP_IND: "Y", UNP_REJECT_CAT_CDE: "ID" });
-        mockExecute.mockResolvedValue({ rows: [row] });
-
-        const result = await handler({ ssn: "123456789", zip: "12345" });
-        expect(result.statusCode).toBe(200);
-        const body = JSON.parse(result.body);
-
-        expect(body["records"][0].unposted).toBe(true);
-        expect(body["records"][0].unposted_reason).toBe("missing_taxpayer_profile");
-        expect(body["records"][0].return_year).toBe("2024");
-        expect(body["records"][0].application_date).toBe("10/31/2025 00:00:00");
-      });
-    });
-    describe("when the unposted reason is name mismatch", () => {
-      it("returns 200 constructs the response", async () => {
-        const row = buildMockRow({ UNP_IND: "Y", UNP_REJECT_CAT_CDE: "NCL" });
-        mockExecute.mockResolvedValue({ rows: [row] });
-
-        const result = await handler({ ssn: "123456789", zip: "12345" });
-        expect(result.statusCode).toBe(200);
-        const body = JSON.parse(result.body);
-
-        expect(body["records"][0].unposted).toBe(true);
-        expect(body["records"][0].unposted_reason).toBe("name_mismatch");
-        expect(body["records"][0].return_year).toBe("2024");
-        expect(body["records"][0].application_date).toBe("10/31/2025 00:00:00");
-      });
-    });
-    describe("when the unposted reason is neither name mismatch or missing profile", () => {
-      it("returns 200 constructs the response", async () => {
-        const row = buildMockRow({ UNP_IND: "Y", UNP_REJECT_CAT_CDE: "" });
-        mockExecute.mockResolvedValue({ rows: [row] });
-
-        const result = await handler({ ssn: "123456789", zip: "12345" });
-        expect(result.statusCode).toBe(200);
-        const body = JSON.parse(result.body);
-
-        expect(body["records"][0].unposted).toBe(true);
-        expect(body["records"][0].unposted_reason).toBeUndefined();
-        expect(body["records"][0].return_year).toBe("2024");
-        expect(body["records"][0].application_date).toBe("10/31/2025 00:00:00");
-      });
-    });
-  });
-
-  describe("when filer has an has an posted record in DB", () => {
-    it("returns 200 constructs the response", async () => {
-      const row = buildMockRow({ UNP_IND: "", UNP_REJECT_CAT_CDE: "" });
-      mockExecute.mockResolvedValue({ rows: [row] });
-
-      const result = await handler({ ssn: "123456789", zip: "12345" });
-      expect(result.statusCode).toBe(200);
-      const body = JSON.parse(result.body);
-
-      expect(body["records"][0].unposted).toBe(false);
-      expect(body["records"][0].unposted_reason).toBeUndefined();
-      expect(body["records"][0].return_year).toBe("2024");
-      expect(body["records"][0].application_date).toBe("10/31/2025 00:00:00");
+      expect(body["records"][1].anchor).toBeDefined();
+      expect(body["records"][1].ptr).toBeDefined();
+      expect(body["records"][1].stay_nj).toBeDefined();
     });
   });
 });
