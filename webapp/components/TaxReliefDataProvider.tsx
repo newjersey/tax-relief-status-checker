@@ -3,10 +3,23 @@
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 
+interface Transaction {
+  readonly status: string;
+  readonly review_category?: string;
+  readonly payment_details?: {
+    readonly amount: number;
+    readonly date: string;
+    readonly method: string;
+    readonly check_number?: string;
+  };
+}
 export interface TaxReliefStatusData {
   readonly lastFourSsnDigits: string;
   readonly zipCode: string;
   readonly applicationDateString: string;
+  readonly anchor: Transaction[];
+  readonly ptr: Transaction[];
+  readonly stay_nj: Transaction[];
 }
 
 const TaxReliefDataContext = createContext<{

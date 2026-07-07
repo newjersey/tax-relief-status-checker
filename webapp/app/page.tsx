@@ -22,6 +22,9 @@ interface UserData {
 interface StatusRecord {
   readonly return_year: string;
   readonly application_date: string;
+  readonly anchor: [];
+  readonly ptr: [];
+  readonly stay_nj: [];
 }
 
 const returnToTop = () => {
@@ -119,6 +122,9 @@ const LandingPage = () => {
         lastFourSsnDigits: lastFourSsnDigits,
         zipCode: data.zipCode,
         applicationDateString: formattedDate,
+        anchor: record2025.anchor,
+        ptr: record2025.ptr,
+        stay_nj: record2025.stay_nj,
       });
 
       logGAEvent(`api_200_record_found`);
