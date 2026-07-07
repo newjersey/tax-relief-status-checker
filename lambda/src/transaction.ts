@@ -5,7 +5,7 @@ export interface Transaction {
     readonly amount: number;
     readonly date: string;
     readonly method: string;
-    readonly check_number?: string;
+    readonly check_number: string;
   };
 }
 
@@ -36,7 +36,6 @@ export const buildTransaction = (
   CHECK_DTE: string,
   CHECK_AMT: number,
   CHECK_NUM: string,
-  DIRECT_DEPOSIT_IND: string,
 ): Transaction => {
   let status;
   if (TRANS_CDE == "RR" && TRANS_STATUS_CDE == "PR" && REVIEW_CATEGORY_CDE === null) {
@@ -55,7 +54,7 @@ export const buildTransaction = (
 
   if (status === "Payment Sent") {
     let method = "check";
-    if (DIRECT_DEPOSIT_IND === "Y") {
+    if (CHECK_NUM.slice(1, 3) == "NN") {
       method = "direct_deposit";
     }
     const payment_details = {
@@ -81,7 +80,6 @@ export const buildAllTransactions = (row: InquiryRow): AllTransactions => {
       row[`CHECK_${i}_DTE`] as string,
       row[`CHECK_${i}_AMT`] as number,
       row[`CHECK_${i}_NUM`] as string,
-      row[`DIRECT_DEPOSIT_IND`] as string,
     );
     if (row[`TRANS_${i}_TAX_CDE`] == anchorCDE) {
       anchor.push(transaction);

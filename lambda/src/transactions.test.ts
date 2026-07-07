@@ -52,7 +52,6 @@ const callBuildTransaction = (row: any, i: number) => {
     row[`CHECK_${i}_DTE`],
     row[`CHECK_${i}_AMT`],
     row[`CHECK_${i}_NUM`],
-    row[`DIRECT_DEPOSIT_IND`],
   );
 };
 
@@ -102,10 +101,21 @@ describe("build transaction status codes", () => {
   });
 
   describe("when TRANS_X_CDE = RR and TRANS_STATUS_X_CDE = AP*", () => {
-    it("returns status as Approved without payment details", async () => {
+    it("returns status as Approved without payment details when status code is APC", async () => {
       const row = buildMockRow({
         TRANS_1_CDE: "RR",
         TRANS_STATUS_1_CDE: "APC",
+      });
+      mockExecute.mockResolvedValue({ rows: [row] });
+
+      const result = callBuildTransaction(row, 1);
+      expect(result.status).toBe("Approved");
+      expect(result.payment_details).toBeUndefined();
+    });
+    it("returns status as Approved without payment details when status code is APR", async () => {
+      const row = buildMockRow({
+        TRANS_1_CDE: "RR",
+        TRANS_STATUS_1_CDE: "APR",
       });
       mockExecute.mockResolvedValue({ rows: [row] });
 
@@ -125,8 +135,42 @@ describe("build transaction status codes", () => {
       const result = callBuildTransaction(row, 1);
       expect(result.status).toBe("Payment Sent");
       expect(result.payment_details?.amount).toBe(1750);
-      expect(result.payment_details?.method).toBe("direct_deposit");
+      expect(result.payment_details?.method).toBe("check");
       expect(result.payment_details?.check_number).toBe("922775385");
+      expect(result.payment_details?.date).toBe("12/11/2025 00:00:00");
+    });
+  });
+
+  describe("when CHECK_X_NUMBER second + third characters are NOT NN", () => {
+    it("returns returns payment method as check", async () => {
+      const row = buildMockRow({
+        TRANS_1_CDE: "RF",
+        CHECK_1_NUM: "012345678",
+      });
+      mockExecute.mockResolvedValue({ rows: [row] });
+
+      const result = callBuildTransaction(row, 1);
+      expect(result.status).toBe("Payment Sent");
+      expect(result.payment_details?.amount).toBe(1750);
+      expect(result.payment_details?.method).toBe("check");
+      expect(result.payment_details?.check_number).toBe("012345678");
+      expect(result.payment_details?.date).toBe("12/11/2025 00:00:00");
+    });
+  });
+
+  describe("when CHECK_X_NUMBER second + third characters are NN", () => {
+    it("returns returns payment method as direct deposit", async () => {
+      const row = buildMockRow({
+        TRANS_1_CDE: "RF",
+        CHECK_1_NUM: "0NN345678",
+      });
+      mockExecute.mockResolvedValue({ rows: [row] });
+
+      const result = callBuildTransaction(row, 1);
+      expect(result.status).toBe("Payment Sent");
+      expect(result.payment_details?.amount).toBe(1750);
+      expect(result.payment_details?.method).toBe("direct_deposit");
+      expect(result.payment_details?.check_number).toBe("0NN345678");
       expect(result.payment_details?.date).toBe("12/11/2025 00:00:00");
     });
   });
