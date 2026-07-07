@@ -19,7 +19,10 @@ const FeedbackWidgetClientOnly = (): ReactElement => {
   return (
     <>
       <section aria-label="Leave Feedback">
-        <feedback-widget contact-link="https://www.nj.gov/treasury/taxation/contact.shtml?open=email"></feedback-widget>
+        <feedback-widget
+          contact-link="https://www.nj.gov/treasury/taxation/contact.shtml?open=email"
+          only-save-rating-to-analytics="true"
+        ></feedback-widget>
       </section>
     </>
   );
