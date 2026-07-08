@@ -1,7 +1,7 @@
 # Description
 
-This AWS Lambda Function returns a response record with transaction level information if it exists
-for each of ANCHOR, PTR, Say NJ transactions.
+This AWS Lambda Function returns a response record with status, application date, and transaction
+level information if it exists based off a user's SSN/ITIN and Zipcode.
 
 # Deployment
 
