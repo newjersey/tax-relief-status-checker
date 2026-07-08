@@ -38,11 +38,11 @@ export const buildTransaction = (
   CHECK_NUM: string,
 ): Transaction => {
   let status;
-  if (TRANS_CDE == "RR" && TRANS_STATUS_CDE == "PR" && REVIEW_CATEGORY_CDE === null) {
+  if (TRANS_CDE === "RR" && TRANS_STATUS_CDE === "PR" && REVIEW_CATEGORY_CDE === null) {
     status = "processing";
-  } else if (TRANS_CDE == "RR" && TRANS_STATUS_CDE == "PR" && REVIEW_CATEGORY_CDE !== null) {
+  } else if (TRANS_CDE === "RR" && TRANS_STATUS_CDE === "PR" && REVIEW_CATEGORY_CDE !== null) {
     status = "issue_flagged";
-  } else if (TRANS_CDE == "RR" && TRANS_STATUS_CDE.startsWith("AP")) {
+  } else if (TRANS_CDE === "RR" && TRANS_STATUS_CDE.startsWith("AP")) {
     status = "approved";
   } else {
     status = "payment_sent";
@@ -54,7 +54,7 @@ export const buildTransaction = (
 
   if (status === "payment_sent") {
     let method = "check";
-    if (CHECK_NUM.slice(1, 3) == "NN") {
+    if (CHECK_NUM.slice(1, 3) === "NN") {
       method = "direct_deposit";
     }
     const payment_details = {
@@ -81,14 +81,16 @@ export const buildAllTransactions = (row: InquiryRow): AllTransactions => {
       row[`CHECK_${i}_AMT`] as number,
       row[`CHECK_${i}_NUM`] as string,
     );
-    if (row[`TRANS_${i}_TAX_CDE`] == anchorCDE) {
+    if (row[`TRANS_${i}_TAX_CDE`] === anchorCDE) {
       anchor.push(transaction);
-    } else if (row[`TRANS_${i}_TAX_CDE`] == ptrCDE) {
+    } else if (row[`TRANS_${i}_TAX_CDE`] === ptrCDE) {
       ptr.push(transaction);
-    } else if (row[`TRANS_${i}_TAX_CDE`] == stayCDE) {
+    } else if (row[`TRANS_${i}_TAX_CDE`] === stayCDE) {
       stay_nj.push(transaction);
     } else {
-      throw new Error("No Transaction Tax Code");
+      throw new Error(
+        `Invalid transaction tax code: ${row[`TRANS_${i}_TAX_CDE`]} for transaction ${i}`,
+      );
     }
   }
   return { anchor: anchor, ptr: ptr, stay_nj: stay_nj };
