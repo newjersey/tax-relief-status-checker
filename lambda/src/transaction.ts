@@ -39,20 +39,20 @@ export const buildTransaction = (
 ): Transaction => {
   let status;
   if (TRANS_CDE == "RR" && TRANS_STATUS_CDE == "PR" && REVIEW_CATEGORY_CDE === null) {
-    status = "Processing";
+    status = "processing";
   } else if (TRANS_CDE == "RR" && TRANS_STATUS_CDE == "PR" && REVIEW_CATEGORY_CDE !== null) {
-    status = "Issue Flagged";
+    status = "issue_flagged";
   } else if (TRANS_CDE == "RR" && TRANS_STATUS_CDE.startsWith("AP")) {
-    status = "Approved";
+    status = "approved";
   } else {
-    status = "Payment Sent";
+    status = "payment_sent";
   }
 
-  if (status === "Issue Flagged") {
+  if (status === "issue_flagged") {
     return { status: status, review_category: REVIEW_CATEGORY_CDE };
   }
 
-  if (status === "Payment Sent") {
+  if (status === "payment_sent") {
     let method = "check";
     if (CHECK_NUM.slice(1, 3) == "NN") {
       method = "direct_deposit";

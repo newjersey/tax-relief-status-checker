@@ -80,7 +80,7 @@ describe("build transaction status codes", () => {
       mockExecute.mockResolvedValue({ rows: [row] });
 
       const result = callBuildTransaction(row, 1);
-      expect(result.status).toBe("Processing");
+      expect(result.status).toBe("processing");
     });
   });
 
@@ -94,7 +94,7 @@ describe("build transaction status codes", () => {
       mockExecute.mockResolvedValue({ rows: [row] });
 
       const result = callBuildTransaction(row, 1);
-      expect(result.status).toBe("Issue Flagged");
+      expect(result.status).toBe("issue_flagged");
       expect(result.payment_details).toBeUndefined();
       expect(result.review_category).toBe("ID");
     });
@@ -109,7 +109,7 @@ describe("build transaction status codes", () => {
       mockExecute.mockResolvedValue({ rows: [row] });
 
       const result = callBuildTransaction(row, 1);
-      expect(result.status).toBe("Approved");
+      expect(result.status).toBe("approved");
       expect(result.payment_details).toBeUndefined();
     });
     it("returns status as Approved without payment details when status code is APR", async () => {
@@ -120,7 +120,7 @@ describe("build transaction status codes", () => {
       mockExecute.mockResolvedValue({ rows: [row] });
 
       const result = callBuildTransaction(row, 1);
-      expect(result.status).toBe("Approved");
+      expect(result.status).toBe("approved");
       expect(result.payment_details).toBeUndefined();
     });
   });
@@ -133,7 +133,7 @@ describe("build transaction status codes", () => {
       mockExecute.mockResolvedValue({ rows: [row] });
 
       const result = callBuildTransaction(row, 1);
-      expect(result.status).toBe("Payment Sent");
+      expect(result.status).toBe("payment_sent");
       expect(result.payment_details?.amount).toBe(1750);
       expect(result.payment_details?.method).toBe("check");
       expect(result.payment_details?.check_number).toBe("922775385");
@@ -150,7 +150,7 @@ describe("build transaction status codes", () => {
       mockExecute.mockResolvedValue({ rows: [row] });
 
       const result = callBuildTransaction(row, 1);
-      expect(result.status).toBe("Payment Sent");
+      expect(result.status).toBe("payment_sent");
       expect(result.payment_details?.amount).toBe(1750);
       expect(result.payment_details?.method).toBe("check");
       expect(result.payment_details?.check_number).toBe("012345678");
@@ -167,7 +167,7 @@ describe("build transaction status codes", () => {
       mockExecute.mockResolvedValue({ rows: [row] });
 
       const result = callBuildTransaction(row, 1);
-      expect(result.status).toBe("Payment Sent");
+      expect(result.status).toBe("payment_sent");
       expect(result.payment_details?.amount).toBe(1750);
       expect(result.payment_details?.method).toBe("direct_deposit");
       expect(result.payment_details?.check_number).toBe("0NN345678");
