@@ -124,45 +124,13 @@ describe("handler business logic", () => {
       console.log(body["records"][0]);
 
       expect(body["records"]).toHaveLength(1);
-      expect(body["records"][0].return_year).toBe("2024");
+      expect(body["records"][0].return_year).toBe("2025");
       expect(body["records"][0].application_date).toBe("10/31/2025 00:00:00");
       expect(body["records"][0]["anchor"][0].status).toBe("payment_sent");
       expect(body["records"][0].ptr).toBeDefined();
       expect(body["records"][0].ptr.length).toBe(0);
       expect(body["records"][0].stay_nj).toBeDefined();
       expect(body["records"][0].stay_nj.length).toBe(0);
-    });
-  });
-
-  describe("when filer has multiple matching rows in DB", () => {
-    it("returns 200 and constructs the response", async () => {
-      const row2024 = buildMockRow({ RETURN_YEAR_DTE: 2024 });
-      const row2025 = buildMockRow({
-        RETURN_YEAR_DTE: 2025,
-        RNY_APPLIED_DTE: "10/31/2026 00:00:00",
-      });
-      mockExecute.mockResolvedValue({ rows: [row2024, row2025] });
-
-      const result = await handler({ ssn: "123456789", zip: "12345" });
-      expect(result.statusCode).toBe(200);
-      const body = JSON.parse(result.body);
-      expect(body["records"]).toHaveLength(2);
-
-      expect(body["records"][0].return_year).toBe("2024");
-      expect(body["records"][0].application_date).toBe("10/31/2025 00:00:00");
-      expect(body["records"][0]["anchor"][0].status).toBe("payment_sent");
-      expect(body["records"][0].ptr).toBeDefined();
-      expect(body["records"][0].ptr.length).toBe(0);
-      expect(body["records"][0].stay_nj).toBeDefined();
-      expect(body["records"][0].stay_nj.length).toBe(0);
-
-      expect(body["records"][1].return_year).toBe("2025");
-      expect(body["records"][1].application_date).toBe("10/31/2026 00:00:00");
-      expect(body["records"][1]["anchor"][0].status).toBe("payment_sent");
-      expect(body["records"][1].ptr).toBeDefined();
-      expect(body["records"][1].ptr.length).toBe(0);
-      expect(body["records"][1].stay_nj).toBeDefined();
-      expect(body["records"][1].stay_nj.length).toBe(0);
     });
   });
 });

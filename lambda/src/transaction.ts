@@ -51,6 +51,7 @@ export const buildAllTransactions = (row: InquiryRow): AllTransactions => {
   const anchor = [];
   const ptr = [];
   const stay_nj = [];
+
   for (let i = 1; i <= row.TRANS_TOTAL_NUM; i++) {
     const transaction = buildTransaction(
       row[`TRANS_${i}_CDE`] as string,

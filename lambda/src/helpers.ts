@@ -2,7 +2,7 @@
 export const buildMockRow = (overrides = {}) => ({
   SOCIAL_SECURITY_NUMBER_IDN: "123456789",
   ZIP_ADR: "12345",
-  RETURN_YEAR_DTE: 2024,
+  RETURN_YEAR_DTE: 2025,
   RNY_APPLIED_DTE: "10/31/2025 00:00:00",
   TRANS_TOTAL_NUM: 1,
   TRANS_1_CDE: "RF",

@@ -6,7 +6,7 @@ import { buildAllTransactions } from "./transaction";
 
 /** SQL query to look up filer records by SSN and ZIP */
 const INQUIRY_QUERY = `SELECT * FROM ELF_SAVER_INQUIRY
-  WHERE SOCIAL_SECURITY_NUMBER_IDN = :ssn AND ZIP_ADR = :zip`;
+  WHERE SOCIAL_SECURITY_NUMBER_IDN = :ssn AND ZIP_ADR = :zip AND RETURN_YEAR_DTE = 2025`;
 
 /** Result of input validation */
 interface ValidationResult {
