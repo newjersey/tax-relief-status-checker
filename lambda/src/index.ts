@@ -1,8 +1,7 @@
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
 import oracledb from "oracledb";
+
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import { Transaction, InquiryRow } from "./types";
-import { buildAllTransactions } from "./transaction";
 
 /** SQL query to look up filer records by SSN and ZIP */
 const INQUIRY_QUERY = `SELECT * FROM ELF_SAVER_INQUIRY
@@ -23,13 +22,19 @@ interface ValidationResult {
 interface ResponseRecord {
   readonly return_year: string;
   readonly application_date: string;
-  readonly anchor: Transaction[];
-  readonly ptr: Transaction[];
-  readonly stay_nj: Transaction[];
 }
 
 interface BuildResponseResult {
   readonly records: ResponseRecord[];
+}
+
+/** Database row from ELF_SAVER_INQUIRY */
+interface InquiryRow {
+  readonly SOCIAL_SECURITY_NUMBER_IDN: string;
+  readonly ZIP_ADR: string;
+  readonly RNY_APPLIED_DTE: string;
+  readonly RETURN_YEAR_DTE: number;
+  readonly [key: string]: unknown;
 }
 
 /** Database credentials retrieved from Secrets Manager */
@@ -63,16 +68,10 @@ export const validateInput = (
   return { valid: true, ssn: sanitizedSsn, zip: sanitizedZip };
 };
 
-const mapRowToRecord = (row: InquiryRow): ResponseRecord => {
-  const allTransactions = buildAllTransactions(row);
-  return {
-    return_year: String(row.RETURN_YEAR_DTE),
-    application_date: row.RNY_APPLIED_DTE,
-    anchor: allTransactions.anchor,
-    ptr: allTransactions.ptr,
-    stay_nj: allTransactions.stay_nj,
-  };
-};
+const mapRowToRecord = (row: InquiryRow): ResponseRecord => ({
+  return_year: String(row.RETURN_YEAR_DTE),
+  application_date: row.RNY_APPLIED_DTE,
+});
 
 const buildResponse = (rows: InquiryRow[]): BuildResponseResult => {
   if (!rows || rows.length === 0) {

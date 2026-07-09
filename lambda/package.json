@@ -12,6 +12,7 @@
     "package": "npm run build && cp package.json ../package-lock.json dist/ && cp -r config dist/ && cd dist && npm ci --omit=dev && zip -r ../lambda.zip . && cd .. && rm -rf dist"
   },
   "dependencies": {
+    "@types/oracledb": "7.0.0",
     "oracledb": "7.0.0"
   },
   "devDependencies": {
@@ -21,7 +22,6 @@
     "aws-sdk-client-mock": "4.1.0",
     "esbuild": "0.28.1",
     "typescript": "6.0.3",
-    "@types/oracledb": "7.0.0",
     "vitest": "4.1.8"
   }
 }
