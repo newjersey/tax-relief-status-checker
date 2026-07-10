@@ -10,8 +10,8 @@
     "build": "cd webapp && next build",
     "cypress": "cd webapp && cypress run",
     "package": "cd lambda && npm run package",
-    "deploy:dev": "cd infra && cdk deploy -c stage=dev",
-    "deploy:prod": "cd infra && cdk deploy -c stage=prod",
+    "deploy:dev": "npm run package && cd infra && cdk deploy -c stage=dev",
+    "deploy:prod": "npm run package && cd infra && cdk deploy -c stage=prod",
     "test": "vitest run",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
@@ -19,10 +19,10 @@
     "lockfile": "rm -rf webapp/node_modules lambda/node_modules infra/node_modules node_modules package-lock.json && npm install"
   },
   "dependencies": {
-    "@newjersey/feedback-widget": "0.6.0",
+    "@newjersey/feedback-widget": "0.7.1",
     "husky": "9.1.7",
     "lint-staged": "17.0.5",
-    "prettier": "3.8.3",
+    "prettier": "3.9.4",
     "prettier-plugin-jsdoc": "1.8.0"
   },
   "lint-staged": {

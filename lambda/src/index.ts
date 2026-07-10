@@ -1,12 +1,12 @@
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
 import oracledb from "oracledb";
-
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import { buildAllTransactions, Transaction } from "./transaction";
+import { Transaction, InquiryRow } from "./types";
+import { buildAllTransactions } from "./transaction";
 
 /** SQL query to look up filer records by SSN and ZIP */
 const INQUIRY_QUERY = `SELECT * FROM ELF_SAVER_INQUIRY
-  WHERE SOCIAL_SECURITY_NUMBER_IDN = :ssn AND ZIP_ADR = :zip`;
+  WHERE SOCIAL_SECURITY_NUMBER_IDN = :ssn AND ZIP_ADR = :zip AND RETURN_YEAR_DTE = 2025`;
 
 /** Result of input validation */
 interface ValidationResult {
@@ -30,17 +30,6 @@ interface ResponseRecord {
 
 interface BuildResponseResult {
   readonly records: ResponseRecord[];
-}
-
-/** Database row from ELF_SAVER_INQUIRY */
-interface InquiryRow {
-  readonly SOCIAL_SECURITY_NUMBER_IDN: string;
-  readonly ZIP_ADR: string;
-  readonly RNY_APPLIED_DTE: string;
-  readonly RETURN_YEAR_DTE: number;
-  readonly TRANS_TOTAL_NUM: number;
-
-  readonly [key: string]: unknown;
 }
 
 /** Database credentials retrieved from Secrets Manager */

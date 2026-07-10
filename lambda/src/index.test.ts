@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { mockClient } from "aws-sdk-client-mock";
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
-
+import { buildMockRow } from "./helpers.ts";
 import { handler, validateInput } from "./index.ts";
 
 const secretsMock = mockClient(SecretsManagerClient);
@@ -19,28 +19,6 @@ vi.mock("oracledb", () => ({
     OUT_FORMAT_OBJECT: 4001,
   },
 }));
-
-const buildMockRow = (overrides = {}) => ({
-  SOCIAL_SECURITY_NUMBER_IDN: "123456789",
-  ZIP_ADR: "12345",
-  RETURN_YEAR_DTE: 2024,
-  RNY_APPLIED_DTE: "10/31/2025 00:00:00",
-  TRANS_1_CDE: "RF",
-  TRANS_STATUS_1_CDE: "APC",
-  REVIEW_CATEGORY_1_CDE: "MDZ",
-  CHECK_1_DTE: "12/11/2025 00:00:00",
-  CHECK_1_AMT: 1750,
-  CHECK_1_NUM: 922775385,
-  TRANS_1_TAX_CDE: "13",
-  TRANS_2_CDE: null,
-  TRANS_STATUS_2_CDE: null,
-  REVIEW_CATEGORY_2_CDE: null,
-  CHECK_2_DTE: null,
-  CHECK_2_AMT: null,
-  CHECK_2_NUM: null,
-  TRANS_2_TAX_CDE: null,
-  ...overrides,
-});
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -138,38 +116,21 @@ describe("handler business logic", () => {
 
   describe("when filer has one matching row in DB", () => {
     it("returns 200 and constructs the response", async () => {
-      const row = buildMockRow();
+      const row = buildMockRow({});
       mockExecute.mockResolvedValue({ rows: [row] });
-
       const result = await handler({ ssn: "123456789", zip: "12345" });
       expect(result.statusCode).toBe(200);
       const body = JSON.parse(result.body);
+      console.log(body["records"][0]);
 
       expect(body["records"]).toHaveLength(1);
-      expect(body["records"][0].return_year).toBe("2024");
+      expect(body["records"][0].return_year).toBe("2025");
       expect(body["records"][0].application_date).toBe("10/31/2025 00:00:00");
-    });
-  });
-
-  describe("when filer has multiple matching rows in DB", () => {
-    it("returns 200 and constructs the response", async () => {
-      const row2024 = buildMockRow({ RETURN_YEAR_DTE: 2024 });
-      const row2025 = buildMockRow({
-        RETURN_YEAR_DTE: 2025,
-        RNY_APPLIED_DTE: "10/31/2026 00:00:00",
-      });
-      mockExecute.mockResolvedValue({ rows: [row2024, row2025] });
-
-      const result = await handler({ ssn: "123456789", zip: "12345" });
-      expect(result.statusCode).toBe(200);
-      const body = JSON.parse(result.body);
-      expect(body["records"]).toHaveLength(2);
-
-      expect(body["records"][0].return_year).toBe("2024");
-      expect(body["records"][0].application_date).toBe("10/31/2025 00:00:00");
-
-      expect(body["records"][1].return_year).toBe("2025");
-      expect(body["records"][1].application_date).toBe("10/31/2026 00:00:00");
+      expect(body["records"][0]["anchor"][0].status).toBe("payment_sent");
+      expect(body["records"][0].ptr).toBeDefined();
+      expect(body["records"][0].ptr.length).toBe(0);
+      expect(body["records"][0].stay_nj).toBeDefined();
+      expect(body["records"][0].stay_nj.length).toBe(0);
     });
   });
 
