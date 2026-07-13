@@ -34,7 +34,7 @@ const PaymentPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, anchor, ptr, stay_nj } = dataStore;
+  const { lastFourSsnDigits, zipCode, anchor, ptr } = dataStore;
 
   return (
     <main id="main-content">
