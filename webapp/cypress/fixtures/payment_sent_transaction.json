@@ -1,0 +1,9 @@
+{
+  "status": "payment_sent",
+  "payment_details": {
+    "amount": 377.56,
+    "date": "7/6/2026 0:00:00",
+    "method": "check",
+    "check_number": "922775385"
+  }
+}

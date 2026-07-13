@@ -3,10 +3,10 @@
     {
       "return_year": "2025",
       "application_date": "2026-03-19T00:00:00.000Z",
-      "anchor": [{ "status": "Processing" }],
+      "anchor": [{ "status": "processing" }],
       "ptr": [
         {
-          "status": "Payment Sent",
+          "status": "payment_sent",
           "payment_details": {
             "amount": 377.56,
             "date": "7/6/2026 0:00:00",
@@ -15,7 +15,7 @@
           }
         }
       ],
-      "stay_nj": [{ "status": "Processing" }]
+      "stay_nj": [{ "status": "processing" }]
     }
   ]
 }

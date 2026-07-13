@@ -4,9 +4,6 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDataStore } from "@/components/TaxReliefDataProvider";
 import Link from "next/link";
-import { Table } from "@trussworks/react-uswds";
-import { formatDate } from "../utils/formatDate";
-import { expandFaqAccordionItem } from "@/components/LandingPageFaq";
 
 const StatusPage = () => {
   const router = useRouter();
@@ -24,7 +21,7 @@ const StatusPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, applicationDateString, anchor, ptr, stay_nj } = dataStore;
+  const { lastFourSsnDigits, zipCode, applicationDateString } = dataStore;
 
   return (
     <main id="main-content">
@@ -58,68 +55,14 @@ const StatusPage = () => {
             </div>
           </div>
           <div className="margin-top-4">
-            <h1 className="font-heading-xl">You are eligible for benefits</h1>
-            <p className="usa-alert__text">
-              To find out when to expect payment on all programs, review the{" "}
-              <a href="/" target="_blank">
-                program payment table
-              </a>
-              {"."}
+            <p className="font-heading-xl">
+              Your application was received on {applicationDateString}
+            </p>
+            <p>
+              Your application is being reviewed. No action is needed right now. If you applied
+              early this year, please check back in early summer.
             </p>
           </div>
-          <Table className="usa-table" bordered={false} scrollable={true}>
-            <thead>
-              <tr>
-                <th className="width-card">Program</th>
-                <th className="width-mobile">Payment Status</th>
-                <th className="width-mobile">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ptr.map((transaction) => {
-                if (
-                  transaction.status == "Payment Sent" &&
-                  transaction.payment_details?.date &&
-                  transaction.payment_details.amount
-                )
-                  return (
-                    <tr>
-                      <td>Senior Freeze</td>
-                      <td>Check issued on {formatDate(transaction.payment_details.date)}</td>
-                      <td>${transaction.payment_details.amount}</td>
-                    </tr>
-                  );
-              })}
-              {anchor.map((transaction) => {
-                if (
-                  transaction.status == "Payment Sent" &&
-                  transaction.payment_details?.date &&
-                  transaction.payment_details.amount
-                )
-                  return (
-                    <tr>
-                      <td>ANCHOR</td>
-                      <td>Check issued on {formatDate(transaction.payment_details.date)}</td>
-                      <td>${transaction.payment_details.amount}</td>
-                    </tr>
-                  );
-              })}
-              {stay_nj.map((transaction) => {
-                if (
-                  transaction.status == "Payment Sent" &&
-                  transaction.payment_details?.date &&
-                  transaction.payment_details.amount
-                )
-                  return (
-                    <tr>
-                      <td>Stay NJ</td>
-                      <td>Check issued on {formatDate(transaction.payment_details.date)}</td>
-                      <td>${transaction.payment_details.amount}</td>
-                    </tr>
-                  );
-              })}
-            </tbody>
-          </Table>
         </div>
       </section>
     </main>

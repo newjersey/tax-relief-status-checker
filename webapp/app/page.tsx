@@ -26,7 +26,19 @@ interface StatusRecord {
   readonly ptr: [];
   readonly stay_nj: [];
 }
-
+const checkPaymentsSent = (record: StatusRecord) => {
+  for (const transaction of record.anchor) {
+    if (transaction["status"] === "payment_sent") {
+      return true;
+    }
+  }
+  for (const transaction of record.ptr) {
+    if (transaction["status"] === "payment_sent") {
+      return true;
+    }
+  }
+  return false;
+};
 const returnToTop = () => {
   const topOfPage = document.querySelector(`#nj-header`);
   if (!topOfPage) return;
@@ -128,7 +140,11 @@ const LandingPage = () => {
       });
 
       logGAEvent(`api_200_record_found`);
-      router.push("/status");
+      if (process.env.NEXT_PUBLIC_ENABLE_SHOW_PAYMENTS == "true" && checkPaymentsSent(record2025)) {
+        router.push("/payment");
+      } else {
+        router.push("/status");
+      }
     } catch {
       setAlertContent(
         <p className="usa-alert__text maxw-tablet">

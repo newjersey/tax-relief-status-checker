@@ -1,3 +1,5 @@
+"use client";
+
 import { logGAEvent } from "@/app/utils/analytics";
 import { Accordion, type HeadingLevel, type AccordionProps, Table } from "@trussworks/react-uswds";
 

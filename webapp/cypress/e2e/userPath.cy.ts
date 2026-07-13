@@ -128,9 +128,77 @@ it("should display api alert if records is empty in a 200 response", () => {
 
 it("should display status page if records has an object in a 200 response", () => {
   fillFields();
-  cy.intercept("POST", "/api/status", {
-    statusCode: 200,
-    fixture: "v1_api_found_records.json",
+  cy.fixture("v2_api_found_records.json").then((resp) => {
+    resp.records[0].ptr = [];
+    resp.records[0].anchor = [];
+    resp.records[0].stay_nj = [];
+    cy.intercept("POST", "/api/status", {
+      statusCode: 200,
+      body: resp,
+    });
+  });
+
+  cy.contains("button", `Check Status`).click();
+
+  cy.url().should("include", "/status");
+  cy.contains("p", "Your application was received on").should("be.visible");
+
+  cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
+  cy.contains("p", mockSSN.slice(-4)).should("be.visible");
+  cy.contains("p", "Zip Code:").should("be.visible");
+  cy.contains("p", mockZip).should("be.visible");
+  cy.contains("p", "Tax Year: 2025").should("be.visible");
+
+  cy.get("@gtag").should(
+    "have.been.calledWith",
+    "event",
+    "api_200_record_found",
+    Cypress.sinon.match.any,
+  );
+
+  cy.contains("a", "Log out").click();
+  cy.contains("h1", "This website is checking your 2025 PAS");
+});
+
+it("should display application found page if records has an object, but no transactions are payment_sent", () => {
+  fillFields();
+  cy.fixture("v2_api_found_records.json").then((resp) => {
+    resp.records[0].ptr[0] = { status: "processing" };
+    cy.intercept("POST", "/api/status", {
+      statusCode: 200,
+      body: resp,
+    });
+  });
+  cy.contains("button", `Check Status`).click();
+
+  cy.url().should("include", "/status");
+  cy.contains("p", "Your application was received on").should("be.visible");
+
+  cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
+  cy.contains("p", mockSSN.slice(-4)).should("be.visible");
+  cy.contains("p", "Zip Code:").should("be.visible");
+  cy.contains("p", mockZip).should("be.visible");
+  cy.contains("p", "Tax Year: 2025").should("be.visible");
+
+  cy.get("@gtag").should(
+    "have.been.calledWith",
+    "event",
+    "api_200_record_found",
+    Cypress.sinon.match.any,
+  );
+
+  cy.contains("a", "Log out").click();
+  cy.contains("h1", "This website is checking your 2025 PAS");
+});
+
+it("should display application found page if records has an object with payments sent, but feature flag is false", () => {
+  fillFields();
+  cy.fixture("v2_api_found_records.json").then((resp) => {
+    resp.records[0].ptr[0] = { status: "processing" };
+    cy.intercept("POST", "/api/status", {
+      statusCode: 200,
+      body: resp,
+    });
   });
   cy.contains("button", `Check Status`).click();
 
