@@ -32,7 +32,7 @@ it("displays show payments page heading", () => {
     fixture: "v2_api_found_records.json",
   });
   cy.contains("button", `Check Status`).click();
-  cy.url().should("include", "/payment");
+  cy.url().should("include", "/payment-info");
 
   cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
   cy.contains("p", mockSSN.slice(-4)).should("be.visible");
@@ -60,7 +60,7 @@ it("displays payments page if records has senior freeze CHECK", () => {
     fixture: "v2_api_found_records.json",
   });
   cy.contains("button", `Check Status`).click();
-  cy.url().should("include", "/payment");
+  cy.url().should("include", "/payment-info");
 
   cy.contains("th", "Program").should("be.visible");
   cy.contains("th", "Payment Status").should("be.visible");
@@ -81,7 +81,7 @@ it("displays payments page if records has senior freeze DIRECT DEPOSIT", () => {
   });
   cy.contains("button", `Check Status`).click();
 
-  cy.url().should("include", "/payment");
+  cy.url().should("include", "/payment-info");
   cy.contains("th", "Program").should("be.visible");
   cy.contains("th", "Payment Status").should("be.visible");
   cy.contains("th", "Amount").should("be.visible");
@@ -102,7 +102,7 @@ it("displays payments page if records has anchor CHECK", () => {
   });
   cy.contains("button", `Check Status`).click();
 
-  cy.url().should("include", "/payment");
+  cy.url().should("include", "/payment-info");
   cy.contains("th", "Program").should("be.visible");
   cy.contains("th", "Payment Status").should("be.visible");
   cy.contains("th", "Amount").should("be.visible");
@@ -124,7 +124,7 @@ it("displays payments page if records has anchor DIRECT DEPOSIT", () => {
   });
   cy.contains("button", `Check Status`).click();
 
-  cy.url().should("include", "/payment");
+  cy.url().should("include", "/payment-info");
   cy.contains("th", "Program").should("be.visible");
   cy.contains("th", "Payment Status").should("be.visible");
   cy.contains("th", "Amount").should("be.visible");
@@ -147,7 +147,7 @@ it("should not display stay_nj CHECK", () => {
   });
   cy.contains("button", `Check Status`).click();
 
-  cy.url().should("include", "/status");
+  cy.url().should("include", "/application-received");
   cy.contains("p", "Your application was received on").should("be.visible");
 
   cy.contains("td", "Stay NJ").should("not.exist");
@@ -166,7 +166,7 @@ it("displays the first check sent if multiple PTR transactions are payment_sent"
   });
   cy.contains("button", `Check Status`).click();
 
-  cy.url().should("include", "/payment");
+  cy.url().should("include", "/payment-info");
   cy.contains("th", "Program").should("be.visible");
   cy.contains("th", "Payment Status").should("be.visible");
   cy.contains("th", "Amount").should("be.visible");
@@ -188,7 +188,7 @@ it("displays the first check sent if multiple ANCHOR transactions are payment_se
   });
   cy.contains("button", `Check Status`).click();
 
-  cy.url().should("include", "/payment");
+  cy.url().should("include", "/payment-info");
   cy.contains("th", "Program").should("be.visible");
   cy.contains("th", "Payment Status").should("be.visible");
   cy.contains("th", "Amount").should("be.visible");
@@ -212,7 +212,7 @@ it("displays multiple checks from multiple payment categories", () => {
   });
   cy.contains("button", `Check Status`).click();
 
-  cy.url().should("include", "/payment");
+  cy.url().should("include", "/payment-info");
   cy.contains("th", "Program").should("be.visible");
   cy.contains("th", "Payment Status").should("be.visible");
   cy.contains("th", "Amount").should("be.visible");

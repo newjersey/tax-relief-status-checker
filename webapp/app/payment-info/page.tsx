@@ -18,7 +18,7 @@ const getEarliestTransaction = (transactions: any[]) => {
   );
 };
 
-const PaymentPage = () => {
+const PaymentInfoPage = () => {
   const router = useRouter();
   const { dataStore } = useDataStore();
 
@@ -134,4 +134,4 @@ const PaymentPage = () => {
   );
 };
 
-export default PaymentPage;
+export default PaymentInfoPage;

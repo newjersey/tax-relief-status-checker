@@ -140,7 +140,7 @@ it("should display status page if records has an object in a 200 response", () =
 
   cy.contains("button", `Check Status`).click();
 
-  cy.url().should("include", "/status");
+  cy.url().should("include", "/application-received");
   cy.contains("p", "Your application was received on").should("be.visible");
 
   cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
@@ -171,7 +171,7 @@ it("should display application found page if records has an object, but no trans
   });
   cy.contains("button", `Check Status`).click();
 
-  cy.url().should("include", "/status");
+  cy.url().should("include", "/application-received");
   cy.contains("p", "Your application was received on").should("be.visible");
 
   cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
@@ -202,7 +202,7 @@ it("should display application found page if records has an object with payments
   });
   cy.contains("button", `Check Status`).click();
 
-  cy.url().should("include", "/status");
+  cy.url().should("include", "/application-received");
   cy.contains("p", "Your application was received on").should("be.visible");
 
   cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");

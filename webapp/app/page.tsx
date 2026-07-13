@@ -141,9 +141,9 @@ const LandingPage = () => {
 
       logGAEvent(`api_200_record_found`);
       if (process.env.NEXT_PUBLIC_ENABLE_SHOW_PAYMENTS == "true" && checkPaymentsSent(record2025)) {
-        router.push("/payment");
+        router.push("/payment-info");
       } else {
-        router.push("/status");
+        router.push("/application-received");
       }
     } catch {
       setAlertContent(
