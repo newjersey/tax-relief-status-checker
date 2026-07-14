@@ -6,16 +6,26 @@ import { useDataStore } from "@/components/TaxReliefDataProvider";
 import Link from "next/link";
 import { Table } from "@trussworks/react-uswds";
 import { formatDate } from "../utils/formatDate";
-import { expandFaqAccordionItem, LandingPageFaq } from "@/components/LandingPageFaq";
+import { expandFaqAccordionItem, PaymentInfoPageFaq } from "@/components/PaymentInfoPageFaq";
+import { Transaction } from "@/components/types";
 
-const getEarliestTransaction = (transactions: any[]) => {
-  const valid = transactions.filter((t) => t.status === "payment_sent" && t.payment_details?.date);
-  if (valid.length === 0) return;
-  return valid.reduce((earliest, current) =>
-    new Date(current.payment_details.date) < new Date(earliest.payment_details.date)
-      ? current
-      : earliest,
-  );
+export const getEarliestTransaction = (transactions: Transaction[]) => {
+  const valid = transactions.filter((t) => t.status === "payment_sent" && t.payment_details);
+  if (valid.length === 0) return null;
+  if (valid.length === 1) return valid[0];
+
+  let earliestTransaction = valid[0];
+  for (let i = 1; i < valid.length; i++) {
+    if (valid[i].payment_details != null) {
+      if (
+        new Date(valid[i].payment_details!.date) <
+        new Date(earliestTransaction.payment_details!.date)
+      ) {
+        earliestTransaction = valid[i];
+      }
+    }
+  }
+  return earliestTransaction;
 };
 
 const PaymentInfoPage = () => {
@@ -94,7 +104,7 @@ const PaymentInfoPage = () => {
             <tbody>
               {(() => {
                 const transaction = getEarliestTransaction(ptr);
-                if (!transaction) return null;
+                if (!transaction?.payment_details) return null;
                 return (
                   <tr>
                     <td>Senior Freeze</td>
@@ -109,7 +119,7 @@ const PaymentInfoPage = () => {
               })()}
               {(() => {
                 const transaction = getEarliestTransaction(anchor);
-                if (!transaction) return null;
+                if (!transaction?.payment_details) return null;
                 return (
                   <tr>
                     <td>ANCHOR</td>
@@ -126,7 +136,7 @@ const PaymentInfoPage = () => {
           </Table>
           <div className="grid-row grid-gap margin-top-5">
             <h2 className="font-heading-l">Frequently Asked Questions (FAQs)</h2>
-            <LandingPageFaq headingLevel="h3" />
+            <PaymentInfoPageFaq headingLevel="h3" />
           </div>
         </div>
       </section>

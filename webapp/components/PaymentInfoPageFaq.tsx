@@ -28,7 +28,7 @@ interface LandingPageFaqProps {
   readonly headingLevel: HeadingLevel;
 }
 
-export const LandingPageFaq = (props: LandingPageFaqProps) => {
+export const PaymentInfoPageFaq = (props: LandingPageFaqProps) => {
   const faqProps: AccordionItemProps[] = FaqContent.map((faqItem) => {
     return {
       ...faqItem,
