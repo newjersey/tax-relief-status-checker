@@ -23,3 +23,5 @@ jobs:
           build: npx next build
           start: npx next start
           wait-on: "http://localhost:3000/"
+        env:
+          NEXT_PUBLIC_ENABLE_SHOW_PAYMENTS: "true"

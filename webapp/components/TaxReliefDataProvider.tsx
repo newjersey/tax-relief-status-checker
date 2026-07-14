@@ -2,11 +2,15 @@
 
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
+import { Transaction } from "./types";
 
 export interface TaxReliefStatusData {
   readonly lastFourSsnDigits: string;
   readonly zipCode: string;
   readonly applicationDateString: string;
+  readonly anchor: Transaction[];
+  readonly ptr: Transaction[];
+  readonly stay_nj: Transaction[];
 }
 
 const TaxReliefDataContext = createContext<{

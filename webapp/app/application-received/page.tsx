@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useDataStore } from "@/components/TaxReliefDataProvider";
 import Link from "next/link";
 
-const StatusPage = () => {
+const ApplicationReceivedPage = () => {
   const router = useRouter();
   const { dataStore } = useDataStore();
 
@@ -69,4 +69,4 @@ const StatusPage = () => {
   );
 };
 
-export default StatusPage;
+export default ApplicationReceivedPage;

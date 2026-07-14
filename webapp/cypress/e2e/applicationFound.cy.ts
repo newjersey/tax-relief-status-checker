@@ -113,7 +113,7 @@ it("should display api alert if records is empty in a 200 response", () => {
   fillFields();
   cy.intercept("POST", "/api/status", {
     statusCode: 200,
-    fixture: "v1_api_empty_records.json",
+    fixture: "v2_api_empty_records.json",
   });
   cy.contains("button", `Check Status`).click();
   cy.contains("h2", "No 2025 application found").should("be.visible");
@@ -126,15 +126,49 @@ it("should display api alert if records is empty in a 200 response", () => {
   cy.window().its("scrollY").should("equal", 0); // should scroll to top so error is visible
 });
 
-it("should display status page if records has an object in a 200 response", () => {
+it("should display status page if records has an object in a 200 response, no transactions", () => {
   fillFields();
-  cy.intercept("POST", "/api/status", {
-    statusCode: 200,
-    fixture: "v1_api_found_records.json",
+  cy.fixture("v2_api_no_trans_records.json").then((resp) => {
+    cy.intercept("POST", "/api/status", {
+      statusCode: 200,
+      body: resp,
+    });
+  });
+
+  cy.contains("button", `Check Status`).click();
+
+  cy.url().should("include", "/application-received");
+  cy.contains("p", "Your application was received on").should("be.visible");
+
+  cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
+  cy.contains("p", mockSSN.slice(-4)).should("be.visible");
+  cy.contains("p", "Zip Code:").should("be.visible");
+  cy.contains("p", mockZip).should("be.visible");
+  cy.contains("p", "Tax Year: 2025").should("be.visible");
+
+  cy.get("@gtag").should(
+    "have.been.calledWith",
+    "event",
+    "api_200_record_found",
+    Cypress.sinon.match.any,
+  );
+
+  cy.contains("a", "Log out").click();
+  cy.contains("h1", "This website is checking your 2025 PAS");
+});
+
+it("should display application found page if records has an object, but no transactions are payment_sent", () => {
+  fillFields();
+  cy.fixture("v2_api_found_records.json").then((resp) => {
+    resp.records[0].ptr[0] = { status: "processing" };
+    cy.intercept("POST", "/api/status", {
+      statusCode: 200,
+      body: resp,
+    });
   });
   cy.contains("button", `Check Status`).click();
 
-  cy.url().should("include", "/status");
+  cy.url().should("include", "/application-received");
   cy.contains("p", "Your application was received on").should("be.visible");
 
   cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");

@@ -1,0 +1,9 @@
+{
+  "status": "payment_sent",
+  "payment_details": {
+    "amount": 10.0,
+    "date": "1/1/2026 0:00:00",
+    "method": "direct_deposit",
+    "check_number": "9NN775385"
+  }
+}

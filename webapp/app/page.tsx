@@ -22,8 +22,23 @@ interface UserData {
 interface StatusRecord {
   readonly return_year: string;
   readonly application_date: string;
+  readonly anchor: [];
+  readonly ptr: [];
+  readonly stay_nj: [];
 }
-
+const hasPaymentSentTransaction = (record: StatusRecord) => {
+  for (const transaction of record.anchor) {
+    if (transaction["status"] === "payment_sent") {
+      return true;
+    }
+  }
+  for (const transaction of record.ptr) {
+    if (transaction["status"] === "payment_sent") {
+      return true;
+    }
+  }
+  return false;
+};
 const returnToTop = () => {
   const topOfPage = document.querySelector(`#nj-header`);
   if (!topOfPage) return;
@@ -119,10 +134,20 @@ const LandingPage = () => {
         lastFourSsnDigits: lastFourSsnDigits,
         zipCode: data.zipCode,
         applicationDateString: formattedDate,
+        anchor: record2025.anchor,
+        ptr: record2025.ptr,
+        stay_nj: record2025.stay_nj,
       });
 
       logGAEvent(`api_200_record_found`);
-      router.push("/status");
+      if (
+        process.env.NEXT_PUBLIC_ENABLE_SHOW_PAYMENTS == "true" &&
+        hasPaymentSentTransaction(record2025)
+      ) {
+        router.push("/payment-info");
+      } else {
+        router.push("/application-received");
+      }
     } catch {
       setAlertContent(
         <p className="usa-alert__text maxw-tablet">
