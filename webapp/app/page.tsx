@@ -26,7 +26,7 @@ interface StatusRecord {
   readonly ptr: [];
   readonly stay_nj: [];
 }
-const checkPaymentsSent = (record: StatusRecord) => {
+const hasPaymentSentTransaction = (record: StatusRecord) => {
   for (const transaction of record.anchor) {
     if (transaction["status"] === "payment_sent") {
       return true;
@@ -140,7 +140,10 @@ const LandingPage = () => {
       });
 
       logGAEvent(`api_200_record_found`);
-      if (process.env.NEXT_PUBLIC_ENABLE_SHOW_PAYMENTS == "true" && checkPaymentsSent(record2025)) {
+      if (
+        process.env.NEXT_PUBLIC_ENABLE_SHOW_PAYMENTS == "true" &&
+        hasPaymentSentTransaction(record2025)
+      ) {
         router.push("/payment-info");
       } else {
         router.push("/application-received");
