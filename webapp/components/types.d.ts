@@ -5,6 +5,6 @@ export interface Transaction {
     readonly amount: number;
     readonly date: string;
     readonly method: string;
-    readonly check_number: string;
+    readonly check_number?: string;
   };
 }
