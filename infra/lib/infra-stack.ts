@@ -6,6 +6,7 @@ import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as path from "path";
 import { fileURLToPath } from "url";
+import { Alarm, ComparisonOperator, Metric, TreatMissingData } from "aws-cdk-lib/aws-cloudwatch";
 
 const DIRNAME = path.dirname(fileURLToPath(import.meta.url));
 const LAMBDA_TIMEOUT_SECONDS = 5;
@@ -26,6 +27,22 @@ export class InfraStack extends Stack {
 
   constructor(scope: Construct, id: string, props: InfraStackProps) {
     super(scope, id, props);
+
+    new Alarm(this, "PropertyTaxReliefStatusApi500Alarm", {
+      metric: new Metric({
+        namespace: "TaxReliefStatusApi",
+        metricName: "ResponseCount",
+        dimensionsMap: { statusCode: "500" },
+        statistic: "Sum",
+      }),
+      threshold: 0,
+      evaluationPeriods: 1,
+      datapointsToAlarm: 1,
+      alarmName: "PropertyTaxReliefStatusApi500Alarm",
+      alarmDescription: "Alarm for API errors",
+      comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
+      treatMissingData: TreatMissingData.MISSING,
+    });
 
     const vpc = ec2.Vpc.fromLookup(this, `vpc-${props.stageName}`, {
       vpcId: props.vpcId,
