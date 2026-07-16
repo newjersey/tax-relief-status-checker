@@ -19,8 +19,10 @@ export const buildTransaction = (
     status = "issue_flagged";
   } else if (TRANS_CDE === "RR" && TRANS_STATUS_CDE.startsWith("AP")) {
     status = "approved";
-  } else {
+  } else if (TRANS_CDE === "RF") {
     status = "payment_sent";
+  } else {
+    throw new Error(`Invalid TRANS_CDE: ${TRANS_CDE}`);
   }
 
   if (status === "issue_flagged") {
