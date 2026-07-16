@@ -7,6 +7,8 @@ import * as iam from "aws-cdk-lib/aws-iam";
 import * as path from "path";
 import { fileURLToPath } from "url";
 import * as cw from "aws-cdk-lib/aws-cloudwatch";
+import * as cwActions from "aws-cdk-lib/aws-cloudwatch-actions";
+import * as sns from "aws-cdk-lib/aws-sns";
 
 const DIRNAME = path.dirname(fileURLToPath(import.meta.url));
 const LAMBDA_TIMEOUT_SECONDS = 5;
@@ -28,11 +30,16 @@ export class InfraStack extends Stack {
   constructor(scope: Construct, id: string, props: InfraStackProps) {
     super(scope, id, props);
 
-    new cw.Alarm(this, "PropertyTaxReliefStatusApi500Alarm", {
+    const alarmNotificationTopic = new sns.Topic(this, "PropertyTaxReliefStatusApiAlarmTopic", {
+      topicName: `property-tax-relief-status-api-alarms-${props.stageName}`,
+      displayName: "Property Tax Relief Status API Alarms",
+    });
+
+    const api500Alarm = new cw.Alarm(this, "PropertyTaxReliefStatusApi500Alarm", {
       metric: new cw.Metric({
         namespace: "TaxReliefStatusApi",
         metricName: "ResponseCount",
-        dimensionsMap: { statusCode: "500" },
+        dimensionsMap: { StatusCode: "500" },
         statistic: "Sum",
       }),
       threshold: 0,
@@ -43,6 +50,8 @@ export class InfraStack extends Stack {
       comparisonOperator: cw.ComparisonOperator.GREATER_THAN_THRESHOLD,
       treatMissingData: cw.TreatMissingData.NOT_BREACHING,
     });
+
+    api500Alarm.addAlarmAction(new cwActions.SnsAction(alarmNotificationTopic));
 
     const vpc = ec2.Vpc.fromLookup(this, `vpc-${props.stageName}`, {
       vpcId: props.vpcId,
