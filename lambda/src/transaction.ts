@@ -19,8 +19,10 @@ export const buildTransaction = (
     status = "issue_flagged";
   } else if (TRANS_CDE === "RR" && TRANS_STATUS_CDE.startsWith("AP")) {
     status = "approved";
-  } else {
+  } else if (TRANS_CDE === "RF") {
     status = "payment_sent";
+  } else {
+    throw new Error(`Invalid TRANS_CDE: ${TRANS_CDE}`);
   }
 
   if (status === "issue_flagged") {
@@ -28,21 +30,23 @@ export const buildTransaction = (
   }
 
   if (status === "payment_sent") {
-    let method;
-    if (CHECK_NUM.slice(1, 3) === "NN") {
-      method = "direct_deposit";
-    } else if (CHECK_NUM.slice(1, 3)) {
-      method = "check";
-    } else {
+    if (!CHECK_NUM) {
       throw new Error(`Missing CHECK_NUM`);
+    } else {
+      let method;
+      if (CHECK_NUM.slice(1, 3) === "NN") {
+        method = "direct_deposit";
+      } else {
+        method = "check";
+      }
+      const payment_details = {
+        amount: CHECK_AMT,
+        date: CHECK_DTE,
+        method: method,
+        check_number: CHECK_NUM,
+      };
+      return { status: status, payment_details: payment_details };
     }
-    const payment_details = {
-      amount: CHECK_AMT,
-      date: CHECK_DTE,
-      method: method,
-      check_number: CHECK_NUM,
-    };
-    return { status: status, payment_details: payment_details };
   }
   return { status: status };
 };

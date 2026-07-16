@@ -73,6 +73,16 @@ describe("build transaction status codes", () => {
     });
   });
 
+  describe("when TRANS_X_CDE is missing", () => {
+    it("throws an error with trans cde", async () => {
+      const row = buildMockRow({
+        TRANS_1_CDE: null,
+      });
+
+      expect(() => callBuildTransaction(row, 1)).toThrow("Invalid TRANS_CDE: null");
+    });
+  });
+
   describe("when CHECK_X_NUMBER second + third characters are NOT NN", () => {
     it("returns payment method as check", async () => {
       const row = buildMockRow({
@@ -101,7 +111,7 @@ describe("build transaction status codes", () => {
     it("throws an error for Missing CHECK_NUM", async () => {
       const row = buildMockRow({
         TRANS_1_CDE: "RF",
-        CHECK_1_NUM: "",
+        CHECK_1_NUM: null,
       });
 
       expect(() => callBuildTransaction(row, 1)).toThrow("Missing CHECK_NUM");
