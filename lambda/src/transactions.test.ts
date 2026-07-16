@@ -111,7 +111,7 @@ describe("build transaction status codes", () => {
     it("throws an error for Missing CHECK_NUM", async () => {
       const row = buildMockRow({
         TRANS_1_CDE: "RF",
-        CHECK_1_NUM: "",
+        CHECK_1_NUM: null,
       });
 
       expect(() => callBuildTransaction(row, 1)).toThrow("Missing CHECK_NUM");
