@@ -30,21 +30,23 @@ export const buildTransaction = (
   }
 
   if (status === "payment_sent") {
-    let method;
-    if (CHECK_NUM.slice(1, 3) === "NN") {
-      method = "direct_deposit";
-    } else if (CHECK_NUM.slice(1, 3)) {
-      method = "check";
-    } else {
+    if (!CHECK_NUM) {
       throw new Error(`Missing CHECK_NUM`);
+    } else {
+      let method;
+      if (CHECK_NUM.slice(1, 3) === "NN") {
+        method = "direct_deposit";
+      } else {
+        method = "check";
+      }
+      const payment_details = {
+        amount: CHECK_AMT,
+        date: CHECK_DTE,
+        method: method,
+        check_number: CHECK_NUM,
+      };
+      return { status: status, payment_details: payment_details };
     }
-    const payment_details = {
-      amount: CHECK_AMT,
-      date: CHECK_DTE,
-      method: method,
-      check_number: CHECK_NUM,
-    };
-    return { status: status, payment_details: payment_details };
   }
   return { status: status };
 };
