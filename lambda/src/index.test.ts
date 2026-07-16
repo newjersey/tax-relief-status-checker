@@ -1,8 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { mockClient } from "aws-sdk-client-mock";
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
 import { buildMockRow } from "./helpers.ts";
 import { handler, validateInput } from "./index.ts";
+import { embeddedMetricsPublisher } from "./metrics.ts";
 
 const secretsMock = mockClient(SecretsManagerClient);
 const mockExecute = vi.fn();
@@ -32,6 +33,10 @@ beforeEach(() => {
       ORACLE_DB_PASSWORD: "testpass",
     }),
   });
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 describe("handler input validation", () => {
@@ -79,17 +84,26 @@ describe("handler input validation", () => {
 describe("handler error handling", () => {
   it("returns 500 when database query fails", async () => {
     mockExecute.mockRejectedValue(new Error("ORA-12541: TNS:no listener"));
+    const metricsSpy = vi
+      .spyOn(embeddedMetricsPublisher, "recordResponse")
+      .mockImplementation(() => {});
 
     const result = await handler({ ssn: "123456789", zip: "07656" });
 
     expect(result.statusCode).toBe(500);
     expect(JSON.parse(result.body).error).toBe("Internal server error");
+    expect(metricsSpy).toHaveBeenCalledWith({ statusCode: 500 });
   });
 
   it("returns 400 when validation fails", async () => {
+    const metricsSpy = vi
+      .spyOn(embeddedMetricsPublisher, "recordResponse")
+      .mockImplementation(() => {});
+
     const result = await handler({});
     expect(result.statusCode).toBe(400);
     expect(JSON.parse(result.body).error).toBe("Both ssn and zip are required");
+    expect(metricsSpy).toHaveBeenCalledWith({ statusCode: 400 });
   });
 
   it("closes the database connection even on error", async () => {
@@ -105,12 +119,16 @@ describe("handler business logic", () => {
   describe("when filer has no matching rows in DB", () => {
     it("returns 200 with empty filer object when no rows match", async () => {
       mockExecute.mockResolvedValue({ rows: [] });
+      const metricsSpy = vi
+        .spyOn(embeddedMetricsPublisher, "recordResponse")
+        .mockImplementation(() => {});
 
       const result = await handler({ ssn: "123456789", zip: "00000" });
 
       expect(result.statusCode).toBe(200);
       const body = JSON.parse(result.body);
       expect(body.records).toEqual([]);
+      expect(metricsSpy).toHaveBeenCalledWith({ statusCode: 200 });
     });
   });
 
@@ -121,7 +139,6 @@ describe("handler business logic", () => {
       const result = await handler({ ssn: "123456789", zip: "12345" });
       expect(result.statusCode).toBe(200);
       const body = JSON.parse(result.body);
-      console.log(body["records"][0]);
 
       expect(body["records"]).toHaveLength(1);
       expect(body["records"][0].return_year).toBe("2025");

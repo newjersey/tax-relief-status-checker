@@ -3,6 +3,7 @@ import oracledb from "oracledb";
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { Transaction, InquiryRow } from "./types";
 import { buildAllTransactions } from "./transaction";
+import { embeddedMetricsPublisher } from "./metrics";
 
 /** SQL query to look up filer records by SSN and ZIP */
 const INQUIRY_QUERY = `SELECT * FROM ELF_SAVER_INQUIRY
@@ -109,6 +110,7 @@ export const handler = async (
 ): Promise<APIGatewayProxyResult> => {
   const validation = validateInput(event);
   if (!validation.valid) {
+    embeddedMetricsPublisher.recordResponse({ statusCode: 400 });
     return {
       statusCode: 400,
       body: JSON.stringify({ error: validation.error }),
@@ -133,6 +135,7 @@ export const handler = async (
 
     const responseBody = buildResponse(result.rows as InquiryRow[]);
 
+    embeddedMetricsPublisher.recordResponse({ statusCode: 200 });
     return {
       statusCode: 200,
       body: JSON.stringify(responseBody),
@@ -143,6 +146,7 @@ export const handler = async (
       error: error.message,
       stack: error.stack,
     });
+    embeddedMetricsPublisher.recordResponse({ statusCode: 500 });
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Internal server error" }),
