@@ -2,9 +2,7 @@ import { describe, it, expect, afterEach, vi } from "vitest";
 import { embeddedMetricsPublisher } from "./metrics.ts";
 
 describe("embeddedMetricsPublisher.recordResponse", () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
+  afterEach(vi.restoreAllMocks);
 
   it.each([200, 400, 500])("emits an EMF log entry for status code %d", (statusCode) => {
     const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
