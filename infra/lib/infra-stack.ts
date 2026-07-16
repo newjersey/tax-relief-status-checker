@@ -41,7 +41,7 @@ export class InfraStack extends Stack {
       alarmName: "PropertyTaxReliefStatusApi500Alarm",
       alarmDescription: "Alarm for API errors",
       comparisonOperator: cw.ComparisonOperator.GREATER_THAN_THRESHOLD,
-      treatMissingData: cw.TreatMissingData.MISSING,
+      treatMissingData: cw.TreatMissingData.NOT_BREACHING,
     });
 
     const vpc = ec2.Vpc.fromLookup(this, `vpc-${props.stageName}`, {
