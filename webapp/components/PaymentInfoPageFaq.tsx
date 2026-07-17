@@ -43,8 +43,8 @@ export const FaqContent: AccordionItemContent[] = [
     title: "When can I expect my application to show up?",
     content: (
       <p>
-        It can take up to 3 weeks after you submit your application to see that we've received it
-        here. Paper applications can take up to 12 weeks.
+        It can take up to three weeks after you submit your application to see that we've received
+        it here. Paper applications can take up to 12 weeks.
       </p>
     ),
     expanded: false,
