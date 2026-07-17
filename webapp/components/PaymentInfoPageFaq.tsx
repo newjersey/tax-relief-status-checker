@@ -43,8 +43,9 @@ export const FaqContent: AccordionItemContent[] = [
     title: "When can I expect my application to show up?",
     content: (
       <p>
-        It can take up to three weeks after you submit your application to see that we've received
-        it here. Paper applications can take up to 12 weeks.
+        For online applications, it can take up to three weeks for an application to show up on this
+        website. For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants,
+        check back in the fall of 2026.
       </p>
     ),
     expanded: false,
