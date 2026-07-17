@@ -52,7 +52,7 @@ export const FaqContent: AccordionItemContent[] = [
     handleToggle: () => fireEventWhenFaqOpened("faq_when_can_i_expect_my_application_status"),
   },
   {
-    title: "I applied, but I keep getting \u201DNo 2025 application found.\u201D Why?",
+    title: "I applied, but I keep getting \u201CNo 2025 application found.\u201D Why?",
     content: (
       <>
         <p>Some common reasons this might be happening:</p>
