@@ -140,10 +140,7 @@ const LandingPage = () => {
       });
 
       logGAEvent(`api_200_record_found`);
-      if (
-        process.env.NEXT_PUBLIC_ENABLE_SHOW_PAYMENTS == "true" &&
-        hasPaymentSentTransaction(record2025)
-      ) {
+      if (hasPaymentSentTransaction(record2025)) {
         router.push("/payment-info");
       } else {
         router.push("/application-received");
