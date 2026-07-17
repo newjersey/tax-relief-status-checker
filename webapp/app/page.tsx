@@ -178,7 +178,7 @@ const LandingPage = () => {
                 This website is checking your 2025 PAS&#8209;1 application status
               </h1>
               <Form onSubmit={handleSubmit(onSubmit)} className="maxw-full" noValidate>
-                <p className="text-bold font-heading-md">Enter your SSN or ITN and Zip Code</p>
+                <p className="text-bold font-heading-md">Enter your SSN or ITIN and ZIP Code</p>
                 <Label htmlFor="ssn" requiredMarker={true}>
                   Social Security or Individual Taxpayer Identification Number
                 </Label>
@@ -208,7 +208,7 @@ const LandingPage = () => {
                 </div>
 
                 <Label htmlFor="zipCode" requiredMarker={true}>
-                  Zip code you submitted with your application
+                  ZIP code you submitted with your application
                 </Label>
                 <div className="tablet:grid-col-10">
                   <TextInputMask
