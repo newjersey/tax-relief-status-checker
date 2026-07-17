@@ -94,12 +94,12 @@ const LandingPage = () => {
           <>
             <h2 className="usa-alert__heading">No 2025 application found</h2>
             <p className="usa-alert__text">
-              We couldn't find any records matching the SSN or ITIN and zip code you entered. Some
+              We couldn't find any records matching the SSN or ITIN and ZIP code you entered. Some
               common reasons why:
             </p>
             <ul>
               <li>
-                <strong>Identity mismatch</strong>: The SSN/ITIN and zip code you filed on your
+                <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code you filed on your
                 application is different than the one you just entered.
               </li>
               <li>
