@@ -93,7 +93,7 @@ const PaymentInfoPage = () => {
               {"."}
             </p>
           </div>
-          <Table className="usa-table" bordered={false} scrollable={true}>
+          <Table className="usa-table payment-table" bordered={false} scrollable={true}>
             <thead>
               <tr>
                 <th className="width-card">Program</th>
