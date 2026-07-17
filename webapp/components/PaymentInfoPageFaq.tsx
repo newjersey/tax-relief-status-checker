@@ -58,7 +58,7 @@ export const FaqContent: AccordionItemContent[] = [
         <p>Some common reasons this might be happening:</p>
         <ul>
           <li>
-            <strong>Identity mismatch</strong>: The SSN/ITIN and Zip code you filed on your
+            <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code you filed on your
             application is different than the one you just entered.
           </li>
           <li>
