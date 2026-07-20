@@ -37,6 +37,11 @@ const hasPaymentSentTransaction = (record: StatusRecord) => {
       return true;
     }
   }
+  for (const transaction of record.stay_nj) {
+    if (transaction["status"] === "payment_sent") {
+      return true;
+    }
+  }
   return false;
 };
 const returnToTop = () => {

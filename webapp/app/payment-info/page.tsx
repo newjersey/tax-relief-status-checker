@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { JSX, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDataStore } from "@/components/TaxReliefDataProvider";
 import Link from "next/link";
@@ -8,6 +8,10 @@ import { Table } from "@trussworks/react-uswds";
 import { formatDate } from "../utils/formatDate";
 import { expandFaqAccordionItem, PaymentInfoPageFaq } from "@/components/PaymentInfoPageFaq";
 import { Transaction } from "@/components/types";
+
+const ptrString = "Senior Freeze";
+const anchorString = "ANCHOR";
+const stayNJString = "Stay NJ";
 
 export const getEarliestTransaction = (transactions: Transaction[]) => {
   const valid = transactions.filter((t) => t.status === "payment_sent" && t.payment_details);
@@ -28,6 +32,86 @@ export const getEarliestTransaction = (transactions: Transaction[]) => {
   return earliestTransaction;
 };
 
+export const showEarliestTransaction = (transaction: Transaction, category: string) => {
+  if (!transaction?.payment_details) return null;
+  return (
+    <tr>
+      <td>{category}</td>
+      {transaction.payment_details.method === "check" ? (
+        <td>Check issued on {formatDate(transaction.payment_details.date)}</td>
+      ) : (
+        <td>Direct deposit made on {formatDate(transaction.payment_details.date)}</td>
+      )}
+      <td>${transaction.payment_details.amount}</td>
+    </tr>
+  );
+};
+
+export const showUpdatedTransaction = (
+  transaction: Transaction,
+  category: string,
+): JSX.Element | null => {
+  if (!transaction?.payment_details) return null;
+  return (
+    <tr>
+      <td>{category}</td>
+      <td>
+        <div style={{ textWrap: "wrap" }}>
+          Your benefit amount was adjusted. A check was sent on{" "}
+          {formatDate(transaction.payment_details.date)}
+        </div>
+      </td>
+      <td>${transaction.payment_details.amount}</td>
+    </tr>
+  );
+};
+
+export const showAllTransactions = (transactions: Transaction[], category: string) => {
+  const earliest = getEarliestTransaction(transactions);
+  if (!earliest?.payment_details) return null;
+
+  if (transactions.length === 1) {
+    return showEarliestTransaction(earliest, category);
+  }
+
+  const rest = transactions.filter((transaction) => transaction !== earliest);
+
+  return (
+    <>
+      {showEarliestTransaction(earliest, category)}
+      {rest.map((transaction) => showUpdatedTransaction(transaction, category))}
+    </>
+  );
+};
+
+export const sortStayNJTransactions = (transactions: Transaction[]) => {
+  const sortedStayNJ: Transaction[][] = [[], [], [], []];
+  for (const transaction of transactions) {
+    if (!transaction.payment_details) continue;
+    const currentDate = new Date(transaction.payment_details.date);
+    if (currentDate >= new Date("01/01/27") && currentDate <= new Date("04/30/27 23:59:59")) {
+      sortedStayNJ[0].push(transaction);
+    } else if (
+      currentDate > new Date("4/30/27 23:59:59") &&
+      currentDate <= new Date("07/31/27 23:59:59")
+    ) {
+      sortedStayNJ[1].push(transaction);
+    } else if (
+      currentDate > new Date("07/31/27 23:59:59") &&
+      currentDate <= new Date("10/31/27 23:59:59")
+    ) {
+      sortedStayNJ[2].push(transaction);
+    } else if (
+      currentDate > new Date("10/31/27 23:59:59") &&
+      currentDate <= new Date("12/31/27 23:59:59")
+    ) {
+      sortedStayNJ[3].push(transaction);
+    }
+  }
+  console.log(sortedStayNJ);
+  return sortedStayNJ;
+};
+
 const PaymentInfoPage = () => {
   const router = useRouter();
   const { dataStore } = useDataStore();
@@ -44,7 +128,7 @@ const PaymentInfoPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, anchor, ptr } = dataStore;
+  const { lastFourSsnDigits, zipCode, anchor, ptr, stay_nj } = dataStore;
 
   return (
     <main id="main-content">
@@ -103,34 +187,64 @@ const PaymentInfoPage = () => {
             </thead>
             <tbody>
               {(() => {
-                const transaction = getEarliestTransaction(ptr);
-                if (!transaction?.payment_details) return null;
+                if (ptr.length === 0) return null;
+
+                const earliest = getEarliestTransaction(ptr);
+                if (!earliest?.payment_details) return null;
+
+                if (ptr.length === 1) {
+                  return showEarliestTransaction(earliest, ptrString);
+                }
+
+                const rest = ptr.filter((transaction) => transaction !== earliest);
+
                 return (
-                  <tr>
-                    <td>Senior Freeze</td>
-                    {transaction.payment_details.method === "check" ? (
-                      <td>Check issued on {formatDate(transaction.payment_details.date)}</td>
-                    ) : (
-                      <td>Direct deposit made on {formatDate(transaction.payment_details.date)}</td>
-                    )}
-                    <td>${transaction.payment_details.amount}</td>
-                  </tr>
+                  <>
+                    {showEarliestTransaction(earliest, ptrString)}
+                    {rest.map((transaction) => showUpdatedTransaction(transaction, ptrString))}
+                  </>
                 );
               })()}
               {(() => {
-                const transaction = getEarliestTransaction(anchor);
-                if (!transaction?.payment_details) return null;
+                if (anchor.length === 0) return null;
+
+                const earliest = getEarliestTransaction(anchor);
+                if (!earliest?.payment_details) return null;
+
+                if (anchor.length === 1) {
+                  return showEarliestTransaction(earliest, anchorString);
+                }
+
+                const rest = anchor.filter((transaction) => transaction !== earliest);
+
                 return (
-                  <tr>
-                    <td>ANCHOR</td>
-                    {transaction.payment_details.method === "check" ? (
-                      <td>Check issued on {formatDate(transaction.payment_details.date)}</td>
-                    ) : (
-                      <td>Direct deposit made on {formatDate(transaction.payment_details.date)}</td>
-                    )}
-                    <td>${transaction.payment_details.amount}</td>
-                  </tr>
+                  <>
+                    {showEarliestTransaction(earliest, anchorString)}
+                    {rest.map((transaction) => showUpdatedTransaction(transaction, anchorString))}
+                  </>
                 );
+              })()}
+              {(() => {
+                if (stay_nj.length === 0) return null;
+
+                const sortedStayNJ = sortStayNJTransactions(stay_nj);
+                for (const quarter of sortedStayNJ) {
+                  const earliest = getEarliestTransaction(quarter);
+                  if (!earliest?.payment_details) return null;
+
+                  if (quarter.length === 1) {
+                    return showEarliestTransaction(earliest, stayNJString);
+                  }
+
+                  const rest = quarter.filter((transaction) => transaction !== earliest);
+
+                  return (
+                    <>
+                      {showEarliestTransaction(earliest, stayNJString)}
+                      {rest.map((transaction) => showUpdatedTransaction(transaction, stayNJString))}
+                    </>
+                  );
+                }
               })()}
             </tbody>
           </Table>
