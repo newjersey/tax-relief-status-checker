@@ -30,3 +30,7 @@
   table-layout: fixed;
   width: 100%;
 }
+
+p.usa-alert__text {
+  max-width: none;
+}

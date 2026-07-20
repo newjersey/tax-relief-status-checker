@@ -24,11 +24,11 @@ type AccordionItemContent = Omit<AccordionItemProps, "headingLevel">;
 
 type AccordionItemProps = AccordionProps["items"][number];
 
-interface LandingPageFaqProps {
+interface PaymentInfoPageFaqProps {
   readonly headingLevel: HeadingLevel;
 }
 
-export const PaymentInfoPageFaq = (props: LandingPageFaqProps) => {
+export const PaymentInfoPageFaq = (props: PaymentInfoPageFaqProps) => {
   const faqProps: AccordionItemProps[] = FaqContent.map((faqItem) => {
     return {
       ...faqItem,
@@ -43,8 +43,9 @@ export const FaqContent: AccordionItemContent[] = [
     title: "When can I expect my application to show up?",
     content: (
       <p>
-        For online applications, it can take up to 3 weeks before a status shows up. For paper
-        applications, it can take up to 12 weeks before a status shows up.
+        For online applications, it can take up to three weeks for an application to show up on this
+        website. For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants,
+        check back in the fall of 2026.
       </p>
     ),
     expanded: false,
@@ -52,22 +53,22 @@ export const FaqContent: AccordionItemContent[] = [
     handleToggle: () => fireEventWhenFaqOpened("faq_when_can_i_expect_my_application_status"),
   },
   {
-    title: "I applied but I keep getting \u201CNo 2025 application found\u201D. Why?",
+    title: "I applied, but I keep getting \u201CNo 2025 application found.\u201D Why?",
     content: (
       <>
         <p>Some common reasons this might be happening:</p>
         <ul>
           <li>
-            <strong>Identity mismatch</strong>: The SSN/ITIN and zip code you filed on your
+            <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code you filed on your
             application is different than the one you just entered.
           </li>
           <li>
-            <strong>It&apos;s too soon</strong>: For online applications, it can take up to 3 weeks.
-            For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants, check
-            back in the Fall.
+            <strong>It&apos;s too soon</strong>: For online applications, it can take up to three
+            weeks. For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants,
+            check back in the fall.
           </li>
           <li>
-            <strong>Forgot to press submit</strong>: If you filed your 2025 application online you
+            <strong>Forgot to press submit</strong>: If you filed your 2025 application online, you
             should have received a Web Reference Number on the confirmation screen. Otherwise, your
             application was not successfully submitted. The filing deadline is November 2, 2026.
           </li>
@@ -115,9 +116,9 @@ export const FaqContent: AccordionItemContent[] = [
     content: (
       <>
         <p>
-          Even though PAS-1 combines all 3 programs into 1 application, each program has a different
-          payment schedule. The table below outlines when you can expect to receive your payment(s)
-          from each program. Your payment will be delayed if there is an issue with your
+          Even though PAS-1 combines all three programs into one application, each program has a
+          different payment schedule. The table below outlines when you can expect to receive your
+          payment(s) from each program. Your payment will be delayed if there is an issue with your
           application, or if we need additional information from you.
         </p>
         <Table className="usa-table" bordered={true} scrollable={true}>
@@ -135,15 +136,13 @@ export const FaqContent: AccordionItemContent[] = [
                 <strong className="text-uppercase">July-September</strong>
               </td>
               <td>
-                Payments start going out on July 15. If you applied before May 1, you can expect to
-                get your payment between July 15 and September 15.
+                Payments start going out on July 15, 2026. If you applied before May 1, 2026, you
+                can expect to get your payment between July 15, 2026 and September 15, 2026.
               </td>
               <td></td>
               <td>
-                Timing and amount are subject to the{" "}
-                <a href="https://reportcard.nj.gov/">Fiscal Year 2027 State Budget</a>, which the
-                state legislature is expected to finalize by July 1. Payments start going out next
-                year in February (2027). They are paid out quarterly.
+                Stay NJ is paid in quarterly installments. The 2025 benefit will be paid in February
+                and May of 2027.
               </td>
             </tr>
             <tr>
@@ -151,12 +150,12 @@ export const FaqContent: AccordionItemContent[] = [
                 <strong className="text-uppercase">September-October</strong>
               </td>
               <td>
-                If you applied between May 1 and June 1, you can expect to get your payment between
-                September 1 and October 1.
+                If you applied between May 1, 2026 and June 1, 2026, you can expect to get your
+                payment between September 1, 2026 and October 1, 2026.
               </td>
               <td>
-                Payments start going out on September 15. You can expect to get your payment before
-                December 1.
+                Payments start going out on September 15, 2026. You can expect to get your payment
+                before December 1, 2026.
               </td>
               <td></td>
             </tr>
@@ -165,8 +164,8 @@ export const FaqContent: AccordionItemContent[] = [
                 <strong className="text-uppercase">November</strong>
               </td>
               <td>
-                If you applied between June 2 and September 1, you can expect to get your payment
-                between November 2 and January 2, 2027.
+                If you applied between June 2, 2026 and September 1, 2026, you can expect to get
+                your payment between November 2, 2026 and January 2, 2027.
               </td>
               <td></td>
               <td></td>
@@ -176,8 +175,8 @@ export const FaqContent: AccordionItemContent[] = [
                 <strong className="text-uppercase">December</strong>
               </td>
               <td>
-                If you applied between September 2 and October 31, you can expect to get your
-                payment between December 2, 2026 and February 2, 2027.
+                If you applied between September 2, 2026 and October 31, 2026, you can expect to get
+                your payment between December 2, 2026 and February 2, 2027.
               </td>
               <td></td>
               <td></td>
