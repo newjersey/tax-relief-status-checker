@@ -56,7 +56,7 @@ export const showUpdatedTransaction = (
     <tr>
       <td>{category}</td>
       <td>
-        <div style={{ textWrap: "wrap" }}>
+        <div className="transaction-table--payment-status">
           Your benefit amount was adjusted. A check was sent on{" "}
           {formatDate(transaction.payment_details.date)}
         </div>

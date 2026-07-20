@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { renderToStaticMarkup, renderToString } from "react-dom/server";
 
 import {
   getEarliestTransaction,
@@ -6,6 +7,7 @@ import {
   showUpdatedTransaction,
   sortStayNJTransactions,
 } from "./page";
+import { render } from "@testing-library/react";
 
 const payment_sent_transaction = {
   status: "payment_sent",
@@ -137,14 +139,11 @@ describe("showEarliestTransaction", () => {
 describe("showUpdatedTransaction", () => {
   it("shows your benefit amount was adjusted if check has payment details", () => {
     const result = showUpdatedTransaction(payment_sent_transaction, "ANCHOR");
-    expect(result?.props.children[0].props.children).toBe("ANCHOR");
-    expect(result?.props.children[1].props.children.text).toStrictEqual([
-      "Your benefit amount was adjusted. A check was sent on",
-      " ",
-      "07/06/2026",
-    ]);
-    console.log(result);
-    expect(result?.props.children[2].props.children[0].props.children).toStrictEqual(["$", 377.56]);
+    const html = renderToStaticMarkup(result);
+
+    expect(html).toContain("ANCHOR");
+    expect(html).toContain("Your benefit amount was adjusted. A check was sent on 07/06/2026");
+    expect(html).toContain("$377.56");
   });
 
   it("returns nothing if there is no payment_details", () => {
