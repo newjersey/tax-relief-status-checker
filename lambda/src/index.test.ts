@@ -3,13 +3,15 @@ import { mockClient } from "aws-sdk-client-mock";
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
 import { buildMockRow } from "./helpers.ts";
 
+const mockMetricsLogger = vi.hoisted(() => ({
+  setNamespace: vi.fn(),
+  putDimensions: vi.fn(),
+  putMetric: vi.fn(),
+  flush: vi.fn(),
+}));
+
 vi.mock("aws-embedded-metrics", () => ({
-  createMetricsLogger: () => ({
-    setNamespace: vi.fn(),
-    putDimensions: vi.fn(),
-    putMetric: vi.fn(),
-    flush: vi.fn().mockResolvedValue(undefined),
-  }),
+  createMetricsLogger: () => mockMetricsLogger,
   Unit: { Count: "Count" },
   StorageResolution: { Standard: 60 },
 }));
@@ -99,12 +101,20 @@ describe("handler error handling", () => {
 
     expect(result.statusCode).toBe(500);
     expect(JSON.parse(result.body).error).toBe("Internal server error");
+    expect(mockMetricsLogger.setNamespace).toHaveBeenCalledWith("TaxReliefStatusApi");
+    expect(mockMetricsLogger.putDimensions).toHaveBeenCalledWith({ StatusCode: "500" });
+    expect(mockMetricsLogger.putMetric).toHaveBeenCalledWith("ResponseCount", 1, "Count", 60);
+    expect(mockMetricsLogger.flush).toHaveBeenCalled();
   });
 
   it("returns 400 when validation fails", async () => {
     const result = await handler({});
     expect(result.statusCode).toBe(400);
     expect(JSON.parse(result.body).error).toBe("Both ssn and zip are required");
+    expect(mockMetricsLogger.setNamespace).toHaveBeenCalledWith("TaxReliefStatusApi");
+    expect(mockMetricsLogger.putDimensions).toHaveBeenCalledWith({ StatusCode: "400" });
+    expect(mockMetricsLogger.putMetric).toHaveBeenCalledWith("ResponseCount", 1, "Count", 60);
+    expect(mockMetricsLogger.flush).toHaveBeenCalled();
   });
 
   it("closes the database connection even on error", async () => {
@@ -145,6 +155,10 @@ describe("handler business logic", () => {
       expect(body["records"][0].ptr.length).toBe(0);
       expect(body["records"][0].stay_nj).toBeDefined();
       expect(body["records"][0].stay_nj.length).toBe(0);
+      expect(mockMetricsLogger.setNamespace).toHaveBeenCalledWith("TaxReliefStatusApi");
+      expect(mockMetricsLogger.putDimensions).toHaveBeenCalledWith({ StatusCode: "200" });
+      expect(mockMetricsLogger.putMetric).toHaveBeenCalledWith("ResponseCount", 1, "Count", 60);
+      expect(mockMetricsLogger.flush).toHaveBeenCalled();
     });
   });
 });
