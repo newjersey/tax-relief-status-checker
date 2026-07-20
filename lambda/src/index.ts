@@ -51,6 +51,7 @@ interface DatabaseCredentials {
 
 export const logStatusCode = async (statusCode: string): Promise<void> => {
   metrics.setNamespace(METRICS_NAMESPACE);
+  metrics.resetDimensions(false);
   metrics.putDimensions({ StatusCode: `${statusCode}` });
   metrics.putMetric(RESPONSE_COUNT_METRIC_NAME, 1, Unit.Count, StorageResolution.Standard);
   await metrics.flush();
