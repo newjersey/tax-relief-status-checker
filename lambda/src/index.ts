@@ -3,7 +3,6 @@ import oracledb from "oracledb";
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { Transaction, InquiryRow } from "./types";
 import { buildAllTransactions } from "./transaction";
-import { embeddedMetricsPublisher } from "./metrics";
 import { createMetricsLogger, StorageResolution, Unit } from "aws-embedded-metrics";
 
 /** SQL query to look up filer records by SSN and ZIP */
@@ -151,7 +150,7 @@ export const handler = async (
 
     const responseBody = buildResponse(result.rows as InquiryRow[]);
 
-    logStatusCode("200");
+    await logStatusCode("200");
     return {
       statusCode: 200,
       body: JSON.stringify(responseBody),
@@ -162,7 +161,7 @@ export const handler = async (
       error: error.message,
       stack: error.stack,
     });
-    logStatusCode("500");
+    await logStatusCode("500");
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Internal server error" }),

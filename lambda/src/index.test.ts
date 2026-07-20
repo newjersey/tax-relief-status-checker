@@ -2,7 +2,19 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { mockClient } from "aws-sdk-client-mock";
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
 import { buildMockRow } from "./helpers.ts";
-import { handler, validateInput, logStatusCode } from "./index.ts";
+
+vi.mock("aws-embedded-metrics", () => ({
+  createMetricsLogger: () => ({
+    setNamespace: vi.fn(),
+    putDimensions: vi.fn(),
+    putMetric: vi.fn(),
+    flush: vi.fn().mockResolvedValue(undefined),
+  }),
+  Unit: { Count: "Count" },
+  StorageResolution: { Standard: 60 },
+}));
+
+import { handler, validateInput } from "./index.ts";
 
 const secretsMock = mockClient(SecretsManagerClient);
 const mockExecute = vi.fn();
