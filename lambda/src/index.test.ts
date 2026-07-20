@@ -5,10 +5,19 @@ import { buildMockRow } from "./helpers.ts";
 
 const mockMetricsLogger = vi.hoisted(() => ({
   setNamespace: vi.fn(),
+  resetDimensions: vi.fn(),
   putDimensions: vi.fn(),
   putMetric: vi.fn(),
   flush: vi.fn(),
 }));
+
+const assertMetrics = (statusCode: string) => {
+  expect(mockMetricsLogger.setNamespace).toHaveBeenCalledWith("TaxReliefStatusApi");
+  expect(mockMetricsLogger.resetDimensions).toHaveBeenCalledWith(false);
+  expect(mockMetricsLogger.putDimensions).toHaveBeenCalledWith({ StatusCode: statusCode });
+  expect(mockMetricsLogger.putMetric).toHaveBeenCalledWith("ResponseCount", 1, "Count", 60);
+  expect(mockMetricsLogger.flush).toHaveBeenCalled();
+};
 
 vi.mock("aws-embedded-metrics", () => ({
   createMetricsLogger: () => mockMetricsLogger,
@@ -100,16 +109,14 @@ describe("handler error handling", () => {
     const result = await handler({ ssn: "123456789", zip: "07656" });
 
     expect(result.statusCode).toBe(500);
+    assertMetrics("500");
     expect(JSON.parse(result.body).error).toBe("Internal server error");
-    expect(mockMetricsLogger.setNamespace).toHaveBeenCalledWith("TaxReliefStatusApi");
-    expect(mockMetricsLogger.putDimensions).toHaveBeenCalledWith({ StatusCode: "500" });
-    expect(mockMetricsLogger.putMetric).toHaveBeenCalledWith("ResponseCount", 1, "Count", 60);
-    expect(mockMetricsLogger.flush).toHaveBeenCalled();
   });
 
   it("returns 400 when validation fails", async () => {
     const result = await handler({});
     expect(result.statusCode).toBe(400);
+    assertMetrics("400");
     expect(JSON.parse(result.body).error).toBe("Both ssn and zip are required");
     expect(mockMetricsLogger.setNamespace).toHaveBeenCalledWith("TaxReliefStatusApi");
     expect(mockMetricsLogger.putDimensions).toHaveBeenCalledWith({ StatusCode: "400" });
@@ -134,6 +141,7 @@ describe("handler business logic", () => {
       const result = await handler({ ssn: "123456789", zip: "00000" });
 
       expect(result.statusCode).toBe(200);
+      assertMetrics("200");
       const body = JSON.parse(result.body);
       expect(body.records).toEqual([]);
     });
@@ -145,6 +153,7 @@ describe("handler business logic", () => {
       mockExecute.mockResolvedValue({ rows: [row] });
       const result = await handler({ ssn: "123456789", zip: "12345" });
       expect(result.statusCode).toBe(200);
+      assertMetrics("200");
       const body = JSON.parse(result.body);
 
       expect(body["records"]).toHaveLength(1);
@@ -155,10 +164,6 @@ describe("handler business logic", () => {
       expect(body["records"][0].ptr.length).toBe(0);
       expect(body["records"][0].stay_nj).toBeDefined();
       expect(body["records"][0].stay_nj.length).toBe(0);
-      expect(mockMetricsLogger.setNamespace).toHaveBeenCalledWith("TaxReliefStatusApi");
-      expect(mockMetricsLogger.putDimensions).toHaveBeenCalledWith({ StatusCode: "200" });
-      expect(mockMetricsLogger.putMetric).toHaveBeenCalledWith("ResponseCount", 1, "Count", 60);
-      expect(mockMetricsLogger.flush).toHaveBeenCalled();
     });
   });
 });
