@@ -1,0 +1,59 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "timezone": "US/Eastern",
+  "minimumReleaseAge": "3 days",
+  "extends": ["config:recommended", ":maintainLockFilesWeekly"],
+  "schedule": ["* 17-23,0-8 * * *", "* * * * 0,6"],
+  "automergeSchedule": ["* 9-13 * * 1-4"],
+  "labels": ["renovate"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "matchPackageNames": ["@newjersey/feedback-widget"],
+      "enabled": false,
+      "description": "Pinned to 0.6.0 until accessibility false error is fixed"
+    },
+    {
+      "matchPackagePrefixes": ["cypress"],
+      "groupName": "cypress"
+    },
+    {
+      "matchPackageNames": ["jsdom"],
+      "matchPackagePrefixes": ["vitest", "@vitest/"],
+      "groupName": "vitest"
+    },
+    {
+      "matchPackagePrefixes": ["react"],
+      "groupName": "react"
+    },
+    {
+      "matchPackageNames": ["next"],
+      "groupName": "nextjs"
+    },
+    {
+      "matchPackagePrefixes": ["@testing-library"],
+      "groupName": "testing-library"
+    },
+    {
+      "matchPackageNames": ["aws-sdk-client-mock", "aws-embedded-metrics"],
+      "matchPackagePrefixes": ["@aws-sdk/", "@aws-crypto/", "@smithy/"],
+      "groupName": "aws-sdk"
+    },
+    {
+      "matchPackageNames": ["typescript", "@types/node"],
+      "groupName": "typescript"
+    },
+    {
+      "matchPackagePrefixes": ["prettier"],
+      "groupName": "prettier"
+    },
+    {
+      "matchPackageNames": ["actions/*"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "groupName": "github-actions"
+    }
+  ]
+}
