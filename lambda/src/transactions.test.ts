@@ -27,18 +27,45 @@ describe("build transaction status codes", () => {
     });
   });
 
+  describe("when TRANS_X_CDE = RR and TRANS_STATUS_X_CDE = PRH and REVIEW_CATEGORY_X_CDE = null", () => {
+    it("returns status as Processing without payment details", async () => {
+      const row = buildMockRow({
+        TRANS_1_CDE: "RR",
+        TRANS_STATUS_1_CDE: "PRH",
+        REVIEW_CATEGORY_1_CDE: null,
+      });
+
+      const result = callBuildTransaction(row, 1);
+      expect(result.status).toBe("processing");
+    });
+  });
+
   describe("when TRANS_X_CDE = RR and TRANS_STATUS_X_CDE = PR and REVIEW_CATEGORY_X_CDE = !null", () => {
     it("returns status as Issue Flagged without payment details and with a review category", async () => {
       const row = buildMockRow({
         TRANS_1_CDE: "RR",
         TRANS_STATUS_1_CDE: "PR",
-        REVIEW_CATEGORY_1_CDE: "ID",
+        REVIEW_CATEGORY_1_CDE: "MOCK_REVIEW_CATEGORY",
       });
 
       const result = callBuildTransaction(row, 1);
       expect(result.status).toBe("issue_flagged");
       expect(result.payment_details).toBeUndefined();
-      expect(result.review_category).toBe("ID");
+      expect(result.review_category).toBe("MOCK_REVIEW_CATEGORY");
+    });
+  });
+
+  describe("when TRANS_X_CDE = RR and TRANS_STATUS_X_CDE = PRH and REVIEW_CATEGORY_X_CDE = !null", () => {
+    it("returns status as Processing without payment details", async () => {
+      const row = buildMockRow({
+        TRANS_1_CDE: "RR",
+        TRANS_STATUS_1_CDE: "PRH",
+        REVIEW_CATEGORY_1_CDE: "MOCK_REVIEW_CATEGORY",
+      });
+
+      const result = callBuildTransaction(row, 1);
+      expect(result.status).toBe("issue_flagged");
+      expect(result.review_category).toBe("MOCK_REVIEW_CATEGORY");
     });
   });
 

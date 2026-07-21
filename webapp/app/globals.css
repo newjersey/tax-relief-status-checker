@@ -34,3 +34,6 @@
 .transaction-table--payment-status {
   text-wrap: wrap;
 }
+p.usa-alert__text {
+  max-width: none;
+}

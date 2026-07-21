@@ -89,26 +89,29 @@ export const sortStayNJTransactions = (transactions: Transaction[]) => {
   for (const transaction of transactions) {
     if (!transaction.payment_details) continue;
     const currentDate = new Date(transaction.payment_details.date);
-    if (currentDate >= new Date("01/01/27") && currentDate <= new Date("04/30/27 23:59:59")) {
+    const currentMonth = currentDate.getMonth();
+    if (
+      currentMonth >= new Date("01/01").getMonth() &&
+      currentMonth <= new Date("04/30 23:59:59").getMonth()
+    ) {
       sortedStayNJ[0].push(transaction);
     } else if (
-      currentDate > new Date("4/30/27 23:59:59") &&
-      currentDate <= new Date("07/31/27 23:59:59")
+      currentMonth > new Date("4/30 23:59:59").getMonth() &&
+      currentMonth <= new Date("07/31 23:59:59").getMonth()
     ) {
       sortedStayNJ[1].push(transaction);
     } else if (
-      currentDate > new Date("07/31/27 23:59:59") &&
-      currentDate <= new Date("10/31/27 23:59:59")
+      currentMonth > new Date("07/31 23:59:59").getMonth() &&
+      currentMonth <= new Date("10/31 23:59:59").getMonth()
     ) {
       sortedStayNJ[2].push(transaction);
     } else if (
-      currentDate > new Date("10/31/27 23:59:59") &&
-      currentDate <= new Date("12/31/27 23:59:59")
+      currentMonth > new Date("10/31 23:59:59").getMonth() &&
+      currentMonth <= new Date("12/31 23:59:59").getMonth()
     ) {
       sortedStayNJ[3].push(transaction);
     }
   }
-  console.log(sortedStayNJ);
   return sortedStayNJ;
 };
 
@@ -177,7 +180,7 @@ const PaymentInfoPage = () => {
               {"."}
             </p>
           </div>
-          <Table className="usa-table" bordered={false} scrollable={true}>
+          <Table className="usa-table payment-table" bordered={false} scrollable={true}>
             <thead>
               <tr>
                 <th className="width-card">Program</th>
@@ -188,63 +191,18 @@ const PaymentInfoPage = () => {
             <tbody>
               {(() => {
                 if (ptr.length === 0) return null;
-
-                const earliest = getEarliestTransaction(ptr);
-                if (!earliest?.payment_details) return null;
-
-                if (ptr.length === 1) {
-                  return showEarliestTransaction(earliest, ptrString);
-                }
-
-                const rest = ptr.filter((transaction) => transaction !== earliest);
-
-                return (
-                  <>
-                    {showEarliestTransaction(earliest, ptrString)}
-                    {rest.map((transaction) => showUpdatedTransaction(transaction, ptrString))}
-                  </>
-                );
+                return showAllTransactions(ptr, ptrString);
               })()}
               {(() => {
                 if (anchor.length === 0) return null;
-
-                const earliest = getEarliestTransaction(anchor);
-                if (!earliest?.payment_details) return null;
-
-                if (anchor.length === 1) {
-                  return showEarliestTransaction(earliest, anchorString);
-                }
-
-                const rest = anchor.filter((transaction) => transaction !== earliest);
-
-                return (
-                  <>
-                    {showEarliestTransaction(earliest, anchorString)}
-                    {rest.map((transaction) => showUpdatedTransaction(transaction, anchorString))}
-                  </>
-                );
+                return showAllTransactions(anchor, anchorString);
               })()}
               {(() => {
                 if (stay_nj.length === 0) return null;
-
                 const sortedStayNJ = sortStayNJTransactions(stay_nj);
-                for (const quarter of sortedStayNJ) {
-                  const earliest = getEarliestTransaction(quarter);
-                  if (!earliest?.payment_details) return null;
-
-                  if (quarter.length === 1) {
-                    return showEarliestTransaction(earliest, stayNJString);
-                  }
-
-                  const rest = quarter.filter((transaction) => transaction !== earliest);
-
-                  return (
-                    <>
-                      {showEarliestTransaction(earliest, stayNJString)}
-                      {rest.map((transaction) => showUpdatedTransaction(transaction, stayNJString))}
-                    </>
-                  );
-                }
+                return (
+                  <>{sortedStayNJ.map((quarter) => showAllTransactions(quarter, stayNJString))}</>
+                );
               })()}
             </tbody>
           </Table>

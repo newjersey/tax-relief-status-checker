@@ -99,18 +99,18 @@ const LandingPage = () => {
           <>
             <h2 className="usa-alert__heading">No 2025 application found</h2>
             <p className="usa-alert__text">
-              We couldn't find any records matching the SSN or ITIN and zip code you entered. Some
+              We couldn't find any records matching the SSN or ITIN and ZIP code you entered. Some
               common reasons why:
             </p>
             <ul>
               <li>
-                <strong>Identity mismatch</strong>: The SSN/ITIN and zip code you filed on your
+                <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code you filed on your
                 application is different than the one you just entered.
               </li>
               <li>
-                <strong>It's too soon</strong>: For online applications, it can take up to 3 weeks
-                for an application to show up on this website. For paper applications, it can take
-                up to 12 weeks. For ANCHOR-only applicants, check back in the fall of 2026.
+                <strong>It's too soon</strong>: For online applications, it can take up to three
+                weeks for an application to show up on this website. For paper applications, it can
+                take up to 12 weeks. For ANCHOR-only applicants, check back in the fall of 2026.
               </li>
             </ul>
             <p className="usa-alert__text">
@@ -145,10 +145,7 @@ const LandingPage = () => {
       });
 
       logGAEvent(`api_200_record_found`);
-      if (
-        process.env.NEXT_PUBLIC_ENABLE_SHOW_PAYMENTS == "true" &&
-        hasPaymentSentTransaction(record2025)
-      ) {
+      if (hasPaymentSentTransaction(record2025)) {
         router.push("/payment-info");
       } else {
         router.push("/application-received");
@@ -183,7 +180,7 @@ const LandingPage = () => {
                 This website is checking your 2025 PAS&#8209;1 application status
               </h1>
               <Form onSubmit={handleSubmit(onSubmit)} className="maxw-full" noValidate>
-                <p className="text-bold font-heading-md">Enter your SSN or ITN and Zip Code</p>
+                <p className="text-bold font-heading-md">Enter your SSN or ITIN and ZIP Code</p>
                 <Label htmlFor="ssn" requiredMarker={true}>
                   Social Security or Individual Taxpayer Identification Number
                 </Label>
@@ -213,7 +210,7 @@ const LandingPage = () => {
                 </div>
 
                 <Label htmlFor="zipCode" requiredMarker={true}>
-                  Zip code you submitted with your application
+                  ZIP code you submitted with your application
                 </Label>
                 <div className="tablet:grid-col-10">
                   <TextInputMask

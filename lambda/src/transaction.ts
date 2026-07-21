@@ -13,9 +13,13 @@ export const buildTransaction = (
   CHECK_NUM: string,
 ): Transaction => {
   let status;
-  if (TRANS_CDE === "RR" && TRANS_STATUS_CDE === "PR" && REVIEW_CATEGORY_CDE === null) {
+  if (TRANS_CDE === "RR" && TRANS_STATUS_CDE.startsWith("PR") && REVIEW_CATEGORY_CDE === null) {
     status = "processing";
-  } else if (TRANS_CDE === "RR" && TRANS_STATUS_CDE === "PR" && REVIEW_CATEGORY_CDE !== null) {
+  } else if (
+    TRANS_CDE === "RR" &&
+    TRANS_STATUS_CDE.startsWith("PR") &&
+    REVIEW_CATEGORY_CDE !== null
+  ) {
     status = "issue_flagged";
   } else if (TRANS_CDE === "RR" && TRANS_STATUS_CDE.startsWith("AP")) {
     status = "approved";
