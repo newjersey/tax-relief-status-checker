@@ -118,10 +118,6 @@ describe("handler error handling", () => {
     expect(result.statusCode).toBe(400);
     assertMetrics("400");
     expect(JSON.parse(result.body).error).toBe("Both ssn and zip are required");
-    expect(mockMetricsLogger.setNamespace).toHaveBeenCalledWith("TaxReliefStatusApi");
-    expect(mockMetricsLogger.putDimensions).toHaveBeenCalledWith({ StatusCode: "400" });
-    expect(mockMetricsLogger.putMetric).toHaveBeenCalledWith("ResponseCount", 1, "Count", 60);
-    expect(mockMetricsLogger.flush).toHaveBeenCalled();
   });
 
   it("closes the database connection even on error", async () => {
