@@ -14,7 +14,12 @@ export const StatusCheckerHeader = () => (
           <Logo
             size="slim"
             image={
-              <img src="/img/nj_taxation_logo.png" width={90} height={90} alt="Treasury logo" />
+              <img
+                src="/img/nj_taxation_logo.png"
+                width={90}
+                height={90}
+                alt="New Jersey Divison of Taxation logo"
+              />
             }
           />
           <p className="font-heading-2xl text-bold line-height-sans-1">
