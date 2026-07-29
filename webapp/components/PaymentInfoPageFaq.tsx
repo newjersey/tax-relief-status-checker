@@ -1,5 +1,5 @@
 import { logGAEvent } from "@/app/utils/analytics";
-import { Accordion, type HeadingLevel, type AccordionProps, Table } from "@trussworks/react-uswds";
+import { Accordion, type HeadingLevel, type AccordionProps } from "@trussworks/react-uswds";
 
 export const expandFaqAccordionItem = (itemId: string) => {
   const button = document.querySelector<HTMLButtonElement>(`button[aria-controls="${itemId}"]`);
