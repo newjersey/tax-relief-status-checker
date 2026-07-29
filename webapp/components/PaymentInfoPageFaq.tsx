@@ -1,5 +1,5 @@
 import { logGAEvent } from "@/app/utils/analytics";
-import { Accordion, type HeadingLevel, type AccordionProps } from "@trussworks/react-uswds";
+import { Accordion, type HeadingLevel, type AccordionProps, Table } from "@trussworks/react-uswds";
 
 export const expandFaqAccordionItem = (itemId: string) => {
   const button = document.querySelector<HTMLButtonElement>(`button[aria-controls="${itemId}"]`);
@@ -40,17 +40,82 @@ export const PaymentInfoPageFaq = (props: PaymentInfoPageFaqProps) => {
 
 export const FaqContent: AccordionItemContent[] = [
   {
-    title: "When can I expect my application to show up?",
+    title: "When can I expect to receive payments?",
     content: (
-      <p>
-        For online applications, it can take up to three weeks for an application to show up on this
-        website. For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants,
-        check back in the fall of 2026.
-      </p>
+      <>
+        <p>
+          Even though PAS-1 combines all three programs into one application, each program has a
+          different payment schedule. The table below outlines when you can expect to receive your
+          payment(s) from each program. Your payment will be delayed if there is an issue with your
+          application, or if we need additional information from you.
+        </p>
+        <Table className="usa-table" bordered={true} scrollable={true}>
+          <thead>
+            <tr>
+              <th className="width-card">Month</th>
+              <th className="width-mobile">Senior Freeze</th>
+              <th className="width-mobile">ANCHOR</th>
+              <th className="width-mobile">Stay NJ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong className="text-uppercase">July-September</strong>
+              </td>
+              <td>
+                Payments start going out on July 15, 2026. If you applied before May 1, 2026, you
+                can expect to get your payment between July 15, 2026 and September 15, 2026.
+              </td>
+              <td></td>
+              <td>
+                Stay NJ is paid in quarterly installments. The 2025 benefit will be paid in February
+                and May of 2027.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong className="text-uppercase">September-October</strong>
+              </td>
+              <td>
+                If you applied between May 1, 2026 and June 1, 2026, you can expect to get your
+                payment between September 1, 2026 and October 1, 2026.
+              </td>
+              <td>
+                Payments start going out on September 15, 2026. You can expect to get your payment
+                before December 1, 2026.
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <strong className="text-uppercase">November</strong>
+              </td>
+              <td>
+                If you applied between June 2, 2026 and September 1, 2026, you can expect to get
+                your payment between November 2, 2026 and January 2, 2027.
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <strong className="text-uppercase">December</strong>
+              </td>
+              <td>
+                If you applied between September 2, 2026 and October 31, 2026, you can expect to get
+                your payment between December 2, 2026 and February 2, 2027.
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </Table>
+      </>
     ),
     expanded: false,
-    id: "faq_when_can_i_expect_my_application_status",
-    handleToggle: () => fireEventWhenFaqOpened("faq_when_can_i_expect_my_application_status"),
+    id: "faq_when_can_i_expect_to_receive_payments",
+    handleToggle: () => fireEventWhenFaqOpened("faq_when_can_i_expect_to_receive_payments"),
   },
   {
     title: "A check amount is different than what I expected. Who can I contact?",
