@@ -59,7 +59,7 @@ export const FaqContent: AccordionItemContent[] = [
         <p>Please contact the Division using ONLY ONE of the following:</p>
         <ul>
           <li>
-            Call: <a href="tel:+18882381233">1-888-2388-1233</a> (Monday to Friday 8:30 a.m. to 5:30
+            Call: <a href="tel:+18882381233">1-888-238-1233</a> (Monday to Friday 8:30 a.m. to 5:30
             p.m.)
           </li>
           <li>
@@ -85,7 +85,7 @@ export const FaqContent: AccordionItemContent[] = [
         <p>Please contact the Division using ONLY ONE of the following:</p>
         <ul>
           <li>
-            Call: <a href="tel:+18882381233">1-888-2388-1233</a> (Monday to Friday 8:30 a.m. to 5:30
+            Call: <a href="tel:+18882381233">1-888-238-1233</a> (Monday to Friday 8:30 a.m. to 5:30
             p.m.)
           </li>
           <li>
