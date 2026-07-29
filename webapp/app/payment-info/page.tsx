@@ -67,7 +67,7 @@ const PaymentInfoPage = () => {
               </div>
               <div className="tablet:grid-col-3">
                 <p>
-                  Zip Code: <strong>{zipCode}</strong>
+                  ZIP Code: <strong>{zipCode}</strong>
                 </p>
               </div>{" "}
               <div className="tablet:grid-col-3">
