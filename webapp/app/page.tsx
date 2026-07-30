@@ -11,6 +11,8 @@ import { maskSsn } from "@/app/utils/maskSsn";
 import { formatDate } from "@/app/utils/formatDate";
 import { logGAEvent } from "./utils/analytics";
 import { useDataStore } from "@/components/TaxReliefDataProvider";
+import { setIssueFlagged } from "./utils/setIssueFlagged";
+import { Transaction, TransactionStatus } from "@/components/types";
 
 /** Form data collected from the user. */
 interface UserData {
@@ -19,26 +21,33 @@ interface UserData {
 }
 
 /** Response shape returned by the status API. */
-interface StatusRecord {
+export interface StatusRecord {
   readonly return_year: string;
   readonly application_date: string;
-  readonly anchor: [];
-  readonly ptr: [];
-  readonly stay_nj: [];
+  readonly anchor: Transaction[];
+  readonly ptr: Transaction[];
+  readonly stay_nj: Transaction[];
 }
+
 const hasPaymentSentTransaction = (record: StatusRecord) => {
-  for (const transaction of record.anchor) {
-    if (transaction["status"] === "payment_sent") {
-      return true;
-    }
-  }
-  for (const transaction of record.ptr) {
-    if (transaction["status"] === "payment_sent") {
+  return (
+    hasTransactionWithStatus(record.anchor, TransactionStatus.PAYMENT_SENT) ||
+    hasTransactionWithStatus(record.ptr, TransactionStatus.PAYMENT_SENT)
+  );
+};
+
+const hasTransactionWithStatus = (
+  transactionList: Transaction[],
+  status: TransactionStatus,
+): boolean => {
+  for (const t of transactionList) {
+    if (t.status === status) {
       return true;
     }
   }
   return false;
 };
+
 const returnToTop = () => {
   const topOfPage = document.querySelector(`#nj-header`);
   if (!topOfPage) return;
@@ -137,8 +146,8 @@ const LandingPage = () => {
         anchor: record2025.anchor,
         ptr: record2025.ptr,
         stay_nj: record2025.stay_nj,
+        issueFlagged: setIssueFlagged(record2025),
       });
-
       logGAEvent(`api_200_record_found`);
       if (hasPaymentSentTransaction(record2025)) {
         router.push("/payment-info");

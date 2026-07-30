@@ -12,6 +12,27 @@ const fillFields = () => {
   fillField("zipCode", mockZip);
 };
 
+const applicationReceivedAssertions = () => {
+  cy.url().should("include", "/application-received");
+  cy.contains("p", "Your application was received on").should("be.visible");
+
+  cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
+  cy.contains("p", mockSSN.slice(-4)).should("be.visible");
+  cy.contains("p", "ZIP Code:").should("be.visible");
+  cy.contains("p", mockZip).should("be.visible");
+  cy.contains("p", "Tax Year: 2025").should("be.visible");
+
+  cy.get("@gtag").should(
+    "have.been.calledWith",
+    "event",
+    "api_200_record_found",
+    Cypress.sinon.match.any,
+  );
+
+  cy.contains("a", "Log out").click();
+  cy.contains("h1", "This website is checking your 2025 PAS");
+};
+
 beforeEach(() => {
   cy.on("window:before:load", (win) => {
     win.gtag = cy.stub().as("gtag");
@@ -137,24 +158,7 @@ it("should display status page if records has an object in a 200 response, no tr
 
   cy.contains("button", `Check Status`).click();
 
-  cy.url().should("include", "/application-received");
-  cy.contains("p", "Your application was received on").should("be.visible");
-
-  cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
-  cy.contains("p", mockSSN.slice(-4)).should("be.visible");
-  cy.contains("p", "ZIP Code:").should("be.visible");
-  cy.contains("p", mockZip).should("be.visible");
-  cy.contains("p", "Tax Year: 2025").should("be.visible");
-
-  cy.get("@gtag").should(
-    "have.been.calledWith",
-    "event",
-    "api_200_record_found",
-    Cypress.sinon.match.any,
-  );
-
-  cy.contains("a", "Log out").click();
-  cy.contains("h1", "This website is checking your 2025 PAS");
+  applicationReceivedAssertions();
 });
 
 it("should display application found page if records has an object, but no transactions are payment_sent", () => {
@@ -167,23 +171,52 @@ it("should display application found page if records has an object, but no trans
     });
   });
   cy.contains("button", `Check Status`).click();
+  cy.contains(
+    "p",
+    "Your application is being reviewed. No action is needed right now. If you applied early this year, please check back in early summer.",
+  ).should("be.visible");
 
-  cy.url().should("include", "/application-received");
-  cy.contains("p", "Your application was received on").should("be.visible");
+  applicationReceivedAssertions();
+});
 
-  cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
-  cy.contains("p", mockSSN.slice(-4)).should("be.visible");
-  cy.contains("p", "ZIP Code:").should("be.visible");
-  cy.contains("p", mockZip).should("be.visible");
-  cy.contains("p", "Tax Year: 2025").should("be.visible");
+it("should display issue flagged warning - upload tax bill", () => {
+  fillFields();
+  cy.fixture("v2_api_issue_flagged_upload_bill.json").then((resp) => {
+    cy.intercept("POST", "/api/status", {
+      statusCode: 200,
+      body: resp,
+    });
+  });
+  cy.contains("button", `Check Status`).click();
 
-  cy.get("@gtag").should(
-    "have.been.calledWith",
-    "event",
-    "api_200_record_found",
-    Cypress.sinon.match.any,
-  );
+  cy.contains(
+    "p",
+    "We need additional information to continue processing your application. Please send us a copy of your final property tax bill by using one of the following:",
+  ).should("be.visible");
+  cy.contains(
+    "p",
+    "Your application is being reviewed. No action is needed right now. If you applied early this year, please check back in early summer.",
+  ).should("not.exist");
+  applicationReceivedAssertions();
+});
 
-  cy.contains("a", "Log out").click();
-  cy.contains("h1", "This website is checking your 2025 PAS");
+it("should display issue flagged warning - contact taxation", () => {
+  fillFields();
+  cy.fixture("v2_api_issue_flagged_contact_taxation.json").then((resp) => {
+    cy.intercept("POST", "/api/status", {
+      statusCode: 200,
+      body: resp,
+    });
+  });
+  cy.contains("button", `Check Status`).click();
+
+  cy.contains(
+    "p",
+    "We need additional information to continue processing your application. Please contact the Division by using one of the following:",
+  ).should("be.visible");
+  cy.contains(
+    "p",
+    "Your application is being reviewed. No action is needed right now. If you applied early this year, please check back in early summer.",
+  ).should("not.exist");
+  applicationReceivedAssertions();
 });
