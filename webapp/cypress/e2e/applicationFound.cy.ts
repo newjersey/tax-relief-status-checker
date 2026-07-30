@@ -28,6 +28,9 @@ const applicationReceivedAssertions = () => {
     "api_200_record_found",
     Cypress.sinon.match.any,
   );
+
+  cy.contains("a", "Log out").click();
+  cy.contains("h1", "This website is checking your 2025 PAS");
 };
 
 beforeEach(() => {
@@ -156,9 +159,6 @@ it("should display status page if records has an object in a 200 response, no tr
   cy.contains("button", `Check Status`).click();
 
   applicationReceivedAssertions();
-
-  cy.contains("a", "Log out").click();
-  cy.contains("h1", "This website is checking your 2025 PAS");
 });
 
 it("should display application found page if records has an object, but no transactions are payment_sent", () => {
@@ -171,11 +171,12 @@ it("should display application found page if records has an object, but no trans
     });
   });
   cy.contains("button", `Check Status`).click();
+  cy.contains(
+    "p",
+    "Your application is being reviewed. No action is needed right now. If you applied early this year, please check back in early summer.",
+  ).should("be.visible");
 
   applicationReceivedAssertions();
-
-  cy.contains("a", "Log out").click();
-  cy.contains("h1", "This website is checking your 2025 PAS");
 });
 
 it("should display issue flagged warning - upload tax bill", () => {
@@ -192,10 +193,11 @@ it("should display issue flagged warning - upload tax bill", () => {
     "p",
     "We need additional information to continue processing your application. Please send us a copy of your final property tax bill by using one of the following:",
   ).should("be.visible");
+  cy.contains(
+    "p",
+    "Your application is being reviewed. No action is needed right now. If you applied early this year, please check back in early summer.",
+  ).should("not.exist");
   applicationReceivedAssertions();
-
-  cy.contains("a", "Log out").click();
-  cy.contains("h1", "This website is checking your 2025 PAS");
 });
 
 it("should display issue flagged warning - contact taxation", () => {
@@ -212,8 +214,9 @@ it("should display issue flagged warning - contact taxation", () => {
     "p",
     "We need additional information to continue processing your application. Please contact the Division by using one of the following:",
   ).should("be.visible");
+  cy.contains(
+    "p",
+    "Your application is being reviewed. No action is needed right now. If you applied early this year, please check back in early summer.",
+  ).should("not.exist");
   applicationReceivedAssertions();
-
-  cy.contains("a", "Log out").click();
-  cy.contains("h1", "This website is checking your 2025 PAS");
 });

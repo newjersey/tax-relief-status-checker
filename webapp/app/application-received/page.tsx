@@ -118,10 +118,12 @@ const ApplicationReceivedPage = () => {
             <p className="font-heading-xl">
               Your application was received on {applicationDateString}
             </p>
-            <p>
-              Your application is being reviewed. No action is needed right now. If you applied
-              early this year, please check back in early summer.
-            </p>
+            {issueFlagged === undefined && (
+              <p>
+                Your application is being reviewed. No action is needed right now. If you applied
+                early this year, please check back in early summer.
+              </p>
+            )}
           </div>
         </div>
       </section>
