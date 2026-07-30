@@ -36,7 +36,7 @@ it("displays show payments page heading", () => {
 
   cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
   cy.contains("p", mockSSN.slice(-4)).should("be.visible");
-  cy.contains("p", "Zip Code:").should("be.visible");
+  cy.contains("p", "ZIP Code:").should("be.visible");
   cy.contains("p", mockZip).should("be.visible");
   cy.contains("p", "Tax Year: 2025").should("be.visible");
   cy.contains("h1", "You are eligible for benefits").should("be.visible");

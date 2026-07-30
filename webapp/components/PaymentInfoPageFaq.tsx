@@ -40,78 +40,6 @@ export const PaymentInfoPageFaq = (props: PaymentInfoPageFaqProps) => {
 
 export const FaqContent: AccordionItemContent[] = [
   {
-    title: "When can I expect my application to show up?",
-    content: (
-      <p>
-        For online applications, it can take up to three weeks for an application to show up on this
-        website. For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants,
-        check back in the fall of 2026.
-      </p>
-    ),
-    expanded: false,
-    id: "faq_when_can_i_expect_my_application_status",
-    handleToggle: () => fireEventWhenFaqOpened("faq_when_can_i_expect_my_application_status"),
-  },
-  {
-    title: "I applied, but I keep getting \u201CNo 2025 application found.\u201D Why?",
-    content: (
-      <>
-        <p>Some common reasons this might be happening:</p>
-        <ul>
-          <li>
-            <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code you filed on your
-            application is different than the one you just entered.
-          </li>
-          <li>
-            <strong>It&apos;s too soon</strong>: For online applications, it can take up to three
-            weeks. For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants,
-            check back in the fall.
-          </li>
-          <li>
-            <strong>Forgot to press submit</strong>: If you filed your 2025 application online, you
-            should have received a Web Reference Number on the confirmation screen. Otherwise, your
-            application was not successfully submitted. The filing deadline is November 2, 2026.
-          </li>
-          <li>
-            <strong>Prior year PAS-1 filers</strong>: If you applied for a prior tax year (2024 or
-            previous), check your{" "}
-            <a href="https://www1.state.nj.us/TYTR_Saver/jsp/common/HRInquiry.jsp">
-              application status
-            </a>{" "}
-            on this page.
-          </li>
-        </ul>
-      </>
-    ),
-    expanded: false,
-    id: "faq_no_2025_application_found",
-    handleToggle: () => fireEventWhenFaqOpened("faq_no_2025_application_found"),
-  },
-  {
-    title: "What if I need to update something after I\u2019ve submitted my application?",
-    content: (
-      <>
-        <p>
-          To update your application after submitting, reach out to us directly via phone or email.
-          In order for us to locate your record, be ready to provide your full name and the full
-          address of the property you applied for:
-        </p>
-        <ul>
-          <li>
-            Call: <a href="tel:+18882381233">1-888-238-1233</a> (Mondays to Fridays 8:30 a.m. to
-            5:30 p.m.)
-          </li>
-          <li>
-            Email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
-          </li>
-        </ul>
-      </>
-    ),
-    expanded: false,
-    id: "faq_update_after_submission",
-    handleToggle: () => fireEventWhenFaqOpened("faq_update_after_submission"),
-  },
-  {
     title: "When can I expect to receive payments?",
     content: (
       <>
@@ -190,27 +118,55 @@ export const FaqContent: AccordionItemContent[] = [
     handleToggle: () => fireEventWhenFaqOpened("faq_when_can_i_expect_to_receive_payments"),
   },
   {
-    title: "My application is taking too long. Who do I contact?",
+    title: "A check amount is different than what I expected. Who can I contact?",
     content: (
       <>
-        <p>
-          If you have any questions or if processing has taken longer than expected, reach out to us
-          directly via phone or email. In order for us to locate your record, be ready to provide
-          your full name and the full address of the property you applied for:
-        </p>
+        <p>Please contact the Division using one of the following:</p>
         <ul>
           <li>
-            Call: <a href="tel:+18882381233">1-888-238-1233</a> (Mondays to Fridays 8:30 a.m. to
-            5:30 p.m.)
+            Call: <a href="tel:+18882381233">1-888-238-1233</a> (Monday to Friday 8:30 a.m. to 5:30
+            p.m.)
           </li>
           <li>
             Email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
+          </li>
+          <li>
+            Visit one of our{" "}
+            <a href="https://www.nj.gov/treasury/taxation/contact-office.shtml">
+              Regional Information Centers
+            </a>
           </li>
         </ul>
       </>
     ),
     expanded: false,
-    id: "faq_application_taking_too_long",
-    handleToggle: () => fireEventWhenFaqOpened("faq_application_taking_too_long"),
+    id: "faq_check_amount_different_than_expected",
+    handleToggle: () => fireEventWhenFaqOpened("faq_check_amount_different_than_expected"),
+  },
+  {
+    title: "I have not received my check in the mail. What should I do next?",
+    content: (
+      <>
+        <p>Please contact the Division using one of the following:</p>
+        <ul>
+          <li>
+            Call: <a href="tel:+18882381233">1-888-238-1233</a> (Monday to Friday 8:30 a.m. to 5:30
+            p.m.)
+          </li>
+          <li>
+            Email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
+          </li>
+          <li>
+            Visit one of our{" "}
+            <a href="https://www.nj.gov/treasury/taxation/contact-office.shtml">
+              Regional Information Centers
+            </a>
+          </li>
+        </ul>
+      </>
+    ),
+    expanded: false,
+    id: "faq_have_not_received_check_next_steps",
+    handleToggle: () => fireEventWhenFaqOpened("faq_have_not_received_check_next_steps"),
   },
 ];

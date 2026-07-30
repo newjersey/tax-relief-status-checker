@@ -142,7 +142,7 @@ it("should display status page if records has an object in a 200 response, no tr
 
   cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
   cy.contains("p", mockSSN.slice(-4)).should("be.visible");
-  cy.contains("p", "Zip Code:").should("be.visible");
+  cy.contains("p", "ZIP Code:").should("be.visible");
   cy.contains("p", mockZip).should("be.visible");
   cy.contains("p", "Tax Year: 2025").should("be.visible");
 
@@ -173,7 +173,7 @@ it("should display application found page if records has an object, but no trans
 
   cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
   cy.contains("p", mockSSN.slice(-4)).should("be.visible");
-  cy.contains("p", "Zip Code:").should("be.visible");
+  cy.contains("p", "ZIP Code:").should("be.visible");
   cy.contains("p", mockZip).should("be.visible");
   cy.contains("p", "Tax Year: 2025").should("be.visible");
 
