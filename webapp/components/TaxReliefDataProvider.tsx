@@ -4,10 +4,15 @@ import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 import { Transaction } from "./types";
 
+export enum IssueType {
+  PROPERTY_TAX_BILL_NEEDED,
+  CONTACT_TAXATION,
+}
 export interface TaxReliefStatusData {
   readonly lastFourSsnDigits: string;
   readonly zipCode: string;
   readonly applicationDateString: string;
+  readonly issueFlagged?: IssueType;
   readonly anchor: Transaction[];
   readonly ptr: Transaction[];
   readonly stay_nj: Transaction[];
