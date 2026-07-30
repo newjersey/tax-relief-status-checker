@@ -121,7 +121,7 @@ export const FaqContent: AccordionItemContent[] = [
     title: "A check amount is different than what I expected. Who can I contact?",
     content: (
       <>
-        <p>Please contact the Division using ONLY ONE of the following:</p>
+        <p>Please contact the Division using one of the following:</p>
         <ul>
           <li>
             Call: <a href="tel:+18882381233">1-888-238-1233</a> (Monday to Friday 8:30 a.m. to 5:30
@@ -147,7 +147,7 @@ export const FaqContent: AccordionItemContent[] = [
     title: "I have not received my check in the mail. What should I do next?",
     content: (
       <>
-        <p>Please contact the Division using ONLY ONE of the following:</p>
+        <p>Please contact the Division using one of the following:</p>
         <ul>
           <li>
             Call: <a href="tel:+18882381233">1-888-238-1233</a> (Monday to Friday 8:30 a.m. to 5:30
