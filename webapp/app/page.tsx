@@ -151,6 +151,8 @@ const LandingPage = () => {
       logGAEvent(`api_200_record_found`);
       if (hasPaymentSentTransaction(record2025)) {
         router.push("/payment-info");
+      } else if (setIssueFlagged(record2025) !== undefined) {
+        router.push("/more-information-needed");
       } else {
         router.push("/application-received");
       }

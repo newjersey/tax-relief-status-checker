@@ -1,11 +1,11 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDataStore } from "@/components/TaxReliefDataProvider";
-import { IssueFlaggedType } from "@/components/types";
 import Link from "next/link";
-import { Alert } from "@trussworks/react-uswds";
+import { ProcessList, ProcessListHeading, ProcessListItem } from "@trussworks/react-uswds";
+import { ApplicationReceivedPageFaq } from "@/components/ApplicationReceivedPageFaq";
 
 const ApplicationReceivedPage = () => {
   const router = useRouter();
@@ -23,60 +23,7 @@ const ApplicationReceivedPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, applicationDateString, issueFlagged } = dataStore;
-
-  const createAlertContent = (alertType: IssueFlaggedType): ReactNode => {
-    if (alertType === IssueFlaggedType.CONTACT_TAXATION) {
-      return (
-        <>
-          <p>
-            We need additional information to continue processing your application. Please contact
-            the Division by using one of the following:
-          </p>
-          <ul>
-            <li>
-              Call: <a href="tel:+18882381233">1-888-238-1233</a> (Monday to Friday 8:30 a.m. to
-              5:30 p.m.)
-            </li>
-            <li>
-              Email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
-            </li>
-            <li>
-              Visit one of our{" "}
-              <a href="https://www.nj.gov/treasury/taxation/contact-office.shtml">
-                Regional Information Centers
-              </a>
-            </li>
-          </ul>
-        </>
-      );
-    } else if (alertType === IssueFlaggedType.PROPERTY_TAX_BILL_NEEDED) {
-      return (
-        <>
-          <p>
-            We need additional information to continue processing your application.{" "}
-            <strong>Please send us a copy of your final property tax bill</strong> by using one of
-            the following:
-          </p>
-          <ul>
-            <li>
-              Upload using{" "}
-              <a href="https://www.njportal.com/dor/onlinenotices/">
-                the secure NJ Online Notice Response Service (ONRS)
-              </a>
-            </li>
-            <li> Mail to: PO Box 900, Trenton, NJ 08646-0900</li>
-            <li>
-              Bring to one of our{" "}
-              <a href="https://www.nj.gov/treasury/taxation/contact-office.shtml">
-                Regional Information Centers
-              </a>
-            </li>
-          </ul>
-        </>
-      );
-    }
-  };
+  const { lastFourSsnDigits, zipCode, applicationDateString } = dataStore;
 
   return (
     <main id="main-content">
@@ -109,22 +56,31 @@ const ApplicationReceivedPage = () => {
               </div>
             </div>
           </div>
-          {issueFlagged !== undefined && (
-            <Alert type="warning" headingLevel="h2" heading="Additional information needed">
-              {createAlertContent(issueFlagged)}
-            </Alert>
-          )}
           <div className="margin-top-4">
             <p className="font-heading-xl">
               Your application was received on {applicationDateString}
             </p>
-            {issueFlagged === undefined && (
-              <p>
-                Your application is being reviewed. No action is needed right now. If you applied
-                early this year, please check back in early summer.
-              </p>
-            )}
+            <p>
+              Your application is being reviewed for three property tax relief programs: Senior
+              Freeze, ANCHOR, and Stay NJ. Each program makes payments on different timelines, and
+              not everyone qualifies for all three programs.
+            </p>
+            <ProcessList>
+              <ProcessListItem>
+                <ProcessListHeading type="p">Senior Freeze</ProcessListHeading>
+                <p>Senior Freeze payments start July 15, 2026.</p>
+              </ProcessListItem>
+              <ProcessListItem>
+                <ProcessListHeading type="p">ANCHOR</ProcessListHeading>
+                <p>ANCHOR payments begin September 2026.</p>
+              </ProcessListItem>
+              <ProcessListItem>
+                <ProcessListHeading type="p">Stay NJ</ProcessListHeading>
+                <p>Stay NJ quarterly payments begin February 2027.</p>
+              </ProcessListItem>
+            </ProcessList>
           </div>
+          <ApplicationReceivedPageFaq headingLevel="h3" />
         </div>
       </section>
     </main>
