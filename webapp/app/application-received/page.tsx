@@ -2,7 +2,8 @@
 
 import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { IssueType, useDataStore } from "@/components/TaxReliefDataProvider";
+import { useDataStore } from "@/components/TaxReliefDataProvider";
+import { IssueFlaggedType } from "@/components/types";
 import Link from "next/link";
 import { Alert } from "@trussworks/react-uswds";
 
@@ -24,8 +25,8 @@ const ApplicationReceivedPage = () => {
 
   const { lastFourSsnDigits, zipCode, applicationDateString, issueFlagged } = dataStore;
 
-  const createAlertContent = (alertType: IssueType): ReactNode => {
-    if (alertType == IssueType.CONTACT_TAXATION) {
+  const createAlertContent = (alertType: IssueFlaggedType): ReactNode => {
+    if (alertType === IssueFlaggedType.CONTACT_TAXATION) {
       return (
         <>
           <p>
@@ -49,7 +50,7 @@ const ApplicationReceivedPage = () => {
           </ul>
         </>
       );
-    } else if (alertType == IssueType.PROPERTY_TAX_BILL_NEEDED) {
+    } else if (alertType === IssueFlaggedType.PROPERTY_TAX_BILL_NEEDED) {
       return (
         <>
           <p>
@@ -108,7 +109,7 @@ const ApplicationReceivedPage = () => {
               </div>
             </div>
           </div>
-          {issueFlagged && (
+          {issueFlagged !== undefined && (
             <Alert type="warning" headingLevel="h2" heading="Additional information needed">
               {createAlertContent(issueFlagged)}
             </Alert>

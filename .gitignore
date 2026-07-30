@@ -206,3 +206,4 @@ lambda/config
 lambda/lambda.zip
 infra/cdk.out
 webapp/cypress/screenshots
+webapp/next-env.d.ts

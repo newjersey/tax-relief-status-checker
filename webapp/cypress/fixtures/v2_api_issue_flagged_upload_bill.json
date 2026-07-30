@@ -5,13 +5,13 @@
       "application_date": "2026-03-19T00:00:00.000Z",
       "anchor": [
         {
-          "status": "flagged",
+          "status": "issue_flagged",
           "review_category": "MOD"
         }
       ],
       "ptr": [
         {
-          "status": "flagged",
+          "status": "issue_flagged",
           "review_category": "SVR"
         }
       ],

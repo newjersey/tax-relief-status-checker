@@ -210,7 +210,7 @@ it("should display issue flagged warning - contact taxation", () => {
 
   cy.contains(
     "p",
-    "We need additional information to continue processing your application. Please contact the Division by using one of the following:",
+    "We need additional information to continue processing your application. Please contact the Division by using one of the following:",
   ).should("be.visible");
   applicationReceivedAssertions();
 
