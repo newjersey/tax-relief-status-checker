@@ -12,7 +12,7 @@ import { formatDate } from "@/app/utils/formatDate";
 import { logGAEvent } from "./utils/analytics";
 import { useDataStore } from "@/components/TaxReliefDataProvider";
 import { setIssueFlagged } from "./utils/setIssueFlagged";
-import { IssueFlaggedType, Transaction, TransactionStatus } from "@/components/types";
+import { Transaction, TransactionStatus } from "@/components/types";
 
 /** Form data collected from the user. */
 interface UserData {
