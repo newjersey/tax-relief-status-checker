@@ -213,4 +213,29 @@ export const FaqContent: AccordionItemContent[] = [
     id: "faq_application_taking_too_long",
     handleToggle: () => fireEventWhenFaqOpened("faq_application_taking_too_long"),
   },
+  {
+    title: "What goes into reviewing a PAS-1 application?",
+    content: (
+      <>
+        <p>We are verifying:</p>
+        <ul>
+          <li>Your application information</li>
+          <li>Your property tax amount</li>
+          <li>Your income</li>
+          <li>Final eligiblity</li>
+        </ul>
+        <p>
+          Property tax verification must be completed before your benefit can be calculated. We must
+          verify information with:
+        </p>
+        <ul>
+          <li>Your municipality's tax collector</li>
+          <li>State's property records</li>
+        </ul>
+      </>
+    ),
+    expanded: false,
+    id: "faq_application_review",
+    handleToggle: () => fireEventWhenFaqOpened("faq_application_taking_too_long"),
+  },
 ];

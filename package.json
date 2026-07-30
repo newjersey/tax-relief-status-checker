@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@newjersey/feedback-widget": "0.7.1",
+    "classnames": "^2.5.1",
     "husky": "9.1.7",
     "lint-staged": "17.0.5",
     "prettier": "3.9.4",
