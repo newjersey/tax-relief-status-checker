@@ -1,22 +1,12 @@
 import { formatDate } from "@/app/utils/formatDate";
 import payment_sent_transaction from "../fixtures/payment_sent_transaction.json";
 import earlier_transaction from "../fixtures/earlier_payment_sent_transaction.json";
+import { fillFields, MOCK_SSN, MOCK_ZIP } from "./utils";
 
-const fillField = (fieldName: string, value: string): undefined => {
-  cy.get(`input[name="${fieldName}"]`).type(value);
-};
-
-const mockSSN = "123456789";
-const mockZip = "00000";
 const mockDate = formatDate("7/6/2026 0:00:00");
 const mockEarlyDate = formatDate("1/1/2026 0:00:00");
 const mockAmount = 377.56;
 const mockEarlyAmount = 10;
-
-const fillFields = () => {
-  fillField("ssn", mockSSN);
-  fillField("zipCode", mockZip);
-};
 
 beforeEach(() => {
   cy.on("window:before:load", (win) => {
@@ -35,9 +25,9 @@ it("displays show payments page heading", () => {
   cy.url().should("include", "/payment-info");
 
   cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
-  cy.contains("p", mockSSN.slice(-4)).should("be.visible");
+  cy.contains("p", MOCK_SSN.slice(-4)).should("be.visible");
   cy.contains("p", "ZIP Code:").should("be.visible");
-  cy.contains("p", mockZip).should("be.visible");
+  cy.contains("p", MOCK_ZIP).should("be.visible");
   cy.contains("p", "Tax Year: 2025").should("be.visible");
   cy.contains("h1", "You are eligible for benefits").should("be.visible");
   cy.contains("p", "To find out when to expect payment on all programs,").should("be.visible");
@@ -156,7 +146,7 @@ it("should route user to application-received if stay_nj", () => {
   cy.contains("button", `Check Status`).click();
 
   cy.url().should("include", "/application-received");
-  cy.contains("p", "Your application was received on").should("be.visible");
+  cy.contains("h1", "Your application was received on").should("be.visible");
 });
 
 it("displays the first check sent if multiple PTR transactions are payment_sent", () => {

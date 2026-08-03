@@ -1,44 +1,8 @@
-import { logGAEvent } from "@/app/utils/analytics";
-import { Accordion, type HeadingLevel, type AccordionProps, Table } from "@trussworks/react-uswds";
+import { Table } from "@trussworks/react-uswds";
 
-export const expandFaqAccordionItem = (itemId: string) => {
-  const button = document.querySelector<HTMLButtonElement>(`button[aria-controls="${itemId}"]`);
-  if (!button) return;
+import { fireEventWhenFaqOpened, type FaqItem } from "@/components/FaqSection";
 
-  if (button.getAttribute("aria-expanded") !== "true") {
-    button.click();
-  }
-
-  button.scrollIntoView({ behavior: "smooth", block: "start" });
-};
-
-const fireEventWhenFaqOpened = (faqId: string) => {
-  const button = document.querySelector<HTMLButtonElement>(`button[aria-controls="${faqId}"]`);
-  const isExpanded = button?.getAttribute("aria-expanded") === "true";
-  if (!isExpanded) {
-    logGAEvent(`${faqId}_opened`);
-  }
-};
-
-type AccordionItemContent = Omit<AccordionItemProps, "headingLevel">;
-
-type AccordionItemProps = AccordionProps["items"][number];
-
-interface PaymentInfoPageFaqProps {
-  readonly headingLevel: HeadingLevel;
-}
-
-export const PaymentInfoPageFaq = (props: PaymentInfoPageFaqProps) => {
-  const faqProps: AccordionItemProps[] = FaqContent.map((faqItem) => {
-    return {
-      ...faqItem,
-      headingLevel: props.headingLevel,
-    };
-  });
-  return <Accordion multiselectable={true} items={faqProps} />;
-};
-
-export const FaqContent: AccordionItemContent[] = [
+export const PaymentInfoFaqContent: FaqItem[] = [
   {
     title: "When can I expect to receive payments?",
     content: (
