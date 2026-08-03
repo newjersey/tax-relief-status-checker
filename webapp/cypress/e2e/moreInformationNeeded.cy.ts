@@ -2,7 +2,7 @@ import { fillFields, MOCK_SSN, MOCK_ZIP } from "./utils";
 
 const moreInformationNeededAssertions = () => {
   cy.url().should("include", "/more-information-needed");
-  cy.contains("p", "Your application was received on").should("be.visible");
+  cy.contains("h1", "Your application was received on").should("be.visible");
 
   cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
   cy.contains("p", MOCK_SSN.slice(-4)).should("be.visible");

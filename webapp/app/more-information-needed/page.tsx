@@ -115,9 +115,9 @@ const MoreInformationNeededPage = () => {
             </Alert>
           )}
           <div className="margin-top-4">
-            <p className="font-heading-xl">
+            <h1 className="font-heading-xl">
               Your application was received on {applicationDateString}
-            </p>
+            </h1>
           </div>
         </div>
       </section>
