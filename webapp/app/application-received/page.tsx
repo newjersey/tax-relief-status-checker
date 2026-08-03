@@ -4,6 +4,9 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDataStore } from "@/components/TaxReliefDataProvider";
 import Link from "next/link";
+import { ProcessList, ProcessListHeading, ProcessListItem } from "@trussworks/react-uswds";
+import { ApplicationReceivedFaqContent } from "./ApplicationReceivedFaqContent";
+import { FaqSection } from "@/components/FaqSection";
 
 const ApplicationReceivedPage = () => {
   const router = useRouter();
@@ -44,7 +47,7 @@ const ApplicationReceivedPage = () => {
               </div>
               <div className="tablet:grid-col-3">
                 <p>
-                  Zip Code: <strong>{zipCode}</strong>
+                  ZIP Code: <strong>{zipCode}</strong>
                 </p>
               </div>{" "}
               <div className="tablet:grid-col-3">
@@ -55,14 +58,34 @@ const ApplicationReceivedPage = () => {
             </div>
           </div>
           <div className="margin-top-4">
-            <p className="font-heading-xl">
+            <h1 className="font-heading-xl">
               Your application was received on {applicationDateString}
-            </p>
+            </h1>
             <p>
-              Your application is being reviewed. No action is needed right now. If you applied
-              early this year, please check back in early summer.
+              Your application is being reviewed for three property tax relief programs: Senior
+              Freeze, ANCHOR, and Stay NJ. Each program makes payments on different timelines, and
+              not everyone qualifies for all three programs.
             </p>
+            <ProcessList>
+              <ProcessListItem>
+                <ProcessListHeading type="p">Senior Freeze</ProcessListHeading>
+                <p>Senior Freeze payments start July 15, 2026.</p>
+              </ProcessListItem>
+              <ProcessListItem>
+                <ProcessListHeading type="p">ANCHOR</ProcessListHeading>
+                <p>ANCHOR payments begin September 2026.</p>
+              </ProcessListItem>
+              <ProcessListItem>
+                <ProcessListHeading type="p">Stay NJ</ProcessListHeading>
+                <p>Stay NJ quarterly payments begin February 2027.</p>
+              </ProcessListItem>
+            </ProcessList>
           </div>
+          <FaqSection
+            items={ApplicationReceivedFaqContent}
+            titleHeadingLevel="h2"
+            itemHeadingLevel="h3"
+          />
         </div>
       </section>
     </main>

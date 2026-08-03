@@ -6,11 +6,14 @@ import { useRouter } from "next/navigation";
 import { Label, TextInputMask, Form, Button } from "@trussworks/react-uswds";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
-import { LandingPageFaq, expandFaqAccordionItem } from "@/components/LandingPageFaq";
+import { LandingPageFaqContent } from "@/app/LandingPageFaqContent";
+import { FaqSection, expandFaqAccordionItem } from "@/components/FaqSection";
 import { maskSsn } from "@/app/utils/maskSsn";
 import { formatDate } from "@/app/utils/formatDate";
 import { logGAEvent } from "./utils/analytics";
 import { useDataStore } from "@/components/TaxReliefDataProvider";
+import { setIssueFlagged } from "./utils/setIssueFlagged";
+import { Transaction, TransactionStatus } from "@/components/types";
 
 /** Form data collected from the user. */
 interface UserData {
@@ -19,21 +22,27 @@ interface UserData {
 }
 
 /** Response shape returned by the status API. */
-interface StatusRecord {
+export interface StatusRecord {
   readonly return_year: string;
   readonly application_date: string;
-  readonly anchor: [];
-  readonly ptr: [];
-  readonly stay_nj: [];
+  readonly anchor: Transaction[];
+  readonly ptr: Transaction[];
+  readonly stay_nj: Transaction[];
 }
+
 const hasPaymentSentTransaction = (record: StatusRecord) => {
-  for (const transaction of record.anchor) {
-    if (transaction["status"] === "payment_sent") {
-      return true;
-    }
-  }
-  for (const transaction of record.ptr) {
-    if (transaction["status"] === "payment_sent") {
+  return (
+    hasTransactionWithStatus(record.anchor, TransactionStatus.PAYMENT_SENT) ||
+    hasTransactionWithStatus(record.ptr, TransactionStatus.PAYMENT_SENT)
+  );
+};
+
+const hasTransactionWithStatus = (
+  transactionList: Transaction[],
+  status: TransactionStatus,
+): boolean => {
+  for (const t of transactionList) {
+    if (t.status === status) {
       return true;
     }
   }
@@ -44,6 +53,7 @@ const hasPaymentSentTransaction = (record: StatusRecord) => {
   }
   return false;
 };
+
 const returnToTop = () => {
   const topOfPage = document.querySelector(`#nj-header`);
   if (!topOfPage) return;
@@ -142,11 +152,13 @@ const LandingPage = () => {
         anchor: record2025.anchor,
         ptr: record2025.ptr,
         stay_nj: record2025.stay_nj,
+        issueFlagged: setIssueFlagged(record2025),
       });
-
       logGAEvent(`api_200_record_found`);
       if (hasPaymentSentTransaction(record2025)) {
         router.push("/payment-info");
+      } else if (setIssueFlagged(record2025) !== undefined) {
+        router.push("/more-information-needed");
       } else {
         router.push("/application-received");
       }
@@ -249,8 +261,11 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="grid-row grid-gap margin-top-5">
-            <h2 className="font-heading-l">Frequently Asked Questions (FAQs)</h2>
-            <LandingPageFaq headingLevel="h3" />
+            <FaqSection
+              items={LandingPageFaqContent}
+              titleHeadingLevel="h2"
+              itemHeadingLevel="h3"
+            />
           </div>
         </div>
       </section>

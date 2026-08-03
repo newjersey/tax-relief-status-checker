@@ -1,16 +1,5 @@
-import { FaqContent } from "@/components/LandingPageFaq";
-
-const fillField = (fieldName: string, value: string): undefined => {
-  cy.get(`input[name="${fieldName}"]`).type(value);
-};
-
-const mockSSN = "123456789";
-const mockZip = "00000";
-
-const fillFields = () => {
-  fillField("ssn", mockSSN);
-  fillField("zipCode", mockZip);
-};
+import { LandingPageFaqContent } from "@/app/LandingPageFaqContent";
+import { fillField, fillFields } from "./utils";
 
 beforeEach(() => {
   cy.on("window:before:load", (win) => {
@@ -65,7 +54,7 @@ it("displays Zip Code error messages properly", () => {
 });
 
 it("should expand/collapse the accordion FAQ when clicked", () => {
-  for (const faq of FaqContent) {
+  for (const faq of LandingPageFaqContent) {
     cy.contains("button", faq.title as string).click();
     cy.get(`div[id="${faq.id}"]`).should("be.visible");
     cy.get("@gtag").should(
@@ -124,66 +113,4 @@ it("should display api alert if records is empty in a 200 response", () => {
     Cypress.sinon.match.any,
   );
   cy.window().its("scrollY").should("equal", 0); // should scroll to top so error is visible
-});
-
-it("should display status page if records has an object in a 200 response, no transactions", () => {
-  fillFields();
-  cy.fixture("v2_api_no_trans_records.json").then((resp) => {
-    cy.intercept("POST", "/api/status", {
-      statusCode: 200,
-      body: resp,
-    });
-  });
-
-  cy.contains("button", `Check Status`).click();
-
-  cy.url().should("include", "/application-received");
-  cy.contains("p", "Your application was received on").should("be.visible");
-
-  cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
-  cy.contains("p", mockSSN.slice(-4)).should("be.visible");
-  cy.contains("p", "Zip Code:").should("be.visible");
-  cy.contains("p", mockZip).should("be.visible");
-  cy.contains("p", "Tax Year: 2025").should("be.visible");
-
-  cy.get("@gtag").should(
-    "have.been.calledWith",
-    "event",
-    "api_200_record_found",
-    Cypress.sinon.match.any,
-  );
-
-  cy.contains("a", "Log out").click();
-  cy.contains("h1", "This website is checking your 2025 PAS");
-});
-
-it("should display application found page if records has an object, but no transactions are payment_sent", () => {
-  fillFields();
-  cy.fixture("v2_api_found_records.json").then((resp) => {
-    resp.records[0].ptr[0] = { status: "processing" };
-    cy.intercept("POST", "/api/status", {
-      statusCode: 200,
-      body: resp,
-    });
-  });
-  cy.contains("button", `Check Status`).click();
-
-  cy.url().should("include", "/application-received");
-  cy.contains("p", "Your application was received on").should("be.visible");
-
-  cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
-  cy.contains("p", mockSSN.slice(-4)).should("be.visible");
-  cy.contains("p", "Zip Code:").should("be.visible");
-  cy.contains("p", mockZip).should("be.visible");
-  cy.contains("p", "Tax Year: 2025").should("be.visible");
-
-  cy.get("@gtag").should(
-    "have.been.calledWith",
-    "event",
-    "api_200_record_found",
-    Cypress.sinon.match.any,
-  );
-
-  cy.contains("a", "Log out").click();
-  cy.contains("h1", "This website is checking your 2025 PAS");
 });

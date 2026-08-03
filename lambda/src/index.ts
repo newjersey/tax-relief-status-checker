@@ -3,11 +3,19 @@ import oracledb from "oracledb";
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { Transaction, InquiryRow } from "./types";
 import { buildAllTransactions } from "./transaction";
-import { embeddedMetricsPublisher } from "./metrics";
+import { createMetricsLogger, StorageResolution, Unit } from "aws-embedded-metrics";
 
 /** SQL query to look up filer records by SSN and ZIP */
 const INQUIRY_QUERY = `SELECT * FROM ELF_SAVER_INQUIRY
   WHERE SOCIAL_SECURITY_NUMBER_IDN = :ssn AND ZIP_ADR = :zip AND RETURN_YEAR_DTE = 2025`;
+
+/** CloudWatch namespace under which all custom metrics emitted by this API are published. */
+const METRICS_NAMESPACE = "TaxReliefStatusApi";
+
+/** Name of the metric that counts one API response per invocation, dimensioned by HTTP status code. */
+const RESPONSE_COUNT_METRIC_NAME = "ResponseCount";
+
+const metrics = createMetricsLogger();
 
 /** Result of input validation */
 interface ValidationResult {
@@ -40,6 +48,14 @@ interface DatabaseCredentials {
   /** Oracle database password */
   readonly ORACLE_DB_PASSWORD: string;
 }
+
+export const logStatusCode = async (statusCode: string): Promise<void> => {
+  metrics.setNamespace(METRICS_NAMESPACE);
+  metrics.resetDimensions(false);
+  metrics.putDimensions({ StatusCode: `${statusCode}` });
+  metrics.putMetric(RESPONSE_COUNT_METRIC_NAME, 1, Unit.Count, StorageResolution.Standard);
+  await metrics.flush();
+};
 
 export const validateInput = (
   event: APIGatewayProxyEvent | Record<string, unknown>,
@@ -110,7 +126,7 @@ export const handler = async (
 ): Promise<APIGatewayProxyResult> => {
   const validation = validateInput(event);
   if (!validation.valid) {
-    embeddedMetricsPublisher.recordResponse({ statusCode: 400 });
+    await logStatusCode("400");
     return {
       statusCode: 400,
       body: JSON.stringify({ error: validation.error }),
@@ -135,7 +151,7 @@ export const handler = async (
 
     const responseBody = buildResponse(result.rows as InquiryRow[]);
 
-    embeddedMetricsPublisher.recordResponse({ statusCode: 200 });
+    await logStatusCode("200");
     return {
       statusCode: 200,
       body: JSON.stringify(responseBody),
@@ -146,7 +162,7 @@ export const handler = async (
       error: error.message,
       stack: error.stack,
     });
-    embeddedMetricsPublisher.recordResponse({ statusCode: 500 });
+    await logStatusCode("500");
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Internal server error" }),

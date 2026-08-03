@@ -6,7 +6,8 @@ import { useDataStore } from "@/components/TaxReliefDataProvider";
 import Link from "next/link";
 import { Table } from "@trussworks/react-uswds";
 import { formatDate } from "../utils/formatDate";
-import { expandFaqAccordionItem, PaymentInfoPageFaq } from "@/components/PaymentInfoPageFaq";
+import { PaymentInfoFaqContent } from "@/app/payment-info/PaymentInfoFaqContent";
+import { FaqSection, expandFaqAccordionItem } from "@/components/FaqSection";
 import { Transaction } from "@/components/types";
 
 const ptrString = "Senior Freeze";
@@ -154,7 +155,7 @@ const PaymentInfoPage = () => {
               </div>
               <div className="tablet:grid-col-3">
                 <p>
-                  Zip Code: <strong>{zipCode}</strong>
+                  ZIP Code: <strong>{zipCode}</strong>
                 </p>
               </div>{" "}
               <div className="tablet:grid-col-3">
@@ -207,8 +208,11 @@ const PaymentInfoPage = () => {
             </tbody>
           </Table>
           <div className="grid-row grid-gap margin-top-5">
-            <h2 className="font-heading-l">Frequently Asked Questions (FAQs)</h2>
-            <PaymentInfoPageFaq headingLevel="h3" />
+            <FaqSection
+              items={PaymentInfoFaqContent}
+              titleHeadingLevel="h2"
+              itemHeadingLevel="h3"
+            />
           </div>
         </div>
       </section>
