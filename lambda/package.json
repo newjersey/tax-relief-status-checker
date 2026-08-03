@@ -13,13 +13,13 @@
   },
   "dependencies": {
     "aws-embedded-metrics": "4.2.1",
-    "oracledb": "7.0.0"
+    "oracledb": "7.0.1"
   },
   "devDependencies": {
     "@aws-sdk/client-secrets-manager": "3.1083.0",
     "@types/aws-lambda": "8.10.162",
     "@types/node": "25.9.5",
-    "@types/oracledb": "7.0.0",
+    "@types/oracledb": "7.0.1",
     "aws-sdk-client-mock": "4.1.0",
     "esbuild": "0.28.1",
     "typescript": "6.0.3",
