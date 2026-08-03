@@ -29,7 +29,7 @@
     "@smithy/protocol-http": "5.4.6",
     "@testing-library/jest-dom": "6.9.1",
     "@trussworks/react-uswds": "11.0.0",
-    "next": "16.2.7",
+    "next": "16.2.12",
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "react-hook-form": "7.80.0",
