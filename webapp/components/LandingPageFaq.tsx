@@ -230,7 +230,7 @@ export const FaqContent: AccordionItemContent[] = [
         </p>
         <ul>
           <li>Your municipality's tax collector</li>
-          <li>State's property records</li>
+          <li>The State's property records</li>
         </ul>
       </>
     ),

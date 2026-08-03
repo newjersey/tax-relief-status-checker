@@ -34,8 +34,6 @@ export const StepIndicator = (props: StepIndicatorProps): JSX.Element => {
     divProps,
     listProps,
     statusText = { complete: "completed", incomplete: "not completed", current: "current" },
-    currentStepLabel = "You are here",
-    lastUpdated,
   } = props;
 
   const { className: additionalDivClasses, ...remainingDivProps } = divProps || {};
@@ -58,8 +56,6 @@ export const StepIndicator = (props: StepIndicatorProps): JSX.Element => {
   const stepChildren = React.Children.map(children, (child) =>
     React.cloneElement(child, { statusText: statusText }),
   );
-
-  const currentStepIndex = stepChildren.findIndex((child) => child.props.status === "current");
 
   return (
     <div className={divClasses} data-testid="step-indicator" {...remainingDivProps}>

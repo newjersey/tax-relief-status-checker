@@ -187,3 +187,41 @@ it("should display application found page if records has an object, but no trans
   cy.contains("a", "Log out").click();
   cy.contains("h1", "This website is checking your 2025 PAS");
 });
+
+it("should display program by program step indicator and overall program status bar", () => {
+  fillFields();
+  cy.fixture("v2_api_no_trans_records.json").then((resp) => {
+    cy.intercept("POST", "/api/status", {
+      statusCode: 200,
+      body: resp,
+    });
+  });
+  cy.contains("button", `Check Status`).click();
+
+  cy.url().should("include", "/application-received");
+
+  cy.get("@gtag").should(
+    "have.been.calledWith",
+    "event",
+    "api_200_record_found",
+    Cypress.sinon.match.any,
+  );
+  cy.contains("h1", "Your Application Journey").should("be.visible");
+  cy.contains("a", "Learn more about Senior Freeze").click();
+  cy.contains("span", "Last checks sent in February 2027").should("be.visible");
+  cy.contains("a", "Learn more about Senior Freeze").click();
+  cy.contains("span", "Last checks sent in February 2027").should("not.be.visible");
+
+  cy.contains("a", "Learn more about ANCHOR").click();
+  cy.contains("span", "Last checks sent in December 2026").should("be.visible");
+  cy.contains("a", "Learn more about Senior Freeze").click();
+  cy.contains("span", "Last checks sent in December 2026").should("not.be.visible");
+
+  cy.contains("a", "Learn more about Stay NJ").click();
+  cy.contains("span", "Quarter 1 payments begin February 2027").should("be.visible");
+  cy.contains("a", "Learn more about Senior Freeze").click();
+  cy.contains("span", "Quarter 1 payments begin February 2027").should("not.be.visible");
+
+  cy.contains("a", "Log out").click();
+  cy.contains("h1", "This website is checking your 2025 PAS").should("be.visible");
+});

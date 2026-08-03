@@ -34,3 +34,13 @@
 p.usa-alert__text {
   max-width: none;
 }
+
+.usa-process-list__item {
+  max-width: 100%;
+  width: 100%;
+}
+
+.learn-more-content {
+  width: 100%;
+  box-sizing: border-box;
+}

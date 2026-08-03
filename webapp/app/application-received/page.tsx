@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDataStore } from "@/components/TaxReliefDataProvider";
 import Link from "next/link";
-import { StepIndicatorStep } from "@trussworks/react-uswds";
 import { StepIndicator } from "@/components/StepIndicator";
 import { LandingPageFaq } from "@/components/LandingPageFaq";
 
@@ -24,7 +23,7 @@ const ApplicationReceivedPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, applicationDateString } = dataStore;
+  const { applicationDateString } = dataStore;
   const currentDate = new Date().toLocaleDateString();
   return (
     <main id="main-content">
@@ -77,121 +76,234 @@ const ApplicationReceivedPage = () => {
           </StepIndicator>
           <hr></hr>
           <h2 className="font-heading-l">How the payout schedule works:</h2>
-          <ul className="usa-card-group grid-row">
-            <li className="usa-card tablet:grid-col-4">
-              <div className="usa-card__container">
-                <div className="usa-card__header">
-                  <h4 className="usa-card__heading">Senior Freeze</h4>
-                </div>
-                <div className="usa-card__body">
-                  <p>
-                    <b>July 15th to February 2027</b>
-                  </p>
-                  <p>Formerly, known as the Property Tax Reimbursement</p>
-                </div>
-                <div className="usa-card__footer">
-                  {/* button modal */}
-                  <a href="#" className="usa-button">
-                    Learn More
-                  </a>
-                </div>
-              </div>
-            </li>
-            <li className="usa-card tablet:grid-col-4">
-              <div className="usa-card__container">
-                <div className="usa-card__header">
-                  <h4 className="usa-card__heading">ANCHOR</h4>
-                </div>
-                <div className="usa-card__body">
-                  <p>
-                    <b>September 15th to December 31</b>
-                  </p>
-                  <p>
-                    ANCHOR stands for Affordable New Jersey Communities for Homeowners and
-                    Renters.{" "}
-                  </p>
-                </div>
-                <div className="usa-card__footer">
-                  <a href="#" className="usa-button">
-                    Learn More
-                  </a>
-                </div>
-              </div>
-            </li>
-            <li className="usa-card tablet:grid-col-4">
-              <div className="usa-card__container">
-                <div className="usa-card__header">
-                  <h4 className="usa-card__heading">Stay NJ</h4>
-                </div>
-                <div className="usa-card__body">
-                  <p>
-                    <b>Quarterly starting February 2027</b>
-                  </p>
-                  <p>Stay NJ is paid out in 4 installments.</p>
-                </div>
-                <div className="usa-card__footer">
-                  <a href="#" className="usa-button">
-                    Learn More
-                  </a>
-                </div>
-              </div>
-            </li>
-          </ul>
-          <div className="margin-y-3">
-            <a
-              href="#example-modal-2"
-              className="usa-button"
-              aria-controls="example-modal-2"
-              data-open-modal
-            >
-              Open large modal
-            </a>
-            <div
-              className="usa-modal usa-modal--lg"
-              id="example-modal-2"
-              aria-labelledby="modal-2-heading"
-              aria-describedby="modal-2-description"
-            >
-              <div className="usa-modal__content">
-                <div className="usa-modal__main">
-                  <h2 className="usa-modal__heading" id="modal-2-heading">
-                    Are you sure you want to continue?
-                  </h2>
-                  <div className="usa-prose">
-                    <p id="modal-2-description">You have unsaved changes that will be lost.</p>
-                  </div>
-                  <div className="usa-modal__footer">
-                    <ul className="usa-button-group">
-                      <li className="usa-button-group__item">
-                        <button type="button" className="usa-button" data-close-modal>
-                          Continue without saving
-                        </button>
+          <ol className="usa-process-list">
+            <li className="usa-process-list__item">
+              <h4 className="usa-process-list__heading font-sans-xl line-height-sans-1">
+                Senior Freeze
+              </h4>
+              <p className="font-sans-lg margin-top-1 text-light">
+                Senior Freeze payments start July 15, 2026
+              </p>
+              <details>
+                <summary className="learn-more-link">
+                  <a>Learn more about Senior Freeze</a>
+                </summary>
+                <div className="learn-more-content">
+                  {/* step indicator for senior freeze */}
+                  <StepIndicator className="usa-step-indicator usa-step-indicator--counters">
+                    <ol className="usa-step-indicator__segments margin-top-3">
+                      <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
+                        <span className="usa-step-indicator__segment-label">
+                          PAS-1 application opens February 2026{" "}
+                          <span className="usa-sr-only">completed</span>
+                        </span>
                       </li>
-                      <li className="usa-button-group__item">
-                        <button
-                          type="button"
-                          className="usa-button usa-button--unstyled padding-105 text-center"
-                          data-close-modal
-                        >
-                          Go back
-                        </button>
+                      <li
+                        className="usa-step-indicator__segment usa-step-indicator__segment--complete"
+                        aria-current="true"
+                      >
+                        <span className="usa-step-indicator__segment-label">
+                          Application begin processing in July
+                        </span>
                       </li>
-                    </ul>
-                  </div>
+                      <li
+                        className="usa-step-indicator__segment usa-step-indicator__segment--complete"
+                        aria-current="true"
+                      >
+                        <span className="usa-step-indicator__segment-label">
+                          First check sent 7/15/2026{" "}
+                        </span>
+                      </li>
+                      <li
+                        className="usa-step-indicator__segment usa-step-indicator__segment--complete"
+                        aria-current="true"
+                      >
+                        <span className="usa-step-indicator__segment-label">
+                          Application closes 11/2/2026{" "}
+                        </span>
+                      </li>
+                      <li
+                        className="usa-step-indicator__segment usa-step-indicator__segment--complete"
+                        aria-current="true"
+                      >
+                        <span className="usa-step-indicator__segment-label">
+                          Last checks sent in February 2027{" "}
+                        </span>
+                      </li>
+                    </ol>
+                    <div></div>
+                  </StepIndicator>
+                  <p>
+                    To qualify for the{" "}
+                    <a
+                      href="https://www.nj.gov/treasury/taxation/ptr/eligibility.shtml"
+                      target="_blank"
+                    >
+                      Senior Freeze program
+                    </a>
+                    , you (or your spouse) must meet all the below requirements:
+                  </p>
+                  <ul>
+                    <li>
+                      Be 65 years or older on December 31st, 2025 (or receiving Social Security
+                      Disability during 2025)
+                    </li>
+                    <li>Have owned and lived in your home since December 31, 2022</li>
+                    <li>Paid property taxes</li>
+                    <li>Total annual income for 2025 was $172,475 or less</li>
+                  </ul>
                 </div>
-                <button
-                  type="button"
-                  className="usa-button usa-modal__close"
-                  aria-label="Close this window"
-                  data-close-modal
-                >
-                  <svg className="usa-icon" aria-hidden="true" focusable="false" role="img">
-                    <use href="/assets/img/sprite.svg#close"></use>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
+              </details>
+            </li>{" "}
+            <li className="usa-process-list__item">
+              <h4 className="usa-process-list__heading font-sans-xl line-height-sans-1">ANCHOR</h4>
+              <p className="font-sans-lg margin-top-1 text-light">
+                ANCHOR payments begin September 2026
+              </p>
+              <details>
+                <summary className="learn-more-link">
+                  <a>Learn more about ANCHOR</a>
+                </summary>
+                <div className="learn-more-content">
+                  {/* step indicator for ANCHOR */}
+                  <StepIndicator className="usa-step-indicator usa-step-indicator--counters">
+                    <ol className="usa-step-indicator__segments margin-top-3">
+                      <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
+                        <span className="usa-step-indicator__segment-label">
+                          PAS-1 application opens February 2026{" "}
+                          <span className="usa-sr-only">completed</span>
+                        </span>
+                      </li>
+                      <li
+                        className="usa-step-indicator__segment usa-step-indicator__segment--complete"
+                        aria-current="true"
+                      >
+                        <span className="usa-step-indicator__segment-label">
+                          Application begin processing in July
+                        </span>
+                      </li>
+                      <li
+                        className="usa-step-indicator__segment usa-step-indicator__segment--complete"
+                        aria-current="true"
+                      >
+                        <span className="usa-step-indicator__segment-label">
+                          First check sent 7/15/2026{" "}
+                        </span>
+                      </li>
+                      <li
+                        className="usa-step-indicator__segment usa-step-indicator__segment--complete"
+                        aria-current="true"
+                      >
+                        <span className="usa-step-indicator__segment-label">
+                          Application closes 11/2/2026{" "}
+                        </span>
+                      </li>
+                      <li
+                        className="usa-step-indicator__segment usa-step-indicator__segment--complete"
+                        aria-current="true"
+                      >
+                        <span className="usa-step-indicator__segment-label">
+                          Last checks sent in December 2027{" "}
+                        </span>
+                      </li>
+                    </ol>
+                    <div></div>
+                  </StepIndicator>
+                  <p>
+                    To qualify for the{" "}
+                    <a
+                      href="https://www.nj.gov/treasury/taxation/anchor/eligibility.shtml"
+                      target="_blank"
+                    >
+                      ANCHOR program
+                    </a>
+                    , you (or your spouse) must meet all the below requirements:
+                  </p>
+                  <ul>
+                    <li>New Jersey resident in 2025</li>
+                    <li>
+                      Have owned or rented a home in New Jersey that was your main home on October
+                      1, 2025
+                    </li>
+                    <li>Paid property taxes</li>
+                    <li>
+                      New Jersey gross income was $250,000 or less for homeowners (or $150,000 or
+                      less for renters)
+                    </li>
+                  </ul>
+                </div>
+              </details>
+            </li>{" "}
+            <li className="usa-process-list__item">
+              <h4 className="usa-process-list__heading font-sans-xl line-height-sans-1">Stay NJ</h4>
+              <p className="font-sans-lg margin-top-1 text-light">
+                Stay NJ payments begin February 2027
+              </p>
+              <details>
+                <summary className="learn-more-link">
+                  <a>Learn more about Stay NJ</a>
+                </summary>
+                <div className="learn-more-content">
+                  {/* step indicator for Stay NJ */}
+                  <StepIndicator className="usa-step-indicator usa-step-indicator--counters">
+                    <ol className="usa-step-indicator__segments margin-top-3">
+                      <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
+                        <span className="usa-step-indicator__segment-label">
+                          PAS-1 application opens February 2026{" "}
+                        </span>
+                      </li>
+                      <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
+                        <span className="usa-step-indicator__segment-label">
+                          Application closes 11/2/2026{" "}
+                        </span>
+                      </li>
+                      <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
+                        <span className="usa-step-indicator__segment-label">
+                          Quarter 1 payments begin February 2027{" "}
+                        </span>
+                      </li>
+                      <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
+                        <span className="usa-step-indicator__segment-label">
+                          Quarter 2 payments begin May 2027{" "}
+                        </span>
+                      </li>
+                      <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
+                        <span className="usa-step-indicator__segment-label">
+                          Quarter 3 payments begin August 2027{" "}
+                        </span>
+                      </li>
+                      <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
+                        <span className="usa-step-indicator__segment-label">
+                          Quarter 4 payments begin November 2027{" "}
+                        </span>
+                      </li>
+                    </ol>
+                    <div></div>
+                  </StepIndicator>
+                  <p>
+                    To qualify for the{" "}
+                    <a
+                      href="https://www.nj.gov/treasury/taxation/staynj/index.shtml"
+                      target="_blank"
+                    >
+                      Stay NJ program
+                    </a>
+                    , you (or your spouse) must meet all the below requirements:
+                  </p>
+                  <ul>
+                    <li>Be 65 years or older on December 31st, 2025</li>
+                    <li>New Jersey resident in 2025</li>
+                    <li>
+                      Have owned and lived in New Jersey for the entire year (January 1 to December
+                      31, 2025)
+                    </li>
+                    <li>Paid property taxes</li>
+                    <li>Total annual income less than $200,000</li>
+                  </ul>
+                </div>
+              </details>
+            </li>
+          </ol>
           <div className="grid-row grid-gap margin-top-5">
             <h2 className="font-heading-l">Frequently Asked Questions (FAQs)</h2>
             <LandingPageFaq headingLevel="h3" />
