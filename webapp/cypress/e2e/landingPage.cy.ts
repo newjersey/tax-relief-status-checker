@@ -1,4 +1,4 @@
-import { FaqContent } from "@/components/LandingPageFaq";
+import { LandingPageFaqContent } from "@/app/LandingPageFaqContent";
 import { fillField, fillFields } from "./utils";
 
 beforeEach(() => {
@@ -54,7 +54,7 @@ it("displays Zip Code error messages properly", () => {
 });
 
 it("should expand/collapse the accordion FAQ when clicked", () => {
-  for (const faq of FaqContent) {
+  for (const faq of LandingPageFaqContent) {
     cy.contains("button", faq.title as string).click();
     cy.get(`div[id="${faq.id}"]`).should("be.visible");
     cy.get("@gtag").should(

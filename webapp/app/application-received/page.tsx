@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useDataStore } from "@/components/TaxReliefDataProvider";
 import Link from "next/link";
 import { ProcessList, ProcessListHeading, ProcessListItem } from "@trussworks/react-uswds";
-import { ApplicationReceivedPageFaq } from "@/components/ApplicationReceivedPageFaq";
+import { ApplicationReceivedFaqContent } from "./ApplicationReceivedFaqContent";
+import { FaqSection } from "@/components/FaqSection";
 
 const ApplicationReceivedPage = () => {
   const router = useRouter();
@@ -57,9 +58,9 @@ const ApplicationReceivedPage = () => {
             </div>
           </div>
           <div className="margin-top-4">
-            <p className="font-heading-xl">
+            <h1 className="font-heading-xl">
               Your application was received on {applicationDateString}
-            </p>
+            </h1>
             <p>
               Your application is being reviewed for three property tax relief programs: Senior
               Freeze, ANCHOR, and Stay NJ. Each program makes payments on different timelines, and
@@ -80,7 +81,11 @@ const ApplicationReceivedPage = () => {
               </ProcessListItem>
             </ProcessList>
           </div>
-          <ApplicationReceivedPageFaq headingLevel="h3" />
+          <FaqSection
+            items={ApplicationReceivedFaqContent}
+            titleHeadingLevel="h2"
+            itemHeadingLevel="h3"
+          />
         </div>
       </section>
     </main>

@@ -146,7 +146,7 @@ it("should route user to application-received if stay_nj", () => {
   cy.contains("button", `Check Status`).click();
 
   cy.url().should("include", "/application-received");
-  cy.contains("p", "Your application was received on").should("be.visible");
+  cy.contains("h1", "Your application was received on").should("be.visible");
 });
 
 it("displays the first check sent if multiple PTR transactions are payment_sent", () => {

@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { Label, TextInputMask, Form, Button } from "@trussworks/react-uswds";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
-import { LandingPageFaq, expandFaqAccordionItem } from "@/components/LandingPageFaq";
+import { LandingPageFaqContent } from "@/app/LandingPageFaqContent";
+import { FaqSection, expandFaqAccordionItem } from "@/components/FaqSection";
 import { maskSsn } from "@/app/utils/maskSsn";
 import { formatDate } from "@/app/utils/formatDate";
 import { logGAEvent } from "./utils/analytics";
@@ -255,8 +256,11 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="grid-row grid-gap margin-top-5">
-            <h2 className="font-heading-l">Frequently Asked Questions (FAQs)</h2>
-            <LandingPageFaq headingLevel="h3" />
+            <FaqSection
+              items={LandingPageFaqContent}
+              titleHeadingLevel="h2"
+              itemHeadingLevel="h3"
+            />
           </div>
         </div>
       </section>
