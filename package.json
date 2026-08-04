@@ -9,7 +9,8 @@
     "dev": "cd webapp && next dev --port 3000",
     "build": "cd webapp && next build",
     "cypress": "cd webapp && cypress run",
-    "package": "cd lambda && npm run package",
+    "package": "cd lambda && npm run package && cd ../lambda-anchor-autofile-api && npm run package",
+    "package:autofile": "cd lambda-anchor-autofile-api && npm run package",
     "deploy:dev": "npm run package && cd infra && cdk deploy -c stage=dev",
     "deploy:prod": "npm run package && cd infra && cdk deploy -c stage=prod",
     "test": "vitest run",
@@ -36,6 +37,7 @@
   "workspaces": [
     "webapp",
     "lambda",
+    "lambda-anchor-autofile-api",
     "infra"
   ]
 }

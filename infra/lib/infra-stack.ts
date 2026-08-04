@@ -1,9 +1,10 @@
-import { Duration, Stack } from "aws-cdk-lib";
+import { Duration, RemovalPolicy, Stack } from "aws-cdk-lib";
 import type { StackProps } from "aws-cdk-lib";
 import type { Construct } from "constructs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as iam from "aws-cdk-lib/aws-iam";
+import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as path from "path";
 import { fileURLToPath } from "url";
 import * as cw from "aws-cdk-lib/aws-cloudwatch";
@@ -26,6 +27,12 @@ export interface InfraStackProps extends StackProps {
 export class InfraStack extends Stack {
   /** The Lambda function serving the Property Tax Relief Status API. */
   public readonly lambdaFunction: lambda.Function;
+
+  /** The Lambda function serving the ANCHOR autofile lookup API. */
+  public readonly autofileLambdaFunction: lambda.Function;
+
+  /** The DynamoDB table storing SSN/ZIP hashes for ANCHOR autofile lookup. */
+  public readonly autofileTable: dynamodb.Table;
 
   constructor(scope: Construct, id: string, props: InfraStackProps) {
     super(scope, id, props);
@@ -105,6 +112,35 @@ export class InfraStack extends Stack {
     });
 
     this.lambdaFunction.role?.attachInlinePolicy(customPolicy);
+
+    this.autofileTable = new dynamodb.Table(this, "AnchorAutofileSsnZipTable", {
+      tableName: `anchor-autofile-ssn-zip-${props.stageName}`,
+      partitionKey: { name: "ssnZipHash", type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: RemovalPolicy.RETAIN,
+    });
+
+    this.autofileLambdaFunction = new lambda.Function(this, "AnchorAutofileApi", {
+      functionName: `anchor-autofile-api-${props.stageName}`,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      handler: "index.handler",
+      code: lambda.Code.fromAsset(
+        path.join(DIRNAME, "../../lambda-anchor-autofile-api/lambda.zip"),
+      ),
+      timeout: Duration.seconds(LAMBDA_TIMEOUT_SECONDS),
+      memorySize: LAMBDA_MEMORY_MB,
+      environment: {
+        TABLE_NAME: this.autofileTable.tableName,
+      },
+      ...vpcConfig,
+    });
+
+    this.autofileTable.grantReadData(this.autofileLambdaFunction);
+
+    this.autofileLambdaFunction.addFunctionUrl({
+      authType: lambda.FunctionUrlAuthType.AWS_IAM,
+      cors: { allowedOrigins: props.allowedOrigins },
+    });
   }
 
   private buildVpcConfig(
