@@ -30,10 +30,10 @@
     "@testing-library/jest-dom": "6.9.1",
     "@trussworks/react-uswds": "11.0.0",
     "next": "16.2.12",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
-    "react-hook-form": "7.80.0",
-    "react-router-dom": "7.17.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-hook-form": "7.84.0",
+    "react-router-dom": "7.18.2",
     "typescript": "6.0.3"
   },
   "devDependencies": {
