@@ -8,14 +8,12 @@ import { Table } from "@trussworks/react-uswds";
 import { formatDate } from "../utils/formatDate";
 import { PaymentInfoFaqContent } from "@/app/payment-info/PaymentInfoFaqContent";
 import { FaqSection, expandFaqAccordionItem } from "@/components/FaqSection";
-import { Transaction } from "@/components/types";
-
-const ptrString = "Senior Freeze";
-const anchorString = "ANCHOR";
-const stayNJString = "Stay NJ";
+import { Transaction, TaxProgram, PaymentMethod, TransactionStatus } from "@/components/types";
 
 export const getEarliestTransaction = (transactions: Transaction[]) => {
-  const valid = transactions.filter((t) => t.status === "payment_sent" && t.payment_details);
+  const valid = transactions.filter(
+    (t) => t.status === TransactionStatus.PAYMENT_SENT && t.payment_details,
+  );
   if (valid.length === 0) return null;
   if (valid.length === 1) return valid[0];
 
@@ -33,12 +31,12 @@ export const getEarliestTransaction = (transactions: Transaction[]) => {
   return earliestTransaction;
 };
 
-export const showEarliestTransaction = (transaction: Transaction, category: string) => {
+export const showEarliestTransaction = (transaction: Transaction, taxProgram: TaxProgram) => {
   if (!transaction?.payment_details) return null;
   return (
     <tr>
-      <td>{category}</td>
-      {transaction.payment_details.method === "check" ? (
+      <td>{taxProgram}</td>
+      {transaction.payment_details.method === PaymentMethod.CHECK ? (
         <td>Check issued on {formatDate(transaction.payment_details.date)}</td>
       ) : (
         <td>Direct deposit made on {formatDate(transaction.payment_details.date)}</td>
@@ -50,12 +48,12 @@ export const showEarliestTransaction = (transaction: Transaction, category: stri
 
 export const showUpdatedTransaction = (
   transaction: Transaction,
-  category: string,
+  taxProgram: TaxProgram,
 ): JSX.Element | null => {
   if (!transaction?.payment_details) return null;
   return (
     <tr>
-      <td>{category}</td>
+      <td>{taxProgram}</td>
       <td>
         <div className="transaction-table--payment-status">
           Your benefit amount was adjusted. A check was sent on{" "}
@@ -67,25 +65,21 @@ export const showUpdatedTransaction = (
   );
 };
 
-export const showAllTransactions = (transactions: Transaction[], category: string) => {
+export const showProgramTransactions = (transactions: Transaction[], taxProgram: TaxProgram) => {
   const earliest = getEarliestTransaction(transactions);
   if (!earliest?.payment_details) return null;
 
-  if (transactions.length === 1) {
-    return showEarliestTransaction(earliest, category);
-  }
-
-  const rest = transactions.filter((transaction) => transaction !== earliest);
+  const remainingTransactions = transactions.filter((transaction) => transaction !== earliest);
 
   return (
     <>
-      {showEarliestTransaction(earliest, category)}
-      {rest.map((transaction) => showUpdatedTransaction(transaction, category))}
+      {showEarliestTransaction(earliest, taxProgram)}
+      {remainingTransactions.map((transaction) => showUpdatedTransaction(transaction, taxProgram))}
     </>
   );
 };
 
-export const sortStayNJTransactions = (transactions: Transaction[]) => {
+export const sortStayNJTransactionsByQuarter = (transactions: Transaction[]): Transaction[][] => {
   const sortedStayNJ: Transaction[][] = [[], [], [], []];
   for (const transaction of transactions) {
     if (!transaction.payment_details) continue;
@@ -93,7 +87,7 @@ export const sortStayNJTransactions = (transactions: Transaction[]) => {
     const currentMonth = currentDate.getMonth();
     if (
       currentMonth >= new Date("01/01").getMonth() &&
-      currentMonth <= new Date("04/30 23:59:59").getMonth()
+      currentMonth <= new Date("04/30 23:59:59 UTC-5").getMonth()
     ) {
       sortedStayNJ[0].push(transaction);
     } else if (
@@ -192,17 +186,21 @@ const PaymentInfoPage = () => {
             <tbody>
               {(() => {
                 if (ptr.length === 0) return null;
-                return showAllTransactions(ptr, ptrString);
+                return showProgramTransactions(ptr, TaxProgram.PTR);
               })()}
               {(() => {
                 if (anchor.length === 0) return null;
-                return showAllTransactions(anchor, anchorString);
+                return showProgramTransactions(anchor, TaxProgram.ANCHOR);
               })()}
               {(() => {
                 if (stay_nj.length === 0) return null;
-                const sortedStayNJ = sortStayNJTransactions(stay_nj);
+                const sortedStayNJ = sortStayNJTransactionsByQuarter(stay_nj);
                 return (
-                  <>{sortedStayNJ.map((quarter) => showAllTransactions(quarter, stayNJString))}</>
+                  <>
+                    {sortedStayNJ.map((quarter) =>
+                      showProgramTransactions(quarter, TaxProgram.STAY_NJ),
+                    )}
+                  </>
                 );
               })()}
             </tbody>

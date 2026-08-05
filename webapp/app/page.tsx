@@ -33,7 +33,8 @@ export interface StatusRecord {
 const hasPaymentSentTransaction = (record: StatusRecord) => {
   return (
     hasTransactionWithStatus(record.anchor, TransactionStatus.PAYMENT_SENT) ||
-    hasTransactionWithStatus(record.ptr, TransactionStatus.PAYMENT_SENT)
+    hasTransactionWithStatus(record.ptr, TransactionStatus.PAYMENT_SENT) ||
+    hasTransactionWithStatus(record.stay_nj, TransactionStatus.PAYMENT_SENT)
   );
 };
 
@@ -43,11 +44,6 @@ const hasTransactionWithStatus = (
 ): boolean => {
   for (const t of transactionList) {
     if (t.status === status) {
-      return true;
-    }
-  }
-  for (const transaction of record.stay_nj) {
-    if (transaction["status"] === "payment_sent") {
       return true;
     }
   }

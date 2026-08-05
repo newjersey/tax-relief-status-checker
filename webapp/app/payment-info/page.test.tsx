@@ -3,10 +3,10 @@ import { renderToStaticMarkup } from "react-dom/server";
 
 import {
   getEarliestTransaction,
-  showAllTransactions,
+  showProgramTransactions,
   showEarliestTransaction,
   showUpdatedTransaction,
-  sortStayNJTransactions,
+  sortStayNJTransactionsByQuarter,
 } from "./page";
 import { render } from "@testing-library/react";
 import { formatDate } from "../utils/formatDate";
@@ -23,8 +23,9 @@ import {
   stayQ4End,
   error_payment_sent_transaction,
 } from "./testUtils";
+import { PaymentMethod, TaxProgram, TransactionStatus } from "@/components/types";
 
-enum PaymentType {
+export enum PaymentType {
   ADJUSTED = "adjusted",
   DIRECT_DEPOSIT = "direct_deposit",
   CHECK = "check",
@@ -61,7 +62,7 @@ describe("getEarliestTransaction", () => {
     expect(
       getEarliestTransaction([
         {
-          status: "processing",
+          status: TransactionStatus.PROCESSING,
         },
       ]),
     ).toBeNull();
@@ -76,21 +77,21 @@ describe("getEarliestTransaction", () => {
       getEarliestTransaction([
         payment_sent_transaction,
         {
-          status: "payment_sent",
+          status: TransactionStatus.PAYMENT_SENT,
           payment_details: {
             amount: 377.56,
             date: "1/1/2026 0:00:00",
-            method: "check",
+            method: PaymentMethod.CHECK,
             check_number: "922775385",
           },
         },
       ]),
     ).toEqual({
-      status: "payment_sent",
+      status: TransactionStatus.PAYMENT_SENT,
       payment_details: {
         amount: 377.56,
         date: "1/1/2026 0:00:00",
-        method: "check",
+        method: PaymentMethod.CHECK,
         check_number: "922775385",
       },
     });
@@ -98,8 +99,8 @@ describe("getEarliestTransaction", () => {
 });
 
 describe("showEarliestTransaction", () => {
-  it("shows check sent on if method is check", () => {
-    const result = showEarliestTransaction(payment_sent_transaction, "ANCHOR");
+  it("shows correct message when method is check", () => {
+    const result = showEarliestTransaction(payment_sent_transaction, TaxProgram.ANCHOR);
     const html = renderToStaticMarkup(result);
     checkTransactionInfo(
       html,
@@ -110,10 +111,10 @@ describe("showEarliestTransaction", () => {
     );
   });
 
-  it("shows direct deposit made on if method is direct_deposit", () => {
+  it("shows correct message when method is direct deposit", () => {
     const transaction = payment_sent_transaction;
-    transaction.payment_details.method = "direct_deposit";
-    const result = showEarliestTransaction(transaction, "ANCHOR");
+    transaction.payment_details.method = PaymentMethod.DIRECT_DEPOSIT;
+    const result = showEarliestTransaction(transaction, TaxProgram.ANCHOR);
     const html = renderToStaticMarkup(result);
     checkTransactionInfo(
       html,
@@ -125,13 +126,13 @@ describe("showEarliestTransaction", () => {
   });
 
   it("returns nothing if there is no payment_details", () => {
-    expect(showEarliestTransaction(error_payment_sent_transaction, "ANCHOR")).toBeNull;
+    expect(showEarliestTransaction(error_payment_sent_transaction, TaxProgram.ANCHOR)).toBeNull;
   });
 });
 
 describe("showUpdatedTransaction", () => {
-  it("shows your benefit amount was adjusted if check has payment details", () => {
-    const result = showUpdatedTransaction(payment_sent_transaction, "ANCHOR");
+  it("shows 'your benefit amount was adjusted' if check has payment details", () => {
+    const result = showUpdatedTransaction(payment_sent_transaction, TaxProgram.ANCHOR);
     const html = renderToStaticMarkup(result);
     checkTransactionInfo(
       html,
@@ -143,13 +144,16 @@ describe("showUpdatedTransaction", () => {
   });
 
   it("returns nothing if there is no payment_details", () => {
-    expect(showUpdatedTransaction(error_payment_sent_transaction, "ANCHOR")).toBeNull;
+    expect(showUpdatedTransaction(error_payment_sent_transaction, TaxProgram.ANCHOR)).toBeNull;
   });
 });
 
 describe("showAllTransactions", () => {
   it("shows first check and update payments for specified transaction", () => {
-    const result = showAllTransactions([payment_sent_transaction, earlier_transaction], "ANCHOR");
+    const result = showProgramTransactions(
+      [payment_sent_transaction, earlier_transaction],
+      TaxProgram.ANCHOR,
+    );
     render(result);
     const tableRows = document.body.querySelectorAll("tr");
     expect(tableRows.length).toEqual(2);
@@ -170,30 +174,34 @@ describe("showAllTransactions", () => {
   });
 
   it("returns nothing if there is no payment_details", () => {
-    expect(showUpdatedTransaction(error_payment_sent_transaction, "ANCHOR")).toBeNull;
+    expect(showUpdatedTransaction(error_payment_sent_transaction, TaxProgram.ANCHOR)).toBeNull;
   });
 });
 
-describe("sortStayNJTransaction", () => {
+describe("sortStayNJTransactionByQuater", () => {
   describe("for ONE transaction", () => {
     it("puts transaction with payment_date in bucket for range 1/1 to 4/31", () => {
-      expect(sortStayNJTransactions([stayQ1Start])).toEqual([[stayQ1Start], [], [], []]);
+      expect(sortStayNJTransactionsByQuarter([stayQ1Start])).toEqual([[stayQ1Start], [], [], []]);
+      expect(sortStayNJTransactionsByQuarter([stayQ1End])).toEqual([[stayQ1End], [], [], []]);
     });
     it("puts transaction with payment_date in bucket for range 5/1 to 7/31", () => {
-      expect(sortStayNJTransactions([stayQ2Start])).toEqual([[], [stayQ2Start], [], []]);
+      expect(sortStayNJTransactionsByQuarter([stayQ2Start])).toEqual([[], [stayQ2Start], [], []]);
+      expect(sortStayNJTransactionsByQuarter([stayQ2End])).toEqual([[], [stayQ2End], [], []]);
     });
     it("puts transaction with payment_date in bucket for range 8/1 to 10/31", () => {
-      expect(sortStayNJTransactions([stayQ3Start])).toEqual([[], [], [stayQ3Start], []]);
+      expect(sortStayNJTransactionsByQuarter([stayQ3Start])).toEqual([[], [], [stayQ3Start], []]);
+      expect(sortStayNJTransactionsByQuarter([stayQ3End])).toEqual([[], [], [stayQ3End], []]);
     });
     it("puts transaction with payment_date in bucket for range 11/1 to 12/31", () => {
-      expect(sortStayNJTransactions([stayQ4Start])).toEqual([[], [], [], [stayQ4Start]]);
+      expect(sortStayNJTransactionsByQuarter([stayQ4Start])).toEqual([[], [], [], [stayQ4Start]]);
+      expect(sortStayNJTransactionsByQuarter([stayQ4End])).toEqual([[], [], [], [stayQ4End]]);
     });
   });
 
   describe("for multiple transactions per bucket", () => {
     it("puts transactions into date range respective buckets", () => {
       expect(
-        sortStayNJTransactions([
+        sortStayNJTransactionsByQuarter([
           stayQ1Start,
           stayQ2Start,
           stayQ3Start,

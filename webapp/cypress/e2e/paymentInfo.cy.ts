@@ -178,8 +178,6 @@ it("displays payments page if records has stay_nj DIRECT DEPOSIT", () => {
   cy.contains("td", "Stay NJ").should("be.visible");
   cy.contains("td", `Direct deposit made on 01/05/2027`).should("be.visible");
   cy.contains("td", `$${mockAmount}`).should("be.visible");
-  cy.url().should("include", "/application-received");
-  cy.contains("h1", "Your application was received on").should("be.visible");
 });
 
 it("displays the first check sent if multiple PTR transactions are payment_sent", () => {
