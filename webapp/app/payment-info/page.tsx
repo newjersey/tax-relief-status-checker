@@ -79,37 +79,6 @@ export const showProgramTransactions = (transactions: Transaction[], taxProgram:
   );
 };
 
-export const sortStayNJTransactionsByQuarter = (transactions: Transaction[]): Transaction[][] => {
-  const sortedStayNJ: Transaction[][] = [[], [], [], []];
-  for (const transaction of transactions) {
-    if (!transaction.payment_details) continue;
-    const currentDate = new Date(transaction.payment_details.date);
-    const currentMonth = currentDate.getMonth();
-    if (
-      currentMonth >= new Date("01/01").getMonth() &&
-      currentMonth <= new Date("04/30 23:59:59 UTC-5").getMonth()
-    ) {
-      sortedStayNJ[0].push(transaction);
-    } else if (
-      currentMonth > new Date("4/30 23:59:59").getMonth() &&
-      currentMonth <= new Date("07/31 23:59:59").getMonth()
-    ) {
-      sortedStayNJ[1].push(transaction);
-    } else if (
-      currentMonth > new Date("07/31 23:59:59").getMonth() &&
-      currentMonth <= new Date("10/31 23:59:59").getMonth()
-    ) {
-      sortedStayNJ[2].push(transaction);
-    } else if (
-      currentMonth > new Date("10/31 23:59:59").getMonth() &&
-      currentMonth <= new Date("12/31 23:59:59").getMonth()
-    ) {
-      sortedStayNJ[3].push(transaction);
-    }
-  }
-  return sortedStayNJ;
-};
-
 const PaymentInfoPage = () => {
   const router = useRouter();
   const { dataStore } = useDataStore();
@@ -126,7 +95,7 @@ const PaymentInfoPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, anchor, ptr, stay_nj } = dataStore;
+  const { lastFourSsnDigits, zipCode, anchor, ptr } = dataStore;
 
   return (
     <main id="main-content">
@@ -191,17 +160,6 @@ const PaymentInfoPage = () => {
               {(() => {
                 if (anchor.length === 0) return null;
                 return showProgramTransactions(anchor, TaxProgram.ANCHOR);
-              })()}
-              {(() => {
-                if (stay_nj.length === 0) return null;
-                const sortedStayNJ = sortStayNJTransactionsByQuarter(stay_nj);
-                return (
-                  <>
-                    {sortedStayNJ.map((quarter) =>
-                      showProgramTransactions(quarter, TaxProgram.STAY_NJ),
-                    )}
-                  </>
-                );
               })()}
             </tbody>
           </Table>

@@ -6,21 +6,12 @@ import {
   showProgramTransactions,
   showEarliestTransaction,
   showUpdatedTransaction,
-  sortStayNJTransactionsByQuarter,
 } from "./page";
 import { render } from "@testing-library/react";
 import { formatDate } from "../utils/formatDate";
 import {
   payment_sent_transaction,
   earlier_transaction,
-  stayQ1Start,
-  stayQ1End,
-  stayQ2Start,
-  stayQ2End,
-  stayQ3Start,
-  stayQ3End,
-  stayQ4Start,
-  stayQ4End,
   error_payment_sent_transaction,
 } from "./testUtils";
 import { PaymentMethod, TaxProgram, TransactionStatus } from "@/components/types";
@@ -175,48 +166,5 @@ describe("showAllTransactions", () => {
 
   it("returns nothing if there is no payment_details", () => {
     expect(showUpdatedTransaction(error_payment_sent_transaction, TaxProgram.ANCHOR)).toBeNull;
-  });
-});
-
-describe("sortStayNJTransactionByQuater", () => {
-  describe("for ONE transaction", () => {
-    it("puts transaction with payment_date in bucket for range 1/1 to 4/31", () => {
-      expect(sortStayNJTransactionsByQuarter([stayQ1Start])).toEqual([[stayQ1Start], [], [], []]);
-      expect(sortStayNJTransactionsByQuarter([stayQ1End])).toEqual([[stayQ1End], [], [], []]);
-    });
-    it("puts transaction with payment_date in bucket for range 5/1 to 7/31", () => {
-      expect(sortStayNJTransactionsByQuarter([stayQ2Start])).toEqual([[], [stayQ2Start], [], []]);
-      expect(sortStayNJTransactionsByQuarter([stayQ2End])).toEqual([[], [stayQ2End], [], []]);
-    });
-    it("puts transaction with payment_date in bucket for range 8/1 to 10/31", () => {
-      expect(sortStayNJTransactionsByQuarter([stayQ3Start])).toEqual([[], [], [stayQ3Start], []]);
-      expect(sortStayNJTransactionsByQuarter([stayQ3End])).toEqual([[], [], [stayQ3End], []]);
-    });
-    it("puts transaction with payment_date in bucket for range 11/1 to 12/31", () => {
-      expect(sortStayNJTransactionsByQuarter([stayQ4Start])).toEqual([[], [], [], [stayQ4Start]]);
-      expect(sortStayNJTransactionsByQuarter([stayQ4End])).toEqual([[], [], [], [stayQ4End]]);
-    });
-  });
-
-  describe("for multiple transactions per bucket", () => {
-    it("puts transactions into date range respective buckets", () => {
-      expect(
-        sortStayNJTransactionsByQuarter([
-          stayQ1Start,
-          stayQ2Start,
-          stayQ3Start,
-          stayQ4Start,
-          stayQ1End,
-          stayQ2End,
-          stayQ3End,
-          stayQ4End,
-        ]),
-      ).toEqual([
-        [stayQ1Start, stayQ1End],
-        [stayQ2Start, stayQ2End],
-        [stayQ3Start, stayQ3End],
-        [stayQ4Start, stayQ4End],
-      ]);
-    });
   });
 });

@@ -33,8 +33,7 @@ export interface StatusRecord {
 const hasPaymentSentTransaction = (record: StatusRecord) => {
   return (
     hasTransactionWithStatus(record.anchor, TransactionStatus.PAYMENT_SENT) ||
-    hasTransactionWithStatus(record.ptr, TransactionStatus.PAYMENT_SENT) ||
-    hasTransactionWithStatus(record.stay_nj, TransactionStatus.PAYMENT_SENT)
+    hasTransactionWithStatus(record.ptr, TransactionStatus.PAYMENT_SENT)
   );
 };
 
