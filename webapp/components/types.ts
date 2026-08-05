@@ -9,9 +9,20 @@ export interface Transaction {
   };
 }
 
-enum PaymentMethod {
+export interface TransactionWithProgram {
+  readonly transaction: Transaction[];
+  readonly taxProgram: TaxProgram;
+}
+
+export enum PaymentMethod {
   DIRECT_DEPOSIT = "direct_deposit",
   CHECK = "check",
+}
+
+export enum TaxProgram {
+  ANCHOR = "ANCHOR",
+  PTR = "Senior Freeze",
+  STAY_NJ = "Stay NJ",
 }
 
 export interface PaymentDetails {

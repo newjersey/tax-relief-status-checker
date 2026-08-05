@@ -1,0 +1,30 @@
+{
+  "records": [
+    {
+      "return_year": "2025",
+      "application_date": "2026-03-19T00:00:00.000Z",
+      "anchor": [],
+      "ptr": [],
+      "stay_nj": [
+        {
+          "status": "payment_sent",
+          "payment_details": {
+            "amount": 377.56,
+            "date": "1/2/2027 0:00:00",
+            "method": "check",
+            "check_number": "0000000005"
+          }
+        },
+        {
+          "status": "payment_sent",
+          "payment_details": {
+            "amount": 10,
+            "date": "1/6/2027 0:00:00",
+            "method": "check",
+            "check_number": "0000000006"
+          }
+        }
+      ]
+    }
+  ]
+}

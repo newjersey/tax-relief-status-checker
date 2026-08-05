@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { JSX, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDataStore } from "@/components/TaxReliefDataProvider";
 import Link from "next/link";
@@ -8,10 +8,12 @@ import { Table } from "@trussworks/react-uswds";
 import { formatDate } from "../utils/formatDate";
 import { PaymentInfoFaqContent } from "@/app/payment-info/PaymentInfoFaqContent";
 import { FaqSection, expandFaqAccordionItem } from "@/components/FaqSection";
-import { Transaction } from "@/components/types";
+import { Transaction, TaxProgram, PaymentMethod, TransactionStatus } from "@/components/types";
 
 export const getEarliestTransaction = (transactions: Transaction[]) => {
-  const valid = transactions.filter((t) => t.status === "payment_sent" && t.payment_details);
+  const valid = transactions.filter(
+    (t) => t.status === TransactionStatus.PAYMENT_SENT && t.payment_details,
+  );
   if (valid.length === 0) return null;
   if (valid.length === 1) return valid[0];
 
@@ -27,6 +29,54 @@ export const getEarliestTransaction = (transactions: Transaction[]) => {
     }
   }
   return earliestTransaction;
+};
+
+export const showEarliestTransaction = (transaction: Transaction, taxProgram: TaxProgram) => {
+  if (!transaction?.payment_details) return null;
+  return (
+    <tr>
+      <td>{taxProgram}</td>
+      {transaction.payment_details.method === PaymentMethod.CHECK ? (
+        <td>Check issued on {formatDate(transaction.payment_details.date)}</td>
+      ) : (
+        <td>Direct deposit made on {formatDate(transaction.payment_details.date)}</td>
+      )}
+      <td>${transaction.payment_details.amount}</td>
+    </tr>
+  );
+};
+
+export const showUpdatedTransaction = (
+  transaction: Transaction,
+  taxProgram: TaxProgram,
+): JSX.Element | null => {
+  if (!transaction?.payment_details) return null;
+  return (
+    <tr>
+      <td>{taxProgram}</td>
+      <td>
+        <div className="transaction-table--payment-status">
+          Your benefit amount was adjusted. A check was sent on{" "}
+          {formatDate(transaction.payment_details.date)}
+        </div>
+      </td>
+      <td>${transaction.payment_details.amount}</td>
+    </tr>
+  );
+};
+
+export const showProgramTransactions = (transactions: Transaction[], taxProgram: TaxProgram) => {
+  const earliest = getEarliestTransaction(transactions);
+  if (!earliest?.payment_details) return null;
+
+  const remainingTransactions = transactions.filter((transaction) => transaction !== earliest);
+
+  return (
+    <>
+      {showEarliestTransaction(earliest, taxProgram)}
+      {remainingTransactions.map((transaction) => showUpdatedTransaction(transaction, taxProgram))}
+    </>
+  );
 };
 
 const PaymentInfoPage = () => {
@@ -104,34 +154,12 @@ const PaymentInfoPage = () => {
             </thead>
             <tbody>
               {(() => {
-                const transaction = getEarliestTransaction(ptr);
-                if (!transaction?.payment_details) return null;
-                return (
-                  <tr>
-                    <td>Senior Freeze</td>
-                    {transaction.payment_details.method === "check" ? (
-                      <td>Check issued on {formatDate(transaction.payment_details.date)}</td>
-                    ) : (
-                      <td>Direct deposit made on {formatDate(transaction.payment_details.date)}</td>
-                    )}
-                    <td>${transaction.payment_details.amount}</td>
-                  </tr>
-                );
+                if (ptr.length === 0) return null;
+                return showProgramTransactions(ptr, TaxProgram.PTR);
               })()}
               {(() => {
-                const transaction = getEarliestTransaction(anchor);
-                if (!transaction?.payment_details) return null;
-                return (
-                  <tr>
-                    <td>ANCHOR</td>
-                    {transaction.payment_details.method === "check" ? (
-                      <td>Check issued on {formatDate(transaction.payment_details.date)}</td>
-                    ) : (
-                      <td>Direct deposit made on {formatDate(transaction.payment_details.date)}</td>
-                    )}
-                    <td>${transaction.payment_details.amount}</td>
-                  </tr>
-                );
+                if (anchor.length === 0) return null;
+                return showProgramTransactions(anchor, TaxProgram.ANCHOR);
               })()}
             </tbody>
           </Table>

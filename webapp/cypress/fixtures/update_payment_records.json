@@ -1,0 +1,122 @@
+{
+  "records": [
+    {
+      "return_year": "2025",
+      "application_date": "2026-03-19T00:00:00.000Z",
+      "anchor": [
+        {
+          "status": "payment_sent",
+          "payment_details": {
+            "amount": 377.56,
+            "date": "10/6/2026 0:00:00",
+            "method": "check",
+            "check_number": "922775385"
+          }
+        },
+        {
+          "status": "payment_sent",
+          "payment_details": {
+            "amount": 1750.0,
+            "date": "9/6/2026 0:00:00",
+            "method": "direct_deposit",
+            "check_number": "922775385"
+          }
+        }
+      ],
+      "ptr": [
+        {
+          "status": "payment_sent",
+          "payment_details": {
+            "amount": 125.0,
+            "date": "7/16/2026 0:00:00",
+            "method": "direct_deposit",
+            "check_number": "922775385"
+          }
+        },
+        {
+          "status": "payment_sent",
+          "payment_details": {
+            "amount": 5.0,
+            "date": "7/17/2026 0:00:00",
+            "method": "check",
+            "check_number": "922775385"
+          }
+        }
+      ],
+      "stay_nj": [
+        {
+          "status": "payment_sent",
+          "payment_details": {
+            "amount": 111,
+            "date": "1/1/2027 0:00:00",
+            "method": "check",
+            "check_number": "922775385"
+          }
+        },
+        {
+          "status": "payment_sent",
+          "payment_details": {
+            "amount": 222,
+            "date": "4/30/2027 0:00:00",
+            "method": "check",
+            "check_number": "922775385"
+          }
+        },
+        {
+          "status": "payment_sent",
+          "payment_details": {
+            "amount": 333,
+            "date": "5/1/2027 0:00:00",
+            "method": "check",
+            "check_number": "922775385"
+          }
+        },
+        {
+          "status": "payment_sent",
+          "payment_details": {
+            "amount": 444,
+            "date": "7/31/2027 0:00:00",
+            "method": "check",
+            "check_number": "922775385"
+          }
+        },
+        {
+          "status": "payment_sent",
+          "payment_details": {
+            "amount": 555,
+            "date": "8/1/2027 0:00:00",
+            "method": "check",
+            "check_number": "922775385"
+          }
+        },
+        {
+          "status": "payment_sent",
+          "payment_details": {
+            "amount": 666,
+            "date": "10/31/2027 0:00:00",
+            "method": "check",
+            "check_number": "922775385"
+          }
+        },
+        {
+          "status": "payment_sent",
+          "payment_details": {
+            "amount": 777,
+            "date": "11/1/2027 0:00:00",
+            "method": "check",
+            "check_number": "922775385"
+          }
+        },
+        {
+          "status": "payment_sent",
+          "payment_details": {
+            "amount": 888,
+            "date": "12/31/2027 0:00:00",
+            "method": "check",
+            "check_number": "922775385"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -2,6 +2,50 @@ import { formatDate } from "@/app/utils/formatDate";
 import payment_sent_transaction from "../fixtures/payment_sent_transaction.json";
 import earlier_transaction from "../fixtures/earlier_payment_sent_transaction.json";
 import { fillFields, MOCK_SSN, MOCK_ZIP } from "./utils";
+import { TaxProgram } from "@/components/types";
+
+enum PaymentType {
+  ADJUSTED = "adjusted",
+  DIRECT_DEPOSIT = "direct_deposit",
+  CHECK = "check",
+}
+
+const paymentInfoAssertions = (
+  taxProgram: TaxProgram,
+  paymentType: PaymentType,
+  date: string,
+  amount: number,
+) => {
+  if (paymentType === PaymentType.CHECK) {
+    cy.get(".payment-table").within(() => {
+      cy.contains("th", "Program").should("be.visible");
+      cy.contains("th", "Payment Status").should("be.visible");
+      cy.contains("th", "Amount").should("be.visible");
+
+      cy.contains("td", taxProgram).should("be.visible");
+      cy.contains("td", `Check issued on ${date}`).should("be.visible");
+      cy.contains("td", `$${amount}`).should("be.visible");
+    });
+  } else if (paymentType === PaymentType.DIRECT_DEPOSIT) {
+    cy.get(".payment-table").within(() => {
+      cy.contains("th", "Program").should("be.visible");
+      cy.contains("th", "Payment Status").should("be.visible");
+      cy.contains("th", "Amount").should("be.visible");
+
+      cy.contains("td", taxProgram).should("be.visible");
+      cy.contains("td", `Direct deposit made on ${date}`).should("be.visible");
+      cy.contains("td", `$${amount}`).should("be.visible");
+    });
+  } else if (paymentType === PaymentType.ADJUSTED) {
+    cy.get(".payment-table").within(() => {
+      cy.contains("td", taxProgram).should("be.visible");
+      cy.contains("td", `Your benefit amount was adjusted. A check was sent on ${date}`).should(
+        "be.visible",
+      );
+      cy.contains("td", `$${amount}`).should("be.visible");
+    });
+  }
+};
 
 const mockDate = formatDate("7/6/2026 0:00:00");
 const mockEarlyDate = formatDate("1/1/2026 0:00:00");
@@ -52,15 +96,7 @@ it("displays payments page if records has senior freeze CHECK", () => {
   cy.contains("button", `Check Status`).click();
   cy.url().should("include", "/payment-info");
 
-  cy.get(".payment-table").within(() => {
-    cy.contains("th", "Program").should("be.visible");
-    cy.contains("th", "Payment Status").should("be.visible");
-    cy.contains("th", "Amount").should("be.visible");
-
-    cy.contains("td", "Senior Freeze").should("be.visible");
-    cy.contains("td", `Check issued on ${mockDate}`).should("be.visible");
-    cy.contains("td", `$${mockAmount}`).should("be.visible");
-  });
+  paymentInfoAssertions(TaxProgram.PTR, PaymentType.CHECK, mockDate, mockAmount);
 });
 
 it("displays payments page if records has senior freeze DIRECT DEPOSIT", () => {
@@ -72,17 +108,8 @@ it("displays payments page if records has senior freeze DIRECT DEPOSIT", () => {
     });
   });
   cy.contains("button", `Check Status`).click();
-
   cy.url().should("include", "/payment-info");
-  cy.get(".payment-table").within(() => {
-    cy.contains("th", "Program").should("be.visible");
-    cy.contains("th", "Payment Status").should("be.visible");
-    cy.contains("th", "Amount").should("be.visible");
-
-    cy.contains("td", "Senior Freeze").should("be.visible");
-    cy.contains("td", `Direct deposit made on ${mockDate}`).should("be.visible");
-    cy.contains("td", `$${mockAmount}`).should("be.visible");
-  });
+  paymentInfoAssertions(TaxProgram.PTR, PaymentType.DIRECT_DEPOSIT, mockDate, mockAmount);
 });
 
 it("displays payments page if records has anchor CHECK", () => {
@@ -95,17 +122,8 @@ it("displays payments page if records has anchor CHECK", () => {
     });
   });
   cy.contains("button", `Check Status`).click();
-
   cy.url().should("include", "/payment-info");
-  cy.get(".payment-table").within(() => {
-    cy.contains("th", "Program").should("be.visible");
-    cy.contains("th", "Payment Status").should("be.visible");
-    cy.contains("th", "Amount").should("be.visible");
-
-    cy.contains("td", "ANCHOR").should("be.visible");
-    cy.contains("td", `Check issued on ${mockDate}`).should("be.visible");
-    cy.contains("td", `$${mockAmount}`).should("be.visible");
-  });
+  paymentInfoAssertions(TaxProgram.ANCHOR, PaymentType.CHECK, mockDate, mockAmount);
 });
 
 it("displays payments page if records has anchor DIRECT DEPOSIT", () => {
@@ -119,39 +137,14 @@ it("displays payments page if records has anchor DIRECT DEPOSIT", () => {
     });
   });
   cy.contains("button", `Check Status`).click();
-
   cy.url().should("include", "/payment-info");
-  cy.get(".payment-table").within(() => {
-    cy.contains("th", "Program").should("be.visible");
-    cy.contains("th", "Payment Status").should("be.visible");
-    cy.contains("th", "Amount").should("be.visible");
-
-    cy.contains("td", "ANCHOR").should("be.visible");
-    cy.contains("td", `Direct deposit made on ${mockDate}`).should("be.visible");
-    cy.contains("td", `$${mockAmount}`).should("be.visible");
-  });
-});
-
-it("should route user to application-received if stay_nj", () => {
-  cy.fixture("v2_api_found_records.json").then((resp) => {
-    resp.records[0].ptr[0] = { status: "processing" };
-    resp.records[0].stay_nj[0] = payment_sent_transaction;
-    resp.records[0].stay_nj[0].payment_details.method = "check";
-
-    cy.intercept("POST", "/api/status", {
-      statusCode: 200,
-      body: resp,
-    });
-  });
-  cy.contains("button", `Check Status`).click();
-
-  cy.url().should("include", "/application-received");
-  cy.contains("h1", "Your application was received on").should("be.visible");
+  paymentInfoAssertions(TaxProgram.ANCHOR, PaymentType.DIRECT_DEPOSIT, mockDate, mockAmount);
 });
 
 it("displays the first check sent if multiple PTR transactions are payment_sent", () => {
   cy.fixture("v2_api_found_records.json").then((resp) => {
     resp.records[0].ptr[0] = payment_sent_transaction;
+    resp.records[0].ptr[0].payment_details.date = "7/6/2026 0:00:00";
     resp.records[0].ptr[0] = earlier_transaction;
     cy.intercept("POST", "/api/status", {
       statusCode: 200,
@@ -159,17 +152,8 @@ it("displays the first check sent if multiple PTR transactions are payment_sent"
     });
   });
   cy.contains("button", `Check Status`).click();
-
   cy.url().should("include", "/payment-info");
-  cy.get(".payment-table").within(() => {
-    cy.contains("th", "Program").should("be.visible");
-    cy.contains("th", "Payment Status").should("be.visible");
-    cy.contains("th", "Amount").should("be.visible");
-
-    cy.contains("td", "Senior Freeze").should("be.visible");
-    cy.contains("td", `Direct deposit made on ${mockEarlyDate}`).should("be.visible");
-    cy.contains("td", `$${mockEarlyAmount}`).should("be.visible");
-  });
+  paymentInfoAssertions(TaxProgram.PTR, PaymentType.DIRECT_DEPOSIT, mockEarlyDate, mockEarlyAmount);
 });
 
 it("displays the first check sent if multiple ANCHOR transactions are payment_sent", () => {
@@ -183,49 +167,24 @@ it("displays the first check sent if multiple ANCHOR transactions are payment_se
     });
   });
   cy.contains("button", `Check Status`).click();
-
   cy.url().should("include", "/payment-info");
-  cy.get(".payment-table").within(() => {
-    cy.contains("th", "Program").should("be.visible");
-    cy.contains("th", "Payment Status").should("be.visible");
-    cy.contains("th", "Amount").should("be.visible");
-
-    cy.contains("td", "ANCHOR").should("be.visible");
-    cy.contains("td", `Direct deposit made on ${mockEarlyDate}`).should("be.visible");
-    cy.contains("td", `$${mockEarlyAmount}`).should("be.visible");
-  });
+  paymentInfoAssertions(
+    TaxProgram.ANCHOR,
+    PaymentType.DIRECT_DEPOSIT,
+    mockEarlyDate,
+    mockEarlyAmount,
+  );
 });
 
-it("displays multiple checks from multiple payment categories", () => {
-  cy.fixture("v2_api_found_records.json").then((resp) => {
-    resp.records[0].anchor[0] = earlier_transaction;
-    resp.records[0].stay_nj[0] = payment_sent_transaction;
-    resp.records[0].stay_nj[0].payment_details.method = "check";
-    resp.records[0].stay_nj[0].payment_details.amount = 33.33;
-    resp.records[0].stay_nj[0].payment_details.date = "03/03/2025";
-    cy.intercept("POST", "/api/status", {
-      statusCode: 200,
-      body: resp,
-    });
+it("displays first check and update payment across every payment category", () => {
+  cy.intercept("POST", "/api/status", {
+    statusCode: 200,
+    fixture: "update_payment_records.json",
   });
   cy.contains("button", `Check Status`).click();
-
   cy.url().should("include", "/payment-info");
-  cy.get(".payment-table").within(() => {
-    cy.contains("th", "Program").should("be.visible");
-    cy.contains("th", "Payment Status").should("be.visible");
-    cy.contains("th", "Amount").should("be.visible");
-
-    cy.contains("td", "Senior Freeze").should("be.visible");
-    cy.contains("td", `Check issued on ${mockDate}`).should("be.visible");
-    cy.contains("td", `$${mockAmount}`).should("be.visible");
-
-    cy.contains("td", "ANCHOR").should("be.visible");
-    cy.contains("td", `Direct deposit made on ${mockEarlyDate}`).should("be.visible");
-    cy.contains("td", `$${mockEarlyAmount}`).should("be.visible");
-
-    cy.contains("td", "Stay NJ").should("not.exist");
-    cy.contains("td", `Check issued on 03/03/2025`).should("not.exist");
-    cy.contains("td", `$33.33`).should("not.exist");
-  });
+  paymentInfoAssertions(TaxProgram.PTR, PaymentType.DIRECT_DEPOSIT, "07/16/2026", 125);
+  paymentInfoAssertions(TaxProgram.PTR, PaymentType.ADJUSTED, "07/17/2026", 5);
+  paymentInfoAssertions(TaxProgram.ANCHOR, PaymentType.DIRECT_DEPOSIT, "09/06/2026", 377.56);
+  paymentInfoAssertions(TaxProgram.ANCHOR, PaymentType.ADJUSTED, "10/06/2026", 1750);
 });
