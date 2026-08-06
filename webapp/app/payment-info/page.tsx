@@ -130,19 +130,6 @@ const PaymentInfoPage = () => {
           </div>
           <div className="margin-top-4">
             <h1 className="font-heading-xl">You are eligible for benefits</h1>
-            <p className="usa-alert__text">
-              To find out when to expect payment on all programs, review the{" "}
-              <a
-                href="#faq_when_can_i_expect_to_receive_payments"
-                onClick={(e) => {
-                  e.preventDefault();
-                  expandFaqAccordionItem("faq_when_can_i_expect_to_receive_payments");
-                }}
-              >
-                program payment table
-              </a>
-              {"."}
-            </p>
           </div>
           <Table className="usa-table payment-table" bordered={false} scrollable={true}>
             <thead>
@@ -163,6 +150,20 @@ const PaymentInfoPage = () => {
               })()}
             </tbody>
           </Table>
+          <p>
+            You must be eligible for a program to receive payment. To find out when to expect
+            payment from ANCHOR or Stay NJ, review the{" "}
+            <a
+              href="#faq_when_can_i_expect_to_receive_payments"
+              onClick={(e) => {
+                e.preventDefault();
+                expandFaqAccordionItem("faq_when_can_i_expect_to_receive_payments");
+              }}
+            >
+              full program payment table
+            </a>
+            {"."}
+          </p>
           <div className="grid-row grid-gap margin-top-5">
             <FaqSection
               items={PaymentInfoFaqContent}
