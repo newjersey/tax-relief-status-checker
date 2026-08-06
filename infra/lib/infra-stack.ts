@@ -175,6 +175,12 @@ export class InfraStack extends Stack {
       securityGroups: [secretsManagerEndpointSecurityGroup],
     });
 
+    new ec2.GatewayVpcEndpoint(this, "DynamoDbEndpoint", {
+      vpc,
+      service: ec2.GatewayVpcEndpointAwsService.DYNAMODB,
+      subnets: [{ subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS }],
+    });
+
     return {
       vpc,
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },

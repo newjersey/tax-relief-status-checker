@@ -1,8 +1,6 @@
 import { createHash } from "node:crypto";
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 
-import type { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
-
 /** Input shape for the autofile lookup request. */
 export interface AutofileLookupRequest {
   /** The 9-digit Social Security Number. */
@@ -28,41 +26,37 @@ export const computeSsnZipHash = (ssn: string, zip: string): string => {
   return createHash("sha256").update(`${ssn}|${zip}`).digest("hex");
 };
 
-/** Validates that the request body contains a valid SSN and ZIP. */
-const parseRequestBody = (body: string | undefined): AutofileLookupRequest | null => {
-  if (!body) return null;
+/** Validates that the event contains a valid SSN and ZIP. */
+const validateEvent = (event: unknown): AutofileLookupRequest | null => {
+  if (!event || typeof event !== "object") return null;
 
-  try {
-    const parsed = JSON.parse(body) as Record<string, unknown>;
-    const ssn = parsed.ssn;
-    const zip = parsed.zip;
+  const { ssn, zip } = event as Record<string, unknown>;
 
-    if (typeof ssn !== "string" || !/^\d{9}$/.test(ssn)) return null;
-    if (typeof zip !== "string" || !/^\d{5}$/.test(zip)) return null;
+  if (typeof ssn !== "string" || !/^\d{9}$/.test(ssn)) return null;
+  if (typeof zip !== "string" || !/^\d{5}$/.test(zip)) return null;
 
-    return { ssn, zip };
-  } catch {
-    return null;
-  }
+  return { ssn, zip };
 };
 
-/** Lambda handler for the ANCHOR autofile lookup API. */
-export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
+/** Response shape returned when validation fails. */
+export interface AutofileLookupErrorResponse {
+  /** Machine-readable error identifier. */
+  readonly error: string;
+}
+
+/** Lambda handler for the ANCHOR autofile lookup. Invoked directly (not via API Gateway). */
+export const handler = async (
+  event: unknown,
+): Promise<AutofileLookupResponse | AutofileLookupErrorResponse> => {
   const TABLE_NAME = process.env.TABLE_NAME;
 
   if (!TABLE_NAME) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "TABLE_NAME environment variable is not configured" }),
-    };
+    throw new Error("TABLE_NAME environment variable is not configured");
   }
 
-  const request = parseRequestBody(event.body);
+  const request = validateEvent(event);
   if (!request) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: "Request must include ssn (9 digits) and zip (5 digits)" }),
-    };
+    return { error: "Request must include ssn (9 digits) and zip (5 digits)" };
   }
 
   const ssnZipHash = computeSsnZipHash(request.ssn, request.zip);
@@ -74,12 +68,5 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
     }),
   );
 
-  const response: AutofileLookupResponse = {
-    autofilePlanned: result.Item !== undefined,
-  };
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify(response),
-  };
+  return { autofilePlanned: result.Item !== undefined };
 };

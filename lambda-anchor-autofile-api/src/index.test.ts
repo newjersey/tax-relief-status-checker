@@ -2,14 +2,9 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { mockClient } from "aws-sdk-client-mock";
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 
-import type { APIGatewayProxyEventV2 } from "aws-lambda";
-
 import { handler, computeSsnZipHash } from "./index.ts";
 
 const dynamoMock = mockClient(DynamoDBClient);
-
-const buildEvent = (body: Record<string, unknown>): APIGatewayProxyEventV2 =>
-  ({ body: JSON.stringify(body) }) as unknown as APIGatewayProxyEventV2;
 
 describe("handler", () => {
   beforeEach(() => {
@@ -26,10 +21,9 @@ describe("handler", () => {
       Item: { ssnZipHash: { S: "abc123" } },
     });
 
-    const result = await handler(buildEvent({ ssn: "123456789", zip: "07001" }));
+    const result = await handler({ ssn: "123456789", zip: "07001" });
 
-    expect(result.statusCode).toBe(200);
-    expect(JSON.parse(result.body as string)).toEqual({ autofilePlanned: true });
+    expect(result).toEqual({ autofilePlanned: true });
   });
 
   it("returns autofilePlanned false when item does not exist", async () => {
@@ -37,42 +31,47 @@ describe("handler", () => {
       Item: undefined,
     });
 
-    const result = await handler(buildEvent({ ssn: "123456789", zip: "07001" }));
+    const result = await handler({ ssn: "123456789", zip: "07001" });
 
-    expect(result.statusCode).toBe(200);
-    expect(JSON.parse(result.body as string)).toEqual({ autofilePlanned: false });
+    expect(result).toEqual({ autofilePlanned: false });
   });
 
-  it("returns 400 for missing ssn", async () => {
-    const result = await handler(buildEvent({ zip: "07001" }));
+  it("returns error for missing ssn", async () => {
+    const result = await handler({ zip: "07001" });
 
-    expect(result.statusCode).toBe(400);
+    expect(result).toEqual({ error: "Request must include ssn (9 digits) and zip (5 digits)" });
   });
 
-  it("returns 400 for invalid ssn format", async () => {
-    const result = await handler(buildEvent({ ssn: "12345", zip: "07001" }));
+  it("returns error for invalid ssn format", async () => {
+    const result = await handler({ ssn: "12345", zip: "07001" });
 
-    expect(result.statusCode).toBe(400);
+    expect(result).toEqual({ error: "Request must include ssn (9 digits) and zip (5 digits)" });
   });
 
-  it("returns 400 for invalid zip format", async () => {
-    const result = await handler(buildEvent({ ssn: "123456789", zip: "123" }));
+  it("returns error for invalid zip format", async () => {
+    const result = await handler({ ssn: "123456789", zip: "123" });
 
-    expect(result.statusCode).toBe(400);
+    expect(result).toEqual({ error: "Request must include ssn (9 digits) and zip (5 digits)" });
   });
 
-  it("returns 400 for missing body", async () => {
-    const event = { body: undefined } as unknown as APIGatewayProxyEventV2;
+  it("returns error for null event", async () => {
+    const result = await handler(null);
 
-    const result = await handler(event);
+    expect(result).toEqual({ error: "Request must include ssn (9 digits) and zip (5 digits)" });
+  });
 
-    expect(result.statusCode).toBe(400);
+  it("throws when TABLE_NAME is not configured", async () => {
+    vi.stubEnv("TABLE_NAME", "");
+
+    await expect(handler({ ssn: "123456789", zip: "07001" })).rejects.toThrow(
+      "TABLE_NAME environment variable is not configured",
+    );
   });
 
   it("queries DynamoDB with the correct hash key", async () => {
     dynamoMock.on(GetItemCommand).resolves({ Item: undefined });
 
-    await handler(buildEvent({ ssn: "123456789", zip: "07001" }));
+    await handler({ ssn: "123456789", zip: "07001" });
 
     const expectedHash = computeSsnZipHash("123456789", "07001");
     const call = dynamoMock.commandCalls(GetItemCommand)[0];
