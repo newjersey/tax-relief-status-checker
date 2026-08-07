@@ -4,14 +4,18 @@ import { fireEventWhenFaqOpened, type FaqItem } from "@/components/FaqSection";
 
 export const PaymentInfoFaqContent: FaqItem[] = [
   {
-    title: "When can I expect to receive payments?",
+    title: "When can I expect to receive payments for Senior Freeze, ANCHOR, and Stay NJ?",
     content: (
       <>
         <p>
-          Even though PAS-1 combines all three programs into one application, each program has a
-          different payment schedule. The table below outlines when you can expect to receive your
-          payment(s) from each program. Your payment will be delayed if there is an issue with your
-          application, or if we need additional information from you.
+          Even though PAS-1 combines all 3 programs into 1 application, each program has a different
+          payment schedule. The table below outlines when you can expect to receive your payment(s)
+          from each program that you are eligible for.
+        </p>
+
+        <p>
+          Your payment will be delayed if there is an issue with your application, or if we need
+          additional information from you.
         </p>
         <Table className="usa-table" bordered={true} scrollable={true}>
           <thead>
