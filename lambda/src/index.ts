@@ -96,6 +96,7 @@ const buildResponse = (rows: InquiryRow[]): BuildResponseResult => {
     return { records: [] };
   }
 
+  console.log(`DLN_NUM: ${rows[0].DLN_NUM}`);
   const records = rows.map(mapRowToRecord);
 
   return { records };
