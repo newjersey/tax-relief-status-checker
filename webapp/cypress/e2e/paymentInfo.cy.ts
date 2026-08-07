@@ -74,7 +74,7 @@ it("displays show payments page heading", () => {
   cy.contains("p", MOCK_ZIP).should("be.visible");
   cy.contains("p", "Tax Year: 2025").should("be.visible");
   cy.contains("h1", "You are eligible for benefits").should("be.visible");
-  cy.contains("p", "To find out when to expect payment on all programs,").should("be.visible");
+  cy.contains("p", "To find out when to expect payment").should("be.visible");
 
   cy.contains("a", "program payment table").click();
   cy.get(`div[id="faq_when_can_i_expect_to_receive_payments"]`).should("be.visible");
@@ -84,7 +84,10 @@ it("displays show payments page heading", () => {
     `faq_when_can_i_expect_to_receive_payments_opened`,
     Cypress.sinon.match.any,
   );
-  cy.contains("button", "When can I expect to receive payments?").click();
+  cy.contains(
+    "button",
+    "When can I expect to receive payments for Senior Freeze, ANCHOR, and Stay NJ?",
+  ).click();
   cy.get(`div[id="faq_when_can_i_expect_to_receive_payments"]`).should("not.be.visible");
 });
 
