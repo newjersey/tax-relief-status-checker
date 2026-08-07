@@ -187,7 +187,7 @@ const ApplicationReceivedPage = () => {
                         aria-current="true"
                       >
                         <span className="usa-step-indicator__segment-label">
-                          First check sent 7/15/2026{" "}
+                          ANCHOR payments begin September 2026{" "}
                         </span>
                       </li>
                       <li
