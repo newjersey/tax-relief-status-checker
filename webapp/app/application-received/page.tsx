@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDataStore } from "@/components/TaxReliefDataProvider";
 import Link from "next/link";
-import { StepIndicator } from "@/components/StepIndicator";
+//import { StepIndicator } from "@trussworks/react-uswds";
 import { LandingPageFaq } from "@/components/LandingPageFaq";
 
 const ApplicationReceivedPage = () => {
@@ -44,7 +44,7 @@ const ApplicationReceivedPage = () => {
             </span>
             We have everything we need. You don't need to do anything. Sit tight!
           </p>
-          <StepIndicator className="usa-step-indicator--counters margin-top-6">
+          {/* <StepIndicator className="usa-step-indicator--counters margin-top-6">
             <ol className="usa-step-indicator__segments">
               <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
                 <span className="usa-step-indicator__segment-label">
@@ -73,7 +73,7 @@ const ApplicationReceivedPage = () => {
               </li>
             </ol>
             <div></div>
-          </StepIndicator>
+          </StepIndicator> */}
           <hr></hr>
           <h2 className="font-heading-l">How the payout schedule works:</h2>
           <ol className="usa-process-list">
@@ -90,7 +90,7 @@ const ApplicationReceivedPage = () => {
                 </summary>
                 <div className="learn-more-content">
                   {/* step indicator for senior freeze */}
-                  <StepIndicator className="usa-step-indicator usa-step-indicator--counters">
+                  {/* <StepIndicator className="usa-step-indicator usa-step-indicator--counters">
                     <ol className="usa-step-indicator__segments margin-top-3">
                       <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
                         <span className="usa-step-indicator__segment-label">
@@ -132,7 +132,7 @@ const ApplicationReceivedPage = () => {
                       </li>
                     </ol>
                     <div></div>
-                  </StepIndicator>
+                  </StepIndicator> */}
                   <p>
                     To qualify for the{" "}
                     <a
@@ -166,7 +166,7 @@ const ApplicationReceivedPage = () => {
                 </summary>
                 <div className="learn-more-content">
                   {/* step indicator for ANCHOR */}
-                  <StepIndicator className="usa-step-indicator usa-step-indicator--counters">
+                  {/* <StepIndicator className="usa-step-indicator usa-step-indicator--counters">
                     <ol className="usa-step-indicator__segments margin-top-3">
                       <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
                         <span className="usa-step-indicator__segment-label">
@@ -208,7 +208,7 @@ const ApplicationReceivedPage = () => {
                       </li>
                     </ol>
                     <div></div>
-                  </StepIndicator>
+                  </StepIndicator> */}
                   <p>
                     To qualify for the{" "}
                     <a
@@ -245,7 +245,7 @@ const ApplicationReceivedPage = () => {
                 </summary>
                 <div className="learn-more-content">
                   {/* step indicator for Stay NJ */}
-                  <StepIndicator className="usa-step-indicator usa-step-indicator--counters">
+                  {/* <StepIndicator className="usa-step-indicator usa-step-indicator--counters">
                     <ol className="usa-step-indicator__segments margin-top-3">
                       <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
                         <span className="usa-step-indicator__segment-label">
@@ -279,7 +279,7 @@ const ApplicationReceivedPage = () => {
                       </li>
                     </ol>
                     <div></div>
-                  </StepIndicator>
+                  </StepIndicator> */}
                   <p>
                     To qualify for the{" "}
                     <a
@@ -304,6 +304,36 @@ const ApplicationReceivedPage = () => {
               </details>
             </li>
           </ol>
+          <div aria-label="progress" className="usa-step-indicator  usa-step-indicator--counters ">
+            <ol className="usa-step-indicator__segments">
+              <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
+                <span className="usa-step-indicator__segment-label">
+                  {"label"} <span className="usa-sr-only">completed</span>
+                </span>
+              </li>
+              <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
+                <span className="usa-step-indicator__segment-label">
+                  {"label"} <span className="usa-sr-only">completed</span>
+                </span>
+              </li>
+              <li
+                className="usa-step-indicator__segment usa-step-indicator__segment--current"
+                aria-current="true"
+              >
+                <span className="usa-step-indicator__segment-label">{"label"} </span>
+              </li>
+              <li className="usa-step-indicator__segment">
+                <span className="usa-step-indicator__segment-label">
+                  {"label"} <span className="usa-sr-only">not completed</span>
+                </span>
+              </li>
+              <li className="usa-step-indicator__segment">
+                <span className="usa-step-indicator__segment-label">
+                  {"label"} <span className="usa-sr-only">not completed</span>
+                </span>
+              </li>
+            </ol>
+          </div>
           <div className="grid-row grid-gap margin-top-5">
             <h2 className="font-heading-l">Frequently Asked Questions (FAQs)</h2>
             <LandingPageFaq headingLevel="h3" />
