@@ -16,67 +16,70 @@ describe("handler", () => {
   afterEach(() => {
     vi.unstubAllEnvs();
   });
+  describe("validation", () => {
+    it("returns error for missing ssn", async () => {
+      const result = await handler({ zip: "07001" });
 
-  it("returns autofilePlanned true with CHECK when item exists without direct deposit", async () => {
-    dynamoMock.on(GetItemCommand).resolves({
-      Item: { ssnZipHash: { S: "abc123" }, DIRECT_DEPOSIT: { BOOL: false } },
+      expect(result).toEqual({ error: "Request must include ssn (9 digits) and zip (5 digits)" });
     });
 
-    const result = await handler({ ssn: "123456789", zip: "07001" });
+    it("returns error for invalid ssn format", async () => {
+      const result = await handler({ ssn: "12345", zip: "07001" });
 
-    expect(result).toEqual({ autofilePlanned: true, paymentMethod: "CHECK" });
-  });
-
-  it("returns autofilePlanned true with DIRECT_DEPOSIT when item has direct deposit", async () => {
-    dynamoMock.on(GetItemCommand).resolves({
-      Item: { ssnZipHash: { S: "abc123" }, DIRECT_DEPOSIT: { BOOL: true } },
+      expect(result).toEqual({ error: "Request must include ssn (9 digits) and zip (5 digits)" });
     });
 
-    const result = await handler({ ssn: "123456789", zip: "07001" });
+    it("returns error for invalid zip format", async () => {
+      const result = await handler({ ssn: "123456789", zip: "123" });
 
-    expect(result).toEqual({ autofilePlanned: true, paymentMethod: "DIRECT_DEPOSIT" });
-  });
-
-  it("returns autofilePlanned false when item does not exist", async () => {
-    dynamoMock.on(GetItemCommand).resolves({
-      Item: undefined,
+      expect(result).toEqual({ error: "Request must include ssn (9 digits) and zip (5 digits)" });
     });
 
-    const result = await handler({ ssn: "123456789", zip: "07001" });
+    it("returns error for null event", async () => {
+      const result = await handler(null);
 
-    expect(result).toEqual({ autofilePlanned: false });
+      expect(result).toEqual({ error: "Request must include ssn (9 digits) and zip (5 digits)" });
+    });
+
+    it("throws when TABLE_NAME is not configured", async () => {
+      vi.stubEnv("TABLE_NAME", "");
+
+      await expect(handler({ ssn: "123456789", zip: "07001" })).rejects.toThrow(
+        "TABLE_NAME environment variable is not configured",
+      );
+    });
   });
 
-  it("returns error for missing ssn", async () => {
-    const result = await handler({ zip: "07001" });
+  describe("business logic", () => {
+    it("returns autofilePlanned true with CHECK when item exists without direct deposit", async () => {
+      dynamoMock.on(GetItemCommand).resolves({
+        Item: { ssnZipHash: { S: "abc123" }, directDeposit: { BOOL: false } },
+      });
 
-    expect(result).toEqual({ error: "Request must include ssn (9 digits) and zip (5 digits)" });
-  });
+      const result = await handler({ ssn: "123456789", zip: "07001" });
 
-  it("returns error for invalid ssn format", async () => {
-    const result = await handler({ ssn: "12345", zip: "07001" });
+      expect(result).toEqual({ autofilePlanned: true, paymentMethod: "CHECK" });
+    });
 
-    expect(result).toEqual({ error: "Request must include ssn (9 digits) and zip (5 digits)" });
-  });
+    it("returns autofilePlanned true with DIRECT_DEPOSIT when item has direct deposit", async () => {
+      dynamoMock.on(GetItemCommand).resolves({
+        Item: { ssnZipHash: { S: "abc123" }, directDeposit: { BOOL: true } },
+      });
 
-  it("returns error for invalid zip format", async () => {
-    const result = await handler({ ssn: "123456789", zip: "123" });
+      const result = await handler({ ssn: "123456789", zip: "07001" });
 
-    expect(result).toEqual({ error: "Request must include ssn (9 digits) and zip (5 digits)" });
-  });
+      expect(result).toEqual({ autofilePlanned: true, paymentMethod: "DIRECT_DEPOSIT" });
+    });
 
-  it("returns error for null event", async () => {
-    const result = await handler(null);
+    it("returns autofilePlanned false when item does not exist", async () => {
+      dynamoMock.on(GetItemCommand).resolves({
+        Item: undefined,
+      });
 
-    expect(result).toEqual({ error: "Request must include ssn (9 digits) and zip (5 digits)" });
-  });
+      const result = await handler({ ssn: "123456789", zip: "07001" });
 
-  it("throws when TABLE_NAME is not configured", async () => {
-    vi.stubEnv("TABLE_NAME", "");
-
-    await expect(handler({ ssn: "123456789", zip: "07001" })).rejects.toThrow(
-      "TABLE_NAME environment variable is not configured",
-    );
+      expect(result).toEqual({ autofilePlanned: false });
+    });
   });
 
   it("queries DynamoDB with the correct hash key", async () => {
