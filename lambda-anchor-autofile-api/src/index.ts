@@ -1,30 +1,23 @@
-import { createHash } from "node:crypto";
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
+import { computeSsnZipHash } from "./util/computeSsnZipHash";
 
-/** Input shape for the autofile lookup request. */
+enum PaymentMenthod {
+  Check = "CHECK",
+  DirectDeposit = "DIRECT_DEPOSIT",
+}
+
 export interface AutofileLookupRequest {
-  /** The 9-digit Social Security Number. */
   readonly ssn: string;
-
-  /** The 5-digit ZIP code. */
   readonly zip: string;
 }
 
-/** Response shape returned by the autofile lookup API. */
 export interface AutofileLookupResponse {
   /** Whether the SSN/ZIP pair is planned for ANCHOR autofile. */
   readonly autofilePlanned: boolean;
+  readonly paymentMethod?: PaymentMenthod;
 }
 
 const dynamoClient = new DynamoDBClient({});
-
-/**
- * Computes the SHA-256 hash of a SSN/ZIP pair to use as the DynamoDB partition key. Hashing avoids
- * storing raw PII in the database.
- */
-export const computeSsnZipHash = (ssn: string, zip: string): string => {
-  return createHash("sha256").update(`${ssn}|${zip}`).digest("hex");
-};
 
 /** Validates that the event contains a valid SSN and ZIP. */
 const validateEvent = (event: unknown): AutofileLookupRequest | null => {

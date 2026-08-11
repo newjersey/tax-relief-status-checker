@@ -5,7 +5,7 @@
  *
  * Example: npx tsx scripts/hash-ssn-zip.ts 123456789 07001
  */
-import { computeSsnZipHash } from "../src/index.js";
+import { computeSsnZipHash } from "../src/util/computeSsnZipHash";
 
 const SSN_PATTERN = /^\d{9}$/;
 const ZIP_PATTERN = /^\d{5}$/;
