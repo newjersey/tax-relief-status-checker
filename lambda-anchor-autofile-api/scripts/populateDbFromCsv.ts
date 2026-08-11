@@ -115,10 +115,14 @@ const processFile = async (csvPath: string): Promise<WriteRequest[]> => {
     }
 
     const hash = computeSsnZipHash(ssn, zip);
+    const isDirectDeposit = Boolean(record["ABA Masked"] && record["Account Masked"]);
 
     requests.push({
       PutRequest: {
-        Item: { ssnZipHash: { S: hash } },
+        Item: {
+          ssnZipHash: { S: hash },
+          directDeposit: { BOOL: isDirectDeposit },
+        },
       },
     });
   }

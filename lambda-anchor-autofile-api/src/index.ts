@@ -61,5 +61,14 @@ export const handler = async (
     }),
   );
 
-  return { autofilePlanned: result.Item !== undefined };
+  if (!result.Item) {
+    return { autofilePlanned: false };
+  }
+
+  const isDirectDeposit = result.Item.directDeposit?.BOOL === true;
+
+  return {
+    autofilePlanned: true,
+    paymentMethod: isDirectDeposit ? PaymentMenthod.DirectDeposit : PaymentMenthod.Check,
+  };
 };

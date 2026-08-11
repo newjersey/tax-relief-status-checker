@@ -2,7 +2,8 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { mockClient } from "aws-sdk-client-mock";
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 
-import { handler, computeSsnZipHash } from "./index.ts";
+import { handler } from "./index";
+import { computeSsnZipHash } from "./util/computeSsnZipHash";
 
 const dynamoMock = mockClient(DynamoDBClient);
 
@@ -16,14 +17,24 @@ describe("handler", () => {
     vi.unstubAllEnvs();
   });
 
-  it("returns autofilePlanned true when item exists", async () => {
+  it("returns autofilePlanned true with CHECK when item exists without direct deposit", async () => {
     dynamoMock.on(GetItemCommand).resolves({
-      Item: { ssnZipHash: { S: "abc123" } },
+      Item: { ssnZipHash: { S: "abc123" }, DIRECT_DEPOSIT: { BOOL: false } },
     });
 
     const result = await handler({ ssn: "123456789", zip: "07001" });
 
-    expect(result).toEqual({ autofilePlanned: true });
+    expect(result).toEqual({ autofilePlanned: true, paymentMethod: "CHECK" });
+  });
+
+  it("returns autofilePlanned true with DIRECT_DEPOSIT when item has direct deposit", async () => {
+    dynamoMock.on(GetItemCommand).resolves({
+      Item: { ssnZipHash: { S: "abc123" }, DIRECT_DEPOSIT: { BOOL: true } },
+    });
+
+    const result = await handler({ ssn: "123456789", zip: "07001" });
+
+    expect(result).toEqual({ autofilePlanned: true, paymentMethod: "DIRECT_DEPOSIT" });
   });
 
   it("returns autofilePlanned false when item does not exist", async () => {
