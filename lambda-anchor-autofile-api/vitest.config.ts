@@ -2,6 +2,6 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    projects: ["webapp", "lambda", "lambda-anchor-autofile-api"],
+    include: ["src/**/*.test.ts"],
   },
 });

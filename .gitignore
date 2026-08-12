@@ -203,7 +203,7 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,node
 
 lambda/config
-lambda/lambda.zip
+**/lambda.zip
 infra/cdk.out
 webapp/cypress/screenshots
 webapp/next-env.d.ts

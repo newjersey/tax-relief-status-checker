@@ -1,0 +1,24 @@
+{
+  "name": "anchor-autofile-api",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "API to check if a SSN/ZIP pair is planned for ANCHOR autofile",
+  "author": "john@innovation.nj.gov",
+  "license": "MIT",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node22 --outfile=dist/index.mjs --format=esm --external:@aws-sdk/*",
+    "test": "vitest run",
+    "package": "npm run build && cp package.json dist/ && cd dist && zip -r ../lambda.zip . && cd .. && rm -rf dist"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-dynamodb": "3.1083.0",
+    "@types/aws-lambda": "8.10.162",
+    "@types/node": "25.9.5",
+    "aws-sdk-client-mock": "4.1.0",
+    "csv-parse": "7.0.2",
+    "esbuild": "0.28.1",
+    "typescript": "6.0.3",
+    "vitest": "4.1.10"
+  }
+}

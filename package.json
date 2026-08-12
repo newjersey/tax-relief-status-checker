@@ -9,14 +9,15 @@
     "dev": "cd webapp && next dev --port 3000",
     "build": "cd webapp && next build",
     "cypress": "cd webapp && cypress run",
-    "package": "cd lambda && npm run package",
+    "package": "npm run package --prefix lambda && npm run package --prefix lambda-anchor-autofile-api",
+    "package:autofile": "npm run package --prefix lambda-anchor-autofile-api",
     "deploy:dev": "npm run package && cd infra && cdk deploy -c stage=dev",
     "deploy:prod": "npm run package && cd infra && cdk deploy -c stage=prod",
     "test": "vitest run",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "prepare": "husky",
-    "lockfile": "rm -rf webapp/node_modules lambda/node_modules infra/node_modules node_modules package-lock.json && npm install"
+    "lockfile": "rm -rf webapp/node_modules lambda/node_modules infra/node_modules lambda-anchor-autofile-api/node_modules node_modules package-lock.json && npm install"
   },
   "dependencies": {
     "@newjersey/feedback-widget": "0.6.0",
@@ -36,6 +37,7 @@
   "workspaces": [
     "webapp",
     "lambda",
+    "lambda-anchor-autofile-api",
     "infra"
   ]
 }
