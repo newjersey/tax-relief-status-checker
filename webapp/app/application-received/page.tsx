@@ -44,139 +44,139 @@ const ApplicationReceivedPage = () => {
             </span>
             We have everything we need. You don't need to do anything. Sit tight!
           </p>
-          <div
-            aria-label="progress"
-            className="usa-step-indicator  usa-step-indicator--counters usa-step-indicator--counters-sm"
-          >
-            <ol className="usa-step-indicator__segments">
-              <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
-                <span className="usa-step-indicator__segment-label">
-                  {`Application received on ${applicationDateString}`}{" "}
-                  <span className="usa-sr-only">completed</span>
-                </span>
-              </li>
-              <li
-                className="usa-step-indicator__segment usa-step-indicator__segment--current"
-                aria-current="true"
-              >
-                <span className="usa-step-indicator__segment-label">
-                  {"Reviewing your application"}{" "}
-                </span>
-              </li>
-              <li className="usa-step-indicator__segment">
-                <span className="usa-step-indicator__segment-label">
-                  {"Approving your benefit(s)"} <span className="usa-sr-only">not completed</span>
-                </span>
-              </li>
-              <li className="usa-step-indicator__segment">
-                <span className="usa-step-indicator__segment-label">
-                  {"Sending out payments"} <span className="usa-sr-only">not completed</span>
-                </span>
-              </li>
-            </ol>
-            <div className="usa-step-indicator__header">
-              <h2 className="usa-step-indicator__heading">
-                <span className="usa-step-indicator__heading-counter">
-                  <span className="usa-sr-only">Step</span>
-                  <span className="usa-step-indicator__current-step">2</span>
-                  <span className="usa-step-indicator__total-steps padding-left-1">of 4</span>
-                </span>
-                <span className="usa-step-indicator__heading-text">{`Last updated on ${currentDate}`}</span>
-              </h2>
+          {window.innerWidth > 520 && (
+            <div
+              aria-label="progress"
+              className="usa-step-indicator  usa-step-indicator--counters usa-step-indicator--counters-sm"
+            >
+              <ol className="usa-step-indicator__segments">
+                <li className="usa-step-indicator__segment usa-step-indicator__segment--complete">
+                  <span className="usa-step-indicator__segment-label">
+                    {`Application received on ${applicationDateString}`}{" "}
+                    <span className="usa-sr-only">completed</span>
+                  </span>
+                </li>
+                <li
+                  className="usa-step-indicator__segment usa-step-indicator__segment--current"
+                  aria-current="true"
+                >
+                  <span className="usa-step-indicator__segment-label">
+                    {"Reviewing your application."}{" "}
+                    <span className="text-normal">Last updated on {currentDate}</span>
+                  </span>
+                </li>
+                <li className="usa-step-indicator__segment">
+                  <span className="usa-step-indicator__segment-label">
+                    {"Approving your benefit(s)"} <span className="usa-sr-only">not completed</span>
+                  </span>
+                </li>
+                <li className="usa-step-indicator__segment">
+                  <span className="usa-step-indicator__segment-label">
+                    {"Sending out payments"} <span className="usa-sr-only">not completed</span>
+                  </span>
+                </li>
+              </ol>
+              <div className="usa-step-indicator__header">
+                <h2 className="usa-step-indicator__heading">
+                  <span className="usa-step-indicator__heading-counter">
+                    <span className="usa-sr-only">Step</span>
+                    <span className="usa-step-indicator__current-step">2</span>
+                    <span className="usa-step-indicator__total-steps padding-left-1">of 4</span>
+                  </span>
+                  <span className="usa-step-indicator__heading-text">{`Last updated on ${currentDate}`}</span>
+                </h2>
+              </div>
             </div>
-          </div>
+          )}
           <hr></hr>
           <h2 className="font-heading-l">How the payout schedule works:</h2>
-          <h3 style={{ marginBottom: 0 }}>Senior Freeze</h3>
-          <p style={{ marginTop: 1 }}>Senior Freeze payments start July 15, 2026</p>
-          <details style={{ marginTop: 1, marginBottom: 50 }}>
+          <h3 className="margin-bottom-0">Senior Freeze</h3>
+          <p className="margin-top-1">Senior Freeze payments start July 15, 2026</p>
+          <details className="margin-top-1 margin-bottom-6">
             <summary className="learn-more-link">
               <a>Learn more about Senior Freeze</a>
             </summary>
             <div className="learn-more-content">
               <ol className="usa-process-list">
                 <li className="usa-process-list__item">
-                  <h4 className="usa-process-list__heading ">
+                  <h4 className="usa-process-list__heading-sm">
                     Starting in July, PAS-1 applications are reviewed for Senior Freeze eligibility
                   </h4>
                 </li>{" "}
                 <li className="usa-process-list__item">
-                  <h4 className="usa-process-list__heading ">
+                  <h4 className="usa-process-list__heading-sm margin-bottom-0">
                     If approved, payments start going out on 7/15/2026
                   </h4>
-                  <p className="">Payments are made on an ongoing basis</p>
+                  <p className="margin-top-0">Payments are made on an ongoing basis</p>
                 </li>{" "}
-                <li className="usa-process-list__item">
-                  <h4 className="usa-process-list__heading ">
+                <li className="usa-process-list__item padding-bottom-0">
+                  <h4 className="usa-process-list__heading-sm margin-bottom-0">
                     Most taxpayers can expect to get a payment by 9/15/26
                   </h4>
-                  <p className="">
+                  <p className="margin-top-0">
                     If you haven't gotten your check by 9/15/26, you should contact the State
                   </p>
                 </li>
               </ol>
             </div>
           </details>
-          <h3 style={{ marginBottom: 0 }}>ANCHOR</h3>
-          <p style={{ marginTop: 1 }}>ANCHOR payments start September 15, 2026</p>
-          <details style={{ marginTop: 1, marginBottom: 50 }}>
+          <h3 className="margin-bottom-0">ANCHOR</h3>
+          <p className="margin-top-1">ANCHOR payments start September 15, 2026</p>
+          <details className="margin-top-1 margin-bottom-6">
             <summary className="learn-more-link">
               <a>Learn more about ANCHOR</a>
             </summary>
             <div className="learn-more-content">
               <ol className="usa-process-list">
                 <li className="usa-process-list__item">
-                  <h4 className="usa-process-list__heading ">
+                  <h4 className="usa-process-list__heading-sm ">
                     Starting in July, PAS-1 applications are reviewed for ANCHOR eligibility
                   </h4>
                 </li>{" "}
                 <li className="usa-process-list__item">
-                  <h4 className="usa-process-list__heading ">
+                  <h4 className="usa-process-list__heading-sm margin-bottom-0">
                     If approved, payments start going out on 9/15/2026
                   </h4>
-                  <p className="">Payments are made on an ongoing basis</p>
+                  <p className="margin-top-0">Payments are made on an ongoing basis</p>
                 </li>{" "}
-                <li className="usa-process-list__item">
-                  <h4 className="usa-process-list__heading ">
+                <li className="usa-process-list__item padding-bottom-0">
+                  <h4 className="usa-process-list__heading-sm margin-bottom-0">
                     Most taxpayers can expect to get a payment by 12/31/26
                   </h4>
-                  <p className="">
+                  <p className="margin-top-0">
                     If you haven't gotten your check by 12/31/26, you should contact the State
                   </p>
                 </li>
               </ol>
             </div>
           </details>
-          <h3 style={{ marginBottom: 0 }}>Stay NJ</h3>
-          <p style={{ marginTop: 1 }}>Stay NJ payments start February 2027</p>
-          <details style={{ marginTop: 1 }}>
+          <h3 className="margin-bottom-0">Stay NJ</h3>
+          <p className="margin-top-1">Stay NJ payments start February 2027</p>
+          <details className="margin-top-1">
             <summary className="learn-more-link">
               <a>Learn more about Stay NJ</a>
             </summary>
             <div className="learn-more-content">
               <ol className="usa-process-list">
                 <li className="usa-process-list__item">
-                  <h4 className="usa-process-list__heading ">
-                    Starting in XXX, PAS-1 applications are reviewed for Stay NJ eligibility
+                  <h4 className="usa-process-list__heading-sm ">
+                    Starting in July, PAS-1 applications are reviewed for Stay NJ eligibility
                   </h4>
                 </li>
                 <li className="usa-process-list__item">
-                  <h4 className="usa-process-list__heading ">
-                    If approved, Quarter 1 payments begin February 2027
+                  <h4 className="usa-process-list__heading-sm margin-bottom-0">
+                    If approved, payments start going out February 2027
                   </h4>
-                </li>
-                <li className="usa-process-list__item">
-                  <h4 className="usa-process-list__heading ">Quarter 2 payments begin May 2027 </h4>
-                </li>
-                <li className="usa-process-list__item">
-                  <h4 className="usa-process-list__heading ">
-                    Quarter 3 payments begin August 2027
+                  <p className="margin-top-0">Stay NJ payments are paid out quarterly</p>
+                </li>{" "}
+                <li className="usa-process-list__item padding-bottom-0">
+                  <h4 className="usa-process-list__heading-sm margin-bottom-0">
+                    Most taxpayers can expect to get a quarterly payment in February, May, August,
+                    and November of new year
                   </h4>
-                </li>
-                <li className="usa-process-list__item">
-                  <h4 className="usa-process-list__heading ">
-                    Quarter 4 payments begin November 2027
-                  </h4>
+                  <p className="margin-top-0">
+                    If you suspect you haven't received a payment, you should contact the State
+                  </p>
                 </li>
               </ol>
             </div>
