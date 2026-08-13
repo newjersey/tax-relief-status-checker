@@ -13,13 +13,15 @@ export const LogoutButton = () => {
 
   return (
     <>
-      <div style={{ textAlign: "right" }}>
-        <Link className="usa-button usa-button--outline margin-right-3 margin-top-3" href="/">
-          <svg focusable="false" role="img" width="20" height="20" fill="#005ea2">
-            <use href="/img/sprite.svg#logout"></use>
-          </svg>
-          Log out
-        </Link>
+      <div className="grid-container">
+        <div style={{ textAlign: "right" }}>
+          <Link className="usa-button usa-button--outline margin-right-3 margin-top-3" href="/">
+            <svg focusable="false" role="img" width="20" height="20" fill="#005ea2">
+              <use href="/img/sprite.svg#logout"></use>
+            </svg>
+            Log out
+          </Link>
+        </div>
       </div>
     </>
   );
