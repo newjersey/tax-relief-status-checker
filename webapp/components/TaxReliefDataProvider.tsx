@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
-import { IssueFlaggedType, Transaction } from "./types";
+import { IssueFlaggedType, PaymentMethod, Transaction } from "./types";
 
 export interface TaxReliefStatusData {
   readonly lastFourSsnDigits: string;
@@ -12,6 +12,8 @@ export interface TaxReliefStatusData {
   readonly anchor: Transaction[];
   readonly ptr: Transaction[];
   readonly stay_nj: Transaction[];
+  /** Payment method for ANCHOR autofile recipients (CHECK or DIRECT_DEPOSIT). */
+  readonly paymentMethod?: PaymentMethod;
 }
 
 const TaxReliefDataContext = createContext<{

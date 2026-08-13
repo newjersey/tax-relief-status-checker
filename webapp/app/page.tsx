@@ -13,7 +13,7 @@ import { formatDate } from "@/app/utils/formatDate";
 import { logGAEvent } from "./utils/analytics";
 import { useDataStore } from "@/components/TaxReliefDataProvider";
 import { setIssueFlagged } from "./utils/setIssueFlagged";
-import { Transaction, TransactionStatus } from "@/components/types";
+import { PaymentMethod, Transaction, TransactionStatus } from "@/components/types";
 
 /** Form data collected from the user. */
 interface UserData {
@@ -29,6 +29,34 @@ export interface StatusRecord {
   readonly ptr: Transaction[];
   readonly stay_nj: Transaction[];
 }
+
+/** Response shape returned by the autofile API. */
+interface AutofileResponse {
+  readonly autofilePlanned: boolean;
+  readonly paymentMethod?: PaymentMethod;
+}
+
+/** Calls the autofile API to determine if the user is an ANCHOR autofile recipient. */
+const checkAutofile = async (config: {
+  readonly ssn: string;
+  readonly zip: string;
+}): Promise<AutofileResponse | null> => {
+  try {
+    const response = await fetch("/api/autofile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ssn: config.ssn, zip: config.zip }),
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return (await response.json()) as AutofileResponse;
+  } catch {
+    return null;
+  }
+};
 
 const hasPaymentSentTransaction = (record: StatusRecord) => {
   return (
@@ -76,6 +104,23 @@ const LandingPage = () => {
     setAlertContent(null);
 
     try {
+      const autofileResult = await checkAutofile({ ssn: data.ssn, zip: data.zipCode });
+
+      if (autofileResult?.autofilePlanned) {
+        setDataStore({
+          lastFourSsnDigits: maskSsn(data.ssn),
+          zipCode: data.zipCode,
+          applicationDateString: "",
+          anchor: [],
+          ptr: [],
+          stay_nj: [],
+          paymentMethod: autofileResult.paymentMethod,
+        });
+        logGAEvent(`autofile_planned`);
+        router.push("/anchor-autofile");
+        return;
+      }
+
       const response = await fetch("/api/status", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
