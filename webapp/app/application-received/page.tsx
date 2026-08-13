@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDataStore } from "@/components/TaxReliefDataProvider";
-import Link from "next/link";
 import { ProcessList, ProcessListHeading, ProcessListItem } from "@trussworks/react-uswds";
 import { ApplicationReceivedFaqContent } from "./ApplicationReceivedFaqContent";
 import { FaqSection } from "@/components/FaqSection";
@@ -30,14 +29,6 @@ const ApplicationReceivedPage = () => {
     <main id="main-content">
       <section className="usa-section">
         <div className="grid-container">
-          <div style={{ textAlign: "right" }}>
-            <Link className="usa-button usa-button--outline margin-right-3 margin-top-3" href="/">
-              <svg focusable="false" role="img" width="20" height="20" fill="#005ea2">
-                <use href="/img/sprite.svg#logout"></use>
-              </svg>
-              Log out
-            </Link>
-          </div>
           <div>
             <div className="grid-row">
               <div className="tablet:grid-col-3">
