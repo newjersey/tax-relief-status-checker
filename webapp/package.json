@@ -27,7 +27,7 @@
     "@aws-sdk/signature-v4": "^3.374.0",
     "@newjersey/njwds": "2.9.2",
     "@smithy/protocol-http": "5.5.16",
-    "@testing-library/jest-dom": "7.0.0",
+    "@testing-library/jest-dom": "7.0.1",
     "@trussworks/react-uswds": "11.2.0",
     "next": "16.3.0",
     "react": "19.2.8",
