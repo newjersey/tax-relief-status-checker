@@ -11,7 +11,7 @@ import { FaqSection, expandFaqAccordionItem } from "@/components/FaqSection";
 import { maskSsn } from "@/app/utils/maskSsn";
 import { formatDate } from "@/app/utils/formatDate";
 import { logGAEvent } from "./utils/analytics";
-import { useDataStore } from "@/components/TaxReliefDataProvider";
+import { DataType, useDataStore } from "@/components/TaxReliefDataProvider";
 import { setIssueFlagged } from "./utils/setIssueFlagged";
 import { PaymentMethod, Transaction, TransactionStatus } from "@/components/types";
 
@@ -58,13 +58,6 @@ const checkAutofile = async (config: {
   }
 };
 
-const hasPaymentSentTransaction = (record: StatusRecord) => {
-  return (
-    hasTransactionWithStatus(record.anchor, TransactionStatus.PAYMENT_SENT) ||
-    hasTransactionWithStatus(record.ptr, TransactionStatus.PAYMENT_SENT)
-  );
-};
-
 const hasTransactionWithStatus = (
   transactionList: Transaction[],
   status: TransactionStatus,
@@ -75,6 +68,25 @@ const hasTransactionWithStatus = (
     }
   }
   return false;
+};
+
+const hasPaymentSentTransaction = (record: StatusRecord) => {
+  return (
+    hasTransactionWithStatus(record.anchor, TransactionStatus.PAYMENT_SENT) ||
+    hasTransactionWithStatus(record.ptr, TransactionStatus.PAYMENT_SENT)
+  );
+};
+
+const determineRoute = (record: StatusRecord): string => {
+  if (hasPaymentSentTransaction(record)) {
+    return "/payment-info";
+  }
+
+  if (setIssueFlagged(record) !== undefined) {
+    return "/more-information-needed";
+  }
+
+  return "/application-received";
 };
 
 const returnToTop = () => {
@@ -108,15 +120,12 @@ const LandingPage = () => {
 
       if (autofileResult?.autofilePlanned) {
         setDataStore({
+          kind: DataType.AUTOFILE,
           lastFourSsnDigits: maskSsn(data.ssn),
           zipCode: data.zipCode,
-          applicationDateString: "",
-          anchor: [],
-          ptr: [],
-          stay_nj: [],
           paymentMethod: autofileResult.paymentMethod,
         });
-        logGAEvent(`autofile_planned`);
+        logGAEvent(`autofile_${autofileResult.paymentMethod}`);
         router.push("/anchor-autofile");
         return;
       }
@@ -186,6 +195,7 @@ const LandingPage = () => {
       const lastFourSsnDigits = maskSsn(data.ssn);
       const formattedDate = formatDate(record2025.application_date);
       setDataStore({
+        kind: DataType.STATUS,
         lastFourSsnDigits: lastFourSsnDigits,
         zipCode: data.zipCode,
         applicationDateString: formattedDate,
@@ -195,13 +205,7 @@ const LandingPage = () => {
         issueFlagged: setIssueFlagged(record2025),
       });
       logGAEvent(`api_200_record_found`);
-      if (hasPaymentSentTransaction(record2025)) {
-        router.push("/payment-info");
-      } else if (setIssueFlagged(record2025) !== undefined) {
-        router.push("/more-information-needed");
-      } else {
-        router.push("/application-received");
-      }
+      router.push(determineRoute(record2025));
     } catch {
       setAlertContent(
         <p className="usa-alert__text maxw-tablet">

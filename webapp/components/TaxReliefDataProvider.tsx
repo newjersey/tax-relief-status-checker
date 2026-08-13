@@ -4,7 +4,20 @@ import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 import { IssueFlaggedType, PaymentMethod, Transaction } from "./types";
 
-export interface TaxReliefStatusData {
+export enum DataType {
+  AUTOFILE,
+  STATUS,
+}
+
+export interface AutofileData {
+  readonly kind: DataType.AUTOFILE;
+  readonly lastFourSsnDigits: string;
+  readonly zipCode: string;
+  readonly paymentMethod?: PaymentMethod;
+}
+
+export interface StatusData {
+  readonly kind: DataType.STATUS;
   readonly lastFourSsnDigits: string;
   readonly zipCode: string;
   readonly applicationDateString: string;
@@ -12,9 +25,9 @@ export interface TaxReliefStatusData {
   readonly anchor: Transaction[];
   readonly ptr: Transaction[];
   readonly stay_nj: Transaction[];
-  /** Payment method for ANCHOR autofile recipients (CHECK or DIRECT_DEPOSIT). */
-  readonly paymentMethod?: PaymentMethod;
 }
+
+export type TaxReliefStatusData = AutofileData | StatusData;
 
 const TaxReliefDataContext = createContext<{
   dataStore: TaxReliefStatusData | null;
