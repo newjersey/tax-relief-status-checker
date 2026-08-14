@@ -1,9 +1,9 @@
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { computeSsnZipHash } from "./util/computeSsnZipHash";
 
-enum PaymentMenthod {
-  Check = "CHECK",
-  DirectDeposit = "DIRECT_DEPOSIT",
+enum PaymentMethod {
+  Check = "check",
+  DirectDeposit = "direct_deposit",
 }
 
 export interface AutofileLookupRequest {
@@ -14,7 +14,7 @@ export interface AutofileLookupRequest {
 export interface AutofileLookupResponse {
   /** Whether the SSN/ZIP pair is planned for ANCHOR autofile. */
   readonly autofilePlanned: boolean;
-  readonly paymentMethod?: PaymentMenthod;
+  readonly paymentMethod?: PaymentMethod;
 }
 
 const dynamoClient = new DynamoDBClient({});
@@ -69,6 +69,6 @@ export const handler = async (
 
   return {
     autofilePlanned: true,
-    paymentMethod: isDirectDeposit ? PaymentMenthod.DirectDeposit : PaymentMenthod.Check,
+    paymentMethod: isDirectDeposit ? PaymentMethod.DirectDeposit : PaymentMethod.Check,
   };
 };

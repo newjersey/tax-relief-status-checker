@@ -30,14 +30,12 @@ export interface StatusRecord {
   readonly stay_nj: Transaction[];
 }
 
-/** Response shape returned by the autofile API. */
 interface AutofileResponse {
   readonly autofilePlanned: boolean;
   readonly paymentMethod?: PaymentMethod;
 }
 
-/** Calls the autofile API to determine if the user is an ANCHOR autofile recipient. */
-const checkAutofile = async (config: {
+const checkAutofile = async (params: {
   readonly ssn: string;
   readonly zip: string;
 }): Promise<AutofileResponse | null> => {
@@ -45,7 +43,7 @@ const checkAutofile = async (config: {
     const response = await fetch("/api/autofile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ssn: config.ssn, zip: config.zip }),
+      body: JSON.stringify({ ssn: params.ssn, zip: params.zip }),
     });
 
     if (!response.ok) {
@@ -54,6 +52,7 @@ const checkAutofile = async (config: {
 
     return (await response.json()) as AutofileResponse;
   } catch {
+    console.log("checkAutoFile failure");
     return null;
   }
 };
