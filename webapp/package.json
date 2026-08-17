@@ -23,13 +23,13 @@
   },
   "dependencies": {
     "@aws-crypto/sha256-js": "5.2.0",
-    "@aws-sdk/credential-provider-node": "3.972.78",
+    "@aws-sdk/credential-provider-node": "3.972.79",
     "@aws-sdk/signature-v4": "^3.374.0",
     "@newjersey/njwds": "2.9.2",
-    "@smithy/protocol-http": "5.5.16",
+    "@smithy/protocol-http": "5.6.0",
     "@testing-library/jest-dom": "7.0.1",
     "@trussworks/react-uswds": "11.2.0",
-    "next": "16.3.0",
+    "next": "16.3.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-hook-form": "7.85.0",
@@ -41,6 +41,6 @@
     "@types/node": "25.9.5",
     "jsdom": "30.0.1",
     "vitest": "4.1.10",
-    "cypress": "15.20.0"
+    "cypress": "15.20.1"
   }
 }
