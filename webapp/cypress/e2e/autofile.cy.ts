@@ -18,10 +18,7 @@ it("should route the user to the autofile page when autofile API returns true wi
     fixture: "autofile_api_check.json",
   });
   cy.contains("button", `Check Status`).click();
-  cy.contains(
-    "h1",
-    "A 2025 ANCHOR application will be filed on your behalf on September 15, 2026.",
-  ).should("be.visible");
+  cy.contains("h1", "A 2025 ANCHOR application will be filed on your behalf.").should("be.visible");
   cy.get("@gtag").should(
     "have.been.calledWith",
     "event",
@@ -56,10 +53,7 @@ it("should route the user to the autofile page when autofile API returns true wi
     fixture: "autofile_api_direct_deposit.json",
   });
   cy.contains("button", `Check Status`).click();
-  cy.contains(
-    "h1",
-    "A 2025 ANCHOR application will be filed on your behalf on September 15, 2026.",
-  ).should("be.visible");
+  cy.contains("h1", "A 2025 ANCHOR application will be filed on your behalf.").should("be.visible");
   cy.get("@gtag").should(
     "have.been.calledWith",
     "event",
