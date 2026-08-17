@@ -25,10 +25,13 @@ const validateEvent = (event: unknown): AutofileLookupRequest | null => {
 
   const { ssn, zip } = event as Record<string, unknown>;
 
-  if (typeof ssn !== "string" || !/^\d{9}$/.test(ssn)) return null;
-  if (typeof zip !== "string" || !/^\d{5}$/.test(zip)) return null;
+  if (typeof ssn !== "string" || typeof zip !== "string") return null;
 
-  return { ssn, zip };
+  const sanitizedSsn = ssn.replace(/-/g, "");
+  if (!/^\d{9}$/.test(sanitizedSsn)) return null;
+  if (!/^\d{5}$/.test(zip)) return null;
+
+  return { ssn: sanitizedSsn, zip };
 };
 
 /** Response shape returned when validation fails. */

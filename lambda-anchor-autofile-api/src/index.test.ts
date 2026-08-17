@@ -35,6 +35,17 @@ describe("handler", () => {
       expect(result).toEqual({ error: "Request must include ssn (9 digits) and zip (5 digits)" });
     });
 
+    it("strips hyphens from SSN before validation", async () => {
+      dynamoMock.on(GetItemCommand).resolves({ Item: undefined });
+
+      const result = await handler({ ssn: "123-45-6789", zip: "07001" });
+
+      expect(result).toEqual({ autofilePlanned: false });
+      const expectedHash = computeSsnZipHash("123456789", "07001");
+      const call = dynamoMock.commandCalls(GetItemCommand)[0];
+      expect(call.args[0].input.Key).toEqual({ ssnZipHash: { S: expectedHash } });
+    });
+
     it("returns error for null event", async () => {
       const result = await handler(null);
 
