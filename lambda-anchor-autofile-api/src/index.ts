@@ -19,11 +19,9 @@ export interface AutofileLookupResponse {
 
 const dynamoClient = new DynamoDBClient({});
 
-/** Validates that the event contains a valid SSN and ZIP. */
-const validateEvent = (event: unknown): AutofileLookupRequest | null => {
-  if (!event || typeof event !== "object") return null;
-
-  const { ssn, zip } = event as Record<string, unknown>;
+const validateEvent = (event: Record<string, unknown>): AutofileLookupRequest | null => {
+  const body = typeof event.body === "string" ? JSON.parse(event.body) : event;
+  const { ssn, zip } = body;
 
   if (typeof ssn !== "string" || typeof zip !== "string") return null;
 
