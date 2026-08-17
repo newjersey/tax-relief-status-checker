@@ -6,20 +6,9 @@ export const AnchorAutofileCheckFaqContent: FaqItem[] = [
     content: (
       <>
         <p>
-          That's okay, nothing's wrong. The State is autofiling on your behalf regardless of whether
-          you received a letter. If you need to change your payment method or mailing address,
-          you'll need to file an application manually{" "}
-          <a href="https://propertytaxreliefapp.nj.gov/">online</a> or by mailing{" "}
-          <a href="https://www.nj.gov/treasury/taxation/propertyreliefforms.shtml">
-            a paper application
-          </a>{" "}
-          to:{" "}
+          In your case, the Division is filing on your behalf. You do not need to file an ANCHOR
+          application.
         </p>
-        <p>NJ Division of Taxation</p>
-        <p>Revenue Processing Center Property</p>
-        <p>Tax Relief Application</p>
-        <p>PO Box 636</p>
-        <p>Trenton, NJ 08646-0636</p>
       </>
     ),
     expanded: false,
@@ -28,57 +17,101 @@ export const AnchorAutofileCheckFaqContent: FaqItem[] = [
       fireEventWhenFaqOpened("faq_anchor_check_did_not_receive_confirmation_in_mail"),
   },
   {
-    title: "What if I need to change my banking information?",
+    title: "What if I need to change my mailing address?",
     content: (
       <>
         <p>
-          You'll need to file an application manually to change your banking information. Otherwise,
-          your benefit will go to the bank account on file from last year.
+          To update your mailing address you must file a{" "}
+          <a
+            href="https://propertytaxreliefapp.nj.gov/File/Eligibility"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            web application
+          </a>
+          .
         </p>
-        <p>
-          To file an application manually, you can do it
-          <a href="https://propertytaxreliefapp.nj.gov/">online</a> or by mailing{" "}
-          <a href="https://www.nj.gov/treasury/taxation/propertyreliefforms.shtml">
-            a paper application
-          </a>{" "}
-          to:{" "}
-        </p>
-        <p>NJ Division of Taxation</p>
-        <p>Revenue Processing Center Property</p>
-        <p>Tax Relief Application</p>
-        <p>PO Box 636</p>
-        <p>Trenton, NJ 08646-0636</p>
       </>
     ),
     expanded: false,
-    id: "faq_anchor_check_need_to_change_banking",
-    handleToggle: () => fireEventWhenFaqOpened("faq_anchor_check_need_to_change_banking"),
+    id: "faq_anchor_check_need_to_change_mailing_address",
+    handleToggle: () => fireEventWhenFaqOpened("faq_anchor_check_need_to_change_mailing_address"),
   },
   {
-    title: "What if I need to change my banking information?",
+    title: "What if I want to switch from a physical check to a direct deposit payment?",
     content: (
       <>
         <p>
-          You'll need to file an application manually to change your banking information. Otherwise,
-          your benefit will go to the bank account on file from last year.
+          To update your payment method you must file a{" "}
+          <a
+            href="https://propertytaxreliefapp.nj.gov/File/Eligibility"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            web application
+          </a>
+          .
         </p>
-        <p>
-          To file an application manually, you can do it
-          <a href="https://propertytaxreliefapp.nj.gov/">online</a> or by mailing{" "}
-          <a href="https://www.nj.gov/treasury/taxation/propertyreliefforms.shtml">
-            a paper application
-          </a>{" "}
-          to:{" "}
-        </p>
-        <p>NJ Division of Taxation</p>
-        <p>Revenue Processing Center Property</p>
-        <p>Tax Relief Application</p>
-        <p>PO Box 636</p>
-        <p>Trenton, NJ 08646-0636</p>
       </>
     ),
     expanded: false,
-    id: "faq_anchor_check_need_to_change_banking",
-    handleToggle: () => fireEventWhenFaqOpened("faq_anchor_check_need_to_change_banking"),
+    id: "faq_anchor_check_switch_physical_check_to_deposit",
+    handleToggle: () => fireEventWhenFaqOpened("faq_anchor_check_switch_physical_check_to_deposit"),
+  },
+  {
+    title: "I know I'm no longer eligible for ANCHOR anymore. How do I opt out?",
+    content: (
+      <>
+        <p>
+          If your eligibility has changed since last year, you must{" "}
+          <a
+            href="https://propertytaxreliefapp.nj.gov/ANCHOROptOut"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            opt out
+          </a>{" "}
+          before September 16, 2026. This lets the Division know not to file on your behalf and
+          avoids you having to repay those funds if you're not eligible this year.
+        </p>
+      </>
+    ),
+    expanded: false,
+    id: "faq_anchor_check_no_longer_eligible_opt_out",
+    handleToggle: () => fireEventWhenFaqOpened("faq_anchor_check_no_longer_eligible_opt_out"),
+  },
+  {
+    title: "What happens if I submitted an application on my own?",
+    content: (
+      <>
+        <p>
+          The application you filed replaces the version we filed on your behalf. However, it must
+          be filed before September 16, 2026, when the Division files applications.
+        </p>
+        <p>If you miss the deadline, contact the Division:</p>
+        <ul>
+          <li>
+            Call: <a href="tel:+18882381233">1-888-238-1233</a> (Monday to Friday 8:30 a.m. to 5:30
+            p.m.)
+          </li>
+          <li>
+            Or email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
+          </li>
+          <li>
+            Or visit one of our{" "}
+            <a
+              href="https://www.nj.gov/treasury/taxation/contact-office.shtml"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Regional Information Centers
+            </a>
+          </li>
+        </ul>
+      </>
+    ),
+    expanded: false,
+    id: "faq_anchor_check_submitted_own_application",
+    handleToggle: () => fireEventWhenFaqOpened("faq_anchor_check_submitted_own_application"),
   },
 ];

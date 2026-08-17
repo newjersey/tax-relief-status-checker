@@ -49,7 +49,7 @@ const AnchorAutofilePage = () => {
           />
           <div className="margin-top-4">
             <h1 className="font-heading-xl">
-              A 2025 ANCHOR application will be filed on your behalf on September 15, 2026.
+              A 2025 ANCHOR application will be filed on your behalf.
             </h1>
             <p>
               Our records show that you are eligible for the ANCHOR benefit. Below are next steps
@@ -58,21 +58,28 @@ const AnchorAutofilePage = () => {
             <ProcessList>
               <ProcessListItem>
                 <ProcessListHeading type="p">
-                  ANCHOR Benefit Confirmation Letters were sent on August 10, 2026
+                  Your ANCHOR Benefit Confirmation Letter was sent on August 10, 2026
                 </ProcessListHeading>
               </ProcessListItem>
               <ProcessListItem>
                 <ProcessListHeading type="p">
-                  ANCHOR application will be filed on September 15, 2026
+                  The Division will start processing applications September 16, 2026
                 </ProcessListHeading>
                 <p>
-                  This is automatically filed for you unless you submit a paper or web application
-                  yourself before this date.
+                  This will happen automatically unless you{" "}
+                  <a
+                    href="https://propertytaxreliefapp.nj.gov/ANCHOROptOut"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    opt out
+                  </a>{" "}
+                  before this date
                 </p>
               </ProcessListItem>
               <ProcessListItem>
                 <ProcessListHeading type="p">
-                  Payments will be made starting October 1, 2026
+                  ANCHOR payments will go out starting October 1, 2026
                 </ProcessListHeading>
                 <p>In some cases, payments will be made after 2026</p>
               </ProcessListItem>
