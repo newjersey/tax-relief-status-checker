@@ -85,29 +85,9 @@ export const AnchorAutofileDirectDepositFaqContent: FaqItem[] = [
     content: (
       <>
         <p>
-          The application you filed replaces the version we filed on your behalf. However, it must
-          be filed before September 16, 2026, when the Division files applications.
+          If you file an application on your own before September 16, 2026, we will not file an
+          application on your behalf.
         </p>
-        <p>If you miss the deadline, contact the Division:</p>
-        <ul>
-          <li>
-            Call: <a href="tel:+18882381233">1-888-238-1233</a> (Monday to Friday 8:30 a.m. to 5:30
-            p.m.)
-          </li>
-          <li>
-            Or email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
-          </li>
-          <li>
-            Or visit one of our{" "}
-            <a
-              href="https://www.nj.gov/treasury/taxation/contact-office.shtml"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Regional Information Centers
-            </a>
-          </li>
-        </ul>
       </>
     ),
     expanded: false,
