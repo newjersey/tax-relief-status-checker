@@ -98,6 +98,10 @@ export class InfraStack extends Stack {
             actions: ["lambda:InvokeFunctionUrl", "lambda:InvokeFunction"],
             resources: [this.lambdaFunction.functionArn],
           }),
+          new iam.PolicyStatement({
+            actions: ["lambda:InvokeFunctionUrl", "lambda:InvokeFunction"],
+            resources: [this.autofileLambdaFunction.functionArn],
+          }),
         ],
       }),
     );
