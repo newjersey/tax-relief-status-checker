@@ -6,6 +6,7 @@ import { DataType, useDataStore } from "@/components/TaxReliefDataProvider";
 import { IssueFlaggedType } from "@/components/types";
 import Link from "next/link";
 import { Alert } from "@trussworks/react-uswds";
+import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
 
 const MoreInformationNeededPage = () => {
   const router = useRouter();
@@ -90,25 +91,7 @@ const MoreInformationNeededPage = () => {
               Log out
             </Link>
           </div>
-          <div>
-            <div className="grid-row">
-              <div className="tablet:grid-col-3">
-                <p>
-                  SSN/ITIN: <strong>***-**-{lastFourSsnDigits}</strong>
-                </p>
-              </div>
-              <div className="tablet:grid-col-3">
-                <p>
-                  ZIP Code: <strong>{zipCode}</strong>
-                </p>
-              </div>{" "}
-              <div className="tablet:grid-col-3">
-                <p>
-                  Tax Year: <strong>2025</strong>
-                </p>
-              </div>
-            </div>
-          </div>
+          <TaxpayerInfoHeader lastFourSsnDigits={lastFourSsnDigits} zipCode={zipCode} />
           {issueFlagged !== undefined && (
             <Alert type="warning" headingLevel="h2" heading="Additional information needed">
               {createAlertContent(issueFlagged)}

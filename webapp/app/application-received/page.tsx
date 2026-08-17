@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ProcessList, ProcessListHeading, ProcessListItem } from "@trussworks/react-uswds";
 import { ApplicationReceivedFaqContent } from "./ApplicationReceivedFaqContent";
 import { FaqSection } from "@/components/FaqSection";
+import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
 
 const ApplicationReceivedPage = () => {
   const router = useRouter();
@@ -38,25 +39,7 @@ const ApplicationReceivedPage = () => {
               Log out
             </Link>
           </div>
-          <div>
-            <div className="grid-row">
-              <div className="tablet:grid-col-3">
-                <p>
-                  SSN/ITIN: <strong>***-**-{lastFourSsnDigits}</strong>
-                </p>
-              </div>
-              <div className="tablet:grid-col-3">
-                <p>
-                  ZIP Code: <strong>{zipCode}</strong>
-                </p>
-              </div>{" "}
-              <div className="tablet:grid-col-3">
-                <p>
-                  Tax Year: <strong>2025</strong>
-                </p>
-              </div>
-            </div>
-          </div>
+          <TaxpayerInfoHeader lastFourSsnDigits={lastFourSsnDigits} zipCode={zipCode} />
           <div className="margin-top-4">
             <h1 className="font-heading-xl">
               Your application was received on {applicationDateString}

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ProcessList, ProcessListHeading, ProcessListItem } from "@trussworks/react-uswds";
 import { FaqSection } from "@/components/FaqSection";
 import { PaymentMethod } from "@/components/types";
+import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
 import { AnchorAutofileCheckFaqContent } from "./AnchorAutofileCheckFaqContent";
 import { AnchorAutofileDirectDepositFaqContent } from "./AnchorAutofileDirectDepositFaqContent";
 
@@ -41,32 +42,11 @@ const AnchorAutofilePage = () => {
               Log out
             </Link>
           </div>
-          <div>
-            <div className="grid-row">
-              <div className="tablet:grid-col-4">
-                <p>
-                  SSN/ITIN: <strong>***-**-{lastFourSsnDigits}</strong>
-                </p>
-              </div>
-              <div className="tablet:grid-col-4">
-                <p>
-                  ZIP Code: <strong>{zipCode}</strong>
-                </p>
-              </div>{" "}
-              <div className="tablet:grid-col-4">
-                <p>
-                  Tax Year: <strong>2025</strong>
-                </p>
-              </div>
-            </div>
-            <div className="grid-row">
-              <div className="tablet:grid-col-6">
-                <p>
-                  Payment Type: <strong>{paymentMethodString}</strong>
-                </p>
-              </div>
-            </div>
-          </div>
+          <TaxpayerInfoHeader
+            lastFourSsnDigits={lastFourSsnDigits}
+            zipCode={zipCode}
+            paymentType={paymentMethodString}
+          />
           <div className="margin-top-4">
             <h1 className="font-heading-xl">
               A 2025 ANCHOR application will be filed on your behalf on September 15, 2026.
