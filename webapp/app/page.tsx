@@ -15,13 +15,11 @@ import { DataType, useDataStore } from "@/components/TaxReliefDataProvider";
 import { setIssueFlagged } from "./utils/setIssueFlagged";
 import { PaymentMethod, Transaction, TransactionStatus } from "@/components/types";
 
-/** Form data collected from the user. */
 interface UserData {
   readonly ssn: string;
   readonly zipCode: string;
 }
 
-/** Response shape returned by the status API. */
 export interface StatusRecord {
   readonly return_year: string;
   readonly application_date: string;
@@ -119,7 +117,7 @@ const LandingPage = () => {
 
       if (autofileResult?.autofilePlanned) {
         setDataStore({
-          kind: DataType.AUTOFILE,
+          type: DataType.AUTOFILE,
           lastFourSsnDigits: maskSsn(data.ssn),
           zipCode: data.zipCode,
           paymentMethod: autofileResult.paymentMethod,
@@ -194,7 +192,7 @@ const LandingPage = () => {
       const lastFourSsnDigits = maskSsn(data.ssn);
       const formattedDate = formatDate(record2025.application_date);
       setDataStore({
-        kind: DataType.STATUS,
+        type: DataType.STATUS,
         lastFourSsnDigits: lastFourSsnDigits,
         zipCode: data.zipCode,
         applicationDateString: formattedDate,
