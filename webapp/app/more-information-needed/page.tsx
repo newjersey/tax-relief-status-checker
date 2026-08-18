@@ -13,14 +13,14 @@ const MoreInformationNeededPage = () => {
   const { dataStore } = useDataStore();
 
   useEffect(() => {
-    if (!dataStore || dataStore.kind !== DataType.STATUS) {
+    if (!dataStore || dataStore.type !== DataType.STATUS) {
       router.replace("/");
     }
   }, [dataStore, router]);
 
   // Next.js prerenders client components during the build,
   // returning null here allows it to render only client-side
-  if (!dataStore || dataStore.kind !== DataType.STATUS) {
+  if (!dataStore || dataStore.type !== DataType.STATUS) {
     return null;
   }
 

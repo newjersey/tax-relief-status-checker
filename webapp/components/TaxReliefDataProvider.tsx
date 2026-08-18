@@ -10,14 +10,14 @@ export enum DataType {
 }
 
 export interface AutofileData {
-  readonly kind: DataType.AUTOFILE;
+  readonly type: DataType.AUTOFILE;
   readonly lastFourSsnDigits: string;
   readonly zipCode: string;
   readonly paymentMethod?: PaymentMethod;
 }
 
 export interface StatusData {
-  readonly kind: DataType.STATUS;
+  readonly type: DataType.STATUS;
   readonly lastFourSsnDigits: string;
   readonly zipCode: string;
   readonly applicationDateString: string;

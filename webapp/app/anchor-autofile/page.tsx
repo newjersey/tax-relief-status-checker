@@ -16,14 +16,14 @@ const AnchorAutofilePage = () => {
   const { dataStore } = useDataStore();
 
   useEffect(() => {
-    if (!dataStore || dataStore.kind !== DataType.AUTOFILE) {
+    if (!dataStore || dataStore.type !== DataType.AUTOFILE) {
       router.replace("/");
     }
   }, [dataStore, router]);
 
   // Next.js prerenders client components during the build,
   // returning null here allows it to render only client-side
-  if (!dataStore || dataStore.kind !== DataType.AUTOFILE) {
+  if (!dataStore || dataStore.type !== DataType.AUTOFILE) {
     return null;
   }
 
