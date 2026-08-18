@@ -57,12 +57,12 @@ const AnchorAutofilePage = () => {
             </p>
             <ProcessList>
               <ProcessListItem>
-                <ProcessListHeading type="p">
+                <ProcessListHeading type="p" className="text-normal">
                   Your ANCHOR Benefit Confirmation Letter was sent on August 10, 2026
                 </ProcessListHeading>
               </ProcessListItem>
               <ProcessListItem>
-                <ProcessListHeading type="p">
+                <ProcessListHeading type="p" className="text-normal">
                   The Division will start processing applications September 16, 2026
                 </ProcessListHeading>
                 <p>
@@ -78,7 +78,7 @@ const AnchorAutofilePage = () => {
                 </p>
               </ProcessListItem>
               <ProcessListItem>
-                <ProcessListHeading type="p">
+                <ProcessListHeading type="p" className="text-normal">
                   ANCHOR payments will go out starting October 1, 2026
                 </ProcessListHeading>
                 <p>In some cases, payments will be made after 2026</p>
