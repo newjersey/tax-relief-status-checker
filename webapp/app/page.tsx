@@ -11,17 +11,15 @@ import { FaqSection, expandFaqAccordionItem } from "@/components/FaqSection";
 import { maskSsn } from "@/app/utils/maskSsn";
 import { formatDate } from "@/app/utils/formatDate";
 import { logGAEvent } from "./utils/analytics";
-import { useDataStore } from "@/components/TaxReliefDataProvider";
+import { DataType, useDataStore } from "@/components/TaxReliefDataProvider";
 import { setIssueFlagged } from "./utils/setIssueFlagged";
-import { Transaction, TransactionStatus } from "@/components/types";
+import { PaymentMethod, Transaction, TransactionStatus } from "@/components/types";
 
-/** Form data collected from the user. */
 interface UserData {
   readonly ssn: string;
   readonly zipCode: string;
 }
 
-/** Response shape returned by the status API. */
 export interface StatusRecord {
   readonly return_year: string;
   readonly application_date: string;
@@ -30,23 +28,48 @@ export interface StatusRecord {
   readonly stay_nj: Transaction[];
 }
 
-const hasPaymentSentTransaction = (record: StatusRecord) => {
-  return (
-    hasTransactionWithStatus(record.anchor, TransactionStatus.PAYMENT_SENT) ||
-    hasTransactionWithStatus(record.ptr, TransactionStatus.PAYMENT_SENT)
-  );
+interface AutofileResponse {
+  readonly autofilePlanned: boolean;
+  readonly paymentMethod?: PaymentMethod;
+}
+
+const checkAutofile = async (params: {
+  readonly ssn: string;
+  readonly zip: string;
+}): Promise<AutofileResponse | null> => {
+  try {
+    const response = await fetch("/api/autofile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ssn: params.ssn, zip: params.zip }),
+    });
+
+    if (!response.ok) {
+      logGAEvent(`autofile_api_error`);
+      return null;
+    }
+
+    return (await response.json()) as AutofileResponse;
+  } catch {
+    logGAEvent(`autofile_api_error`);
+    return null;
+  }
 };
 
-const hasTransactionWithStatus = (
-  transactionList: Transaction[],
-  status: TransactionStatus,
-): boolean => {
-  for (const t of transactionList) {
-    if (t.status === status) {
-      return true;
-    }
+const determineRoute = (record: StatusRecord): string => {
+  const hasPaymentSentTransaction = [...record.anchor, ...record.ptr].some(
+    (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
+  );
+
+  if (hasPaymentSentTransaction) {
+    return "/payment-info";
   }
-  return false;
+
+  if (setIssueFlagged(record) !== undefined) {
+    return "/more-information-needed";
+  }
+
+  return "/application-received";
 };
 
 const returnToTop = () => {
@@ -76,6 +99,20 @@ const LandingPage = () => {
     setAlertContent(null);
 
     try {
+      const autofileResult = await checkAutofile({ ssn: data.ssn, zip: data.zipCode });
+
+      if (autofileResult?.autofilePlanned) {
+        setDataStore({
+          type: DataType.AUTOFILE,
+          lastFourSsnDigits: maskSsn(data.ssn),
+          zipCode: data.zipCode,
+          paymentMethod: autofileResult.paymentMethod,
+        });
+        logGAEvent(`autofile_${autofileResult.paymentMethod}`);
+        router.push("/anchor-autofile");
+        return;
+      }
+
       const response = await fetch("/api/status", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -141,6 +178,7 @@ const LandingPage = () => {
       const lastFourSsnDigits = maskSsn(data.ssn);
       const formattedDate = formatDate(record2025.application_date);
       setDataStore({
+        type: DataType.STATUS,
         lastFourSsnDigits: lastFourSsnDigits,
         zipCode: data.zipCode,
         applicationDateString: formattedDate,
@@ -150,13 +188,7 @@ const LandingPage = () => {
         issueFlagged: setIssueFlagged(record2025),
       });
       logGAEvent(`api_200_record_found`);
-      if (hasPaymentSentTransaction(record2025)) {
-        router.push("/payment-info");
-      } else if (setIssueFlagged(record2025) !== undefined) {
-        router.push("/more-information-needed");
-      } else {
-        router.push("/application-received");
-      }
+      router.push(determineRoute(record2025));
     } catch {
       setAlertContent(
         <p className="usa-alert__text maxw-tablet">

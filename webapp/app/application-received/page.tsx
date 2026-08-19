@@ -2,25 +2,26 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useDataStore } from "@/components/TaxReliefDataProvider";
+import { DataType, useDataStore } from "@/components/TaxReliefDataProvider";
 import Link from "next/link";
 import { ProcessList, ProcessListHeading, ProcessListItem } from "@trussworks/react-uswds";
 import { ApplicationReceivedFaqContent } from "./ApplicationReceivedFaqContent";
 import { FaqSection } from "@/components/FaqSection";
+import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
 
 const ApplicationReceivedPage = () => {
   const router = useRouter();
   const { dataStore } = useDataStore();
 
   useEffect(() => {
-    if (!dataStore) {
+    if (!dataStore || dataStore.type !== DataType.STATUS) {
       router.replace("/");
     }
   }, [dataStore, router]);
 
   // Next.js prerenders client components during the build,
   // returning null here allows it to render only client-side
-  if (!dataStore) {
+  if (!dataStore || dataStore.type !== DataType.STATUS) {
     return null;
   }
 
@@ -38,25 +39,7 @@ const ApplicationReceivedPage = () => {
               Log out
             </Link>
           </div>
-          <div>
-            <div className="grid-row">
-              <div className="tablet:grid-col-3">
-                <p>
-                  SSN/ITIN: <strong>***-**-{lastFourSsnDigits}</strong>
-                </p>
-              </div>
-              <div className="tablet:grid-col-3">
-                <p>
-                  ZIP Code: <strong>{zipCode}</strong>
-                </p>
-              </div>{" "}
-              <div className="tablet:grid-col-3">
-                <p>
-                  Tax Year: <strong>2025</strong>
-                </p>
-              </div>
-            </div>
-          </div>
+          <TaxpayerInfoHeader lastFourSsnDigits={lastFourSsnDigits} zipCode={zipCode} />
           <div className="margin-top-4">
             <h1 className="font-heading-xl">
               Your application was received on {applicationDateString}

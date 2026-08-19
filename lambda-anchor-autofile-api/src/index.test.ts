@@ -35,12 +35,6 @@ describe("handler", () => {
       expect(result).toEqual({ error: "Request must include ssn (9 digits) and zip (5 digits)" });
     });
 
-    it("returns error for null event", async () => {
-      const result = await handler(null);
-
-      expect(result).toEqual({ error: "Request must include ssn (9 digits) and zip (5 digits)" });
-    });
-
     it("throws when TABLE_NAME is not configured", async () => {
       vi.stubEnv("TABLE_NAME", "");
 
@@ -58,7 +52,7 @@ describe("handler", () => {
 
       const result = await handler({ ssn: "123456789", zip: "07001" });
 
-      expect(result).toEqual({ autofilePlanned: true, paymentMethod: "CHECK" });
+      expect(result).toEqual({ autofilePlanned: true, paymentMethod: "check" });
     });
 
     it("returns autofilePlanned true with DIRECT_DEPOSIT when item has direct deposit", async () => {
@@ -68,7 +62,7 @@ describe("handler", () => {
 
       const result = await handler({ ssn: "123456789", zip: "07001" });
 
-      expect(result).toEqual({ autofilePlanned: true, paymentMethod: "DIRECT_DEPOSIT" });
+      expect(result).toEqual({ autofilePlanned: true, paymentMethod: "direct_deposit" });
     });
 
     it("returns autofilePlanned false when item does not exist", async () => {

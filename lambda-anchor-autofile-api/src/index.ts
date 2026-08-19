@@ -1,9 +1,9 @@
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { computeSsnZipHash } from "./util/computeSsnZipHash";
 
-enum PaymentMenthod {
-  Check = "CHECK",
-  DirectDeposit = "DIRECT_DEPOSIT",
+enum PaymentMethod {
+  Check = "check",
+  DirectDeposit = "direct_deposit",
 }
 
 export interface AutofileLookupRequest {
@@ -14,21 +14,22 @@ export interface AutofileLookupRequest {
 export interface AutofileLookupResponse {
   /** Whether the SSN/ZIP pair is planned for ANCHOR autofile. */
   readonly autofilePlanned: boolean;
-  readonly paymentMethod?: PaymentMenthod;
+  readonly paymentMethod?: PaymentMethod;
 }
 
 const dynamoClient = new DynamoDBClient({});
 
-/** Validates that the event contains a valid SSN and ZIP. */
-const validateEvent = (event: unknown): AutofileLookupRequest | null => {
-  if (!event || typeof event !== "object") return null;
+const validateEvent = (event: Record<string, unknown>): AutofileLookupRequest | null => {
+  const body = typeof event.body === "string" ? JSON.parse(event.body) : event;
+  const { ssn, zip } = body;
 
-  const { ssn, zip } = event as Record<string, unknown>;
+  if (typeof ssn !== "string" || typeof zip !== "string") return null;
 
-  if (typeof ssn !== "string" || !/^\d{9}$/.test(ssn)) return null;
-  if (typeof zip !== "string" || !/^\d{5}$/.test(zip)) return null;
+  const sanitizedSsn = ssn.replace(/-/g, "");
+  if (!/^\d{9}$/.test(sanitizedSsn)) return null;
+  if (!/^\d{5}$/.test(zip)) return null;
 
-  return { ssn, zip };
+  return { ssn: sanitizedSsn, zip };
 };
 
 /** Response shape returned when validation fails. */
@@ -69,6 +70,6 @@ export const handler = async (
 
   return {
     autofilePlanned: true,
-    paymentMethod: isDirectDeposit ? PaymentMenthod.DirectDeposit : PaymentMenthod.Check,
+    paymentMethod: isDirectDeposit ? PaymentMethod.DirectDeposit : PaymentMethod.Check,
   };
 };

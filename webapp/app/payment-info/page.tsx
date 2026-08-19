@@ -2,13 +2,14 @@
 
 import { JSX, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useDataStore } from "@/components/TaxReliefDataProvider";
+import { DataType, useDataStore } from "@/components/TaxReliefDataProvider";
 import Link from "next/link";
 import { Table } from "@trussworks/react-uswds";
 import { formatDate } from "../utils/formatDate";
 import { PaymentInfoFaqContent } from "@/app/payment-info/PaymentInfoFaqContent";
 import { FaqSection, expandFaqAccordionItem } from "@/components/FaqSection";
 import { Transaction, TaxProgram, PaymentMethod, TransactionStatus } from "@/components/types";
+import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
 
 export const getEarliestTransaction = (transactions: Transaction[]) => {
   const valid = transactions.filter(
@@ -84,14 +85,14 @@ const PaymentInfoPage = () => {
   const { dataStore } = useDataStore();
 
   useEffect(() => {
-    if (!dataStore) {
+    if (!dataStore || dataStore.type !== DataType.STATUS) {
       router.replace("/");
     }
   }, [dataStore, router]);
 
   // Next.js prerenders client components during the build,
   // returning null here allows it to render only client-side
-  if (!dataStore) {
+  if (!dataStore || dataStore.type !== DataType.STATUS) {
     return null;
   }
 
@@ -109,25 +110,7 @@ const PaymentInfoPage = () => {
               Log out
             </Link>
           </div>
-          <div>
-            <div className="grid-row">
-              <div className="tablet:grid-col-3">
-                <p>
-                  SSN/ITIN: <strong>***-**-{lastFourSsnDigits}</strong>
-                </p>
-              </div>
-              <div className="tablet:grid-col-3">
-                <p>
-                  ZIP Code: <strong>{zipCode}</strong>
-                </p>
-              </div>{" "}
-              <div className="tablet:grid-col-3">
-                <p>
-                  Tax Year: <strong>2025</strong>
-                </p>
-              </div>
-            </div>
-          </div>
+          <TaxpayerInfoHeader lastFourSsnDigits={lastFourSsnDigits} zipCode={zipCode} />
           <div className="margin-top-4">
             <h1 className="font-heading-xl">You are eligible for benefits</h1>
           </div>

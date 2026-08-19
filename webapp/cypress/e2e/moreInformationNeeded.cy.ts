@@ -26,6 +26,10 @@ beforeEach(() => {
     win.gtag = cy.stub().as("gtag");
   });
   cy.visit("/");
+  cy.intercept("POST", "/api/autofile", {
+    statusCode: 200,
+    fixture: "autofile_api_not_planned.json",
+  });
 });
 
 it("should display issue flagged warning - upload tax bill", () => {
