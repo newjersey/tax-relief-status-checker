@@ -23,7 +23,7 @@ export const TaxpayerInfoHeader = ({
           <p>
             ZIP Code: <strong>{zipCode}</strong>
           </p>
-        </div>{" "}
+        </div>
         <div className={colSize}>
           <p>
             Tax Year: <strong>2025</strong>

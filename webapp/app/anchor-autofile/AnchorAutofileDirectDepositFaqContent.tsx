@@ -2,7 +2,7 @@ import { fireEventWhenFaqOpened, type FaqItem } from "@/components/FaqSection";
 
 export const AnchorAutofileDirectDepositFaqContent: FaqItem[] = [
   {
-    title: "What if I did not receive a ANCHOR Benefit Confirmation Letter in the mail?",
+    title: "What if I did not receive an ANCHOR Benefit Confirmation Letter in the mail?",
     content: (
       <>
         <p>

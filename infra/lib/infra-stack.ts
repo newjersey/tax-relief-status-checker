@@ -91,21 +91,6 @@ export class InfraStack extends Stack {
       assumedBy: new iam.ServicePrincipal("amplify.amazonaws.com"),
     });
 
-    amplifyIamRole.attachInlinePolicy(
-      new iam.Policy(this, "InvokeLambdaPolicy", {
-        statements: [
-          new iam.PolicyStatement({
-            actions: ["lambda:InvokeFunctionUrl", "lambda:InvokeFunction"],
-            resources: [this.lambdaFunction.functionArn],
-          }),
-          new iam.PolicyStatement({
-            actions: ["lambda:InvokeFunctionUrl", "lambda:InvokeFunction"],
-            resources: [this.autofileLambdaFunction.functionArn],
-          }),
-        ],
-      }),
-    );
-
     const customPolicy = new iam.Policy(this, "LambdaCustomPolicy", {
       statements: [
         new iam.PolicyStatement({
@@ -145,6 +130,17 @@ export class InfraStack extends Stack {
       authType: lambda.FunctionUrlAuthType.AWS_IAM,
       cors: { allowedOrigins: props.allowedOrigins },
     });
+
+    amplifyIamRole.attachInlinePolicy(
+      new iam.Policy(this, "InvokeLambdaPolicy", {
+        statements: [
+          new iam.PolicyStatement({
+            actions: ["lambda:InvokeFunctionUrl", "lambda:InvokeFunction"],
+            resources: [this.lambdaFunction.functionArn, this.autofileLambdaFunction.functionArn],
+          }),
+        ],
+      }),
+    );
   }
 
   private buildVpcConfig(

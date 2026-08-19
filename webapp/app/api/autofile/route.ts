@@ -76,10 +76,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     const lambdaBody: unknown = await lambdaResponse.json();
 
     return NextResponse.json(lambdaBody, { status: lambdaResponse.status });
-  } catch {
-    return NextResponse.json(
-      { error: "Failed to reach the autofile check service." },
-      { status: 502 },
-    );
+  } catch (err) {
+    return NextResponse.json({ error: err }, { status: 502 });
   }
 };

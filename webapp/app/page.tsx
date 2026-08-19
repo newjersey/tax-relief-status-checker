@@ -45,37 +45,23 @@ const checkAutofile = async (params: {
     });
 
     if (!response.ok) {
+      logGAEvent(`autofile_api_error`);
       return null;
     }
 
     return (await response.json()) as AutofileResponse;
   } catch {
-    console.log("checkAutoFile failure");
+    logGAEvent(`autofile_api_error`);
     return null;
   }
 };
 
-const hasTransactionWithStatus = (
-  transactionList: Transaction[],
-  status: TransactionStatus,
-): boolean => {
-  for (const t of transactionList) {
-    if (t.status === status) {
-      return true;
-    }
-  }
-  return false;
-};
-
-const hasPaymentSentTransaction = (record: StatusRecord) => {
-  return (
-    hasTransactionWithStatus(record.anchor, TransactionStatus.PAYMENT_SENT) ||
-    hasTransactionWithStatus(record.ptr, TransactionStatus.PAYMENT_SENT)
-  );
-};
-
 const determineRoute = (record: StatusRecord): string => {
-  if (hasPaymentSentTransaction(record)) {
+  const hasPaymentSentTransaction = [...record.anchor, ...record.ptr].some(
+    (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
+  );
+
+  if (hasPaymentSentTransaction) {
     return "/payment-info";
   }
 
