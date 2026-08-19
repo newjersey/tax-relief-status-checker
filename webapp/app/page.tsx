@@ -216,7 +216,7 @@ const LandingPage = () => {
           <div className="grid-row grid-gap margin-bottom-10">
             <div className="tablet:grid-col-6">
               <h1 className="font-heading-lg">
-                This website is checking your 2025 PAS&#8209;1 application status
+                Track your 2025 property tax relief application and payment status
               </h1>
               <Form onSubmit={handleSubmit(onSubmit)} className="maxw-full" noValidate>
                 <p className="text-bold font-heading-md">Enter your SSN or ITIN and ZIP Code</p>
