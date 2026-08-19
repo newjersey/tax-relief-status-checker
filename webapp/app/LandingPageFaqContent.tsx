@@ -99,7 +99,7 @@ export const LandingPageFaqContent: FaqItem[] = [
                 <strong>September 2026-October 2026</strong>
               </td>
               <td>
-                If you applied between May 1 and June 1, you can expect to receiveyour payment
+                If you applied between May 1 and June 1, you can expect to receive your payment
                 between September 1 and October 1.
               </td>
             </tr>
@@ -144,11 +144,11 @@ export const LandingPageFaqContent: FaqItem[] = [
           <tbody>
             <tr>
               <td>
-                <strong>September 2026-October 2026</strong>
+                <strong>October 2026</strong>
               </td>
               <td>
-                Payments start going out on September 1. You can expect to receive your payment
-                before December 1.
+                Payments start going out October 1, 2026. In some cases, payments will be made after
+                2026.
               </td>
             </tr>
           </tbody>
@@ -188,13 +188,13 @@ export const LandingPageFaqContent: FaqItem[] = [
               <td>
                 <strong>August 2027</strong>
               </td>
-              <td>The third payment starts going out in May of next year.</td>
+              <td>The third payment starts going out in August of next year.</td>
             </tr>
             <tr>
               <td>
                 <strong>November 2027</strong>
               </td>
-              <td>The fourth payment starts going out in May of next year.</td>
+              <td>The fourth payment starts going out in November of next year.</td>
             </tr>
           </tbody>
         </Table>
