@@ -26,7 +26,7 @@ const applicationReceivedAssertions = () => {
   cy.contains("p.usa-process-list__heading", "Stay NJ").should("be.visible");
 
   cy.contains("a", "Log out").click();
-  cy.contains("h1", "This website is checking your 2025 PAS");
+  cy.contains("h1", "Track your 2025 property tax relief application and payment status");
 };
 
 beforeEach(() => {
