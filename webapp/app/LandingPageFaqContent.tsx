@@ -8,8 +8,7 @@ export const LandingPageFaqContent: FaqItem[] = [
     content: (
       <p>
         For online applications, it can take up to three weeks for an application to show up on this
-        website. For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants,
-        check back in the fall of 2026.
+        website. For paper applications, it can take up to 12 weeks.
       </p>
     ),
     expanded: false,
@@ -28,8 +27,7 @@ export const LandingPageFaqContent: FaqItem[] = [
           </li>
           <li>
             <strong>It&apos;s too soon</strong>: For online applications, it can take up to three
-            weeks. For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants,
-            check back in the fall.
+            weeks. For paper applications, it can take up to 12 weeks.
           </li>
           <li>
             <strong>Forgot to press submit</strong>: If you filed your 2025 application online, you
@@ -76,82 +74,135 @@ export const LandingPageFaqContent: FaqItem[] = [
     handleToggle: () => fireEventWhenFaqOpened("faq_update_after_submission"),
   },
   {
-    title: "When can I expect to receive payments?",
+    title: "When can I expect to receive a Senior Freeze payment?",
     content: (
       <>
-        <p>
-          Even though PAS-1 combines all three programs into one application, each program has a
-          different payment schedule. The table below outlines when you can expect to receive your
-          payment(s) from each program. Your payment will be delayed if there is an issue with your
-          application, or if we need additional information from you.
-        </p>
         <Table className="usa-table" bordered={true} scrollable={true}>
           <thead>
             <tr>
-              <th className="width-card">Month</th>
+              <th className="width-card">Payment period</th>
               <th className="width-mobile">Senior Freeze</th>
-              <th className="width-mobile">ANCHOR</th>
-              <th className="width-mobile">Stay NJ</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
-                <strong className="text-uppercase">July-September</strong>
+                <strong>July 2026-September 2026</strong>
               </td>
               <td>
-                Payments start going out on July 15, 2026. If you applied before May 1, 2026, you
-                can expect to get your payment between July 15, 2026 and September 15, 2026.
-              </td>
-              <td></td>
-              <td>
-                Stay NJ is paid in quarterly installments. The 2025 benefit will be paid in February
-                and May of 2027.
+                If you applied before May 1, you can expect to receive your payment between July 15
+                and September 15.
               </td>
             </tr>
             <tr>
               <td>
-                <strong className="text-uppercase">September-October</strong>
+                <strong>September 2026-October 2026</strong>
               </td>
               <td>
-                If you applied between May 1, 2026 and June 1, 2026, you can expect to get your
-                payment between September 1, 2026 and October 1, 2026.
+                If you applied between May 1 and June 1, you can expect to receive your payment
+                between September 1 and October 1.
               </td>
-              <td>
-                Payments start going out on September 15, 2026. You can expect to get your payment
-                before December 1, 2026.
-              </td>
-              <td></td>
             </tr>
             <tr>
               <td>
-                <strong className="text-uppercase">November</strong>
+                <strong>November 2026</strong>
               </td>
               <td>
-                If you applied between June 2, 2026 and September 1, 2026, you can expect to get
-                your payment between November 2, 2026 and January 2, 2027.
+                If you applied between June 2 and September 1, you can expect to receive your
+                payment between November 2 and January 2, 2027.
               </td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td>
-                <strong className="text-uppercase">December</strong>
+                <strong>December 2026</strong>
               </td>
               <td>
-                If you applied between September 2, 2026 and October 31, 2026, you can expect to get
-                your payment between December 2, 2026 and February 2, 2027.
+                If you applied between September 2 and October 31, you can expect to receive your
+                payment between December 2, 2026 and February 2, 2027.
               </td>
-              <td></td>
-              <td></td>
             </tr>
           </tbody>
         </Table>
       </>
     ),
     expanded: false,
-    id: "faq_when_can_i_expect_to_receive_payments",
-    handleToggle: () => fireEventWhenFaqOpened("faq_when_can_i_expect_to_receive_payments"),
+    id: "faq_when_can_i_expect_to_receive_senior_freeze_payments",
+    handleToggle: () =>
+      fireEventWhenFaqOpened("faq_when_can_i_expect_to_receive_senior_freeze_payments"),
+  },
+  {
+    title: "When can I expect to receive an ANCHOR payment?",
+    content: (
+      <>
+        <Table className="usa-table" bordered={true} scrollable={true}>
+          <thead>
+            <tr>
+              <th className="width-card">Payment period</th>
+              <th className="width-mobile">ANCHOR</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>October 2026</strong>
+              </td>
+              <td>
+                Payments start going out October 1, 2026. In some cases, payments will be made after
+                2026.
+              </td>
+            </tr>
+          </tbody>
+        </Table>
+      </>
+    ),
+    expanded: false,
+    id: "faq_when_can_i_expect_to_receive_anchor_payments",
+    handleToggle: () => fireEventWhenFaqOpened("faq_when_can_i_expect_to_receive_anchor_payments"),
+  },
+  {
+    title: "When can I expect to receive a Stay NJ payment?",
+    content: (
+      <>
+        <p>Stay NJ payments are paid out quarterly</p>
+        <Table className="usa-table" bordered={true} scrollable={true}>
+          <thead>
+            <tr>
+              <th className="width-card">Payment period</th>
+              <th className="width-mobile">Stay NJ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>February 2027</strong>
+              </td>
+              <td>Payments start going out next year in February of next year.</td>
+            </tr>
+            <tr>
+              <td>
+                <strong>May 2027</strong>
+              </td>
+              <td>The second payment starts going out in May of next year.</td>
+            </tr>
+            <tr>
+              <td>
+                <strong>August 2027</strong>
+              </td>
+              <td>The third payment starts going out in August of next year.</td>
+            </tr>
+            <tr>
+              <td>
+                <strong>November 2027</strong>
+              </td>
+              <td>The fourth payment starts going out in November of next year.</td>
+            </tr>
+          </tbody>
+        </Table>
+      </>
+    ),
+    expanded: false,
+    id: "faq_when_can_i_expect_to_receive_stay_nj_payments",
+    handleToggle: () => fireEventWhenFaqOpened("faq_when_can_i_expect_to_receive_stay_nj_payments"),
   },
   {
     title: "My application is taking too long. Who do I contact?",
