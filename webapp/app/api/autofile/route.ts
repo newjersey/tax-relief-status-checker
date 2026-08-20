@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { SignatureV4 } from "@smithy/signature-v4";
 import { Sha256 } from "@aws-crypto/sha256-js";
 import { defaultProvider } from "@aws-sdk/credential-provider-node";
-import { HttpRequest } from "@smithy/protocol-http";
+import { HttpRequest, type IHttpRequest } from "@smithy/protocol-http";
 
 interface StatusRequestBody {
   readonly ssn: string;
@@ -14,7 +14,7 @@ interface StatusRequestBody {
 const signRequest = async (config: {
   readonly url: string;
   readonly body: string;
-}): Promise<HttpRequest> => {
+}): Promise<IHttpRequest> => {
   const parsedUrl = new URL(config.url);
 
   const request = new HttpRequest({
@@ -35,7 +35,7 @@ const signRequest = async (config: {
     sha256: Sha256,
   });
 
-  return (await signer.sign(request)) as HttpRequest;
+  return await signer.sign(request);
 };
 
 /**
