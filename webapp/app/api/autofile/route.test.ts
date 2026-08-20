@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { NextRequest } from "next/server";
 import { POST } from "./route";
 
-vi.mock("@aws-sdk/signature-v4", () => ({
+vi.mock("@smithy/signature-v4", () => ({
   SignatureV4: class {
     sign = vi.fn().mockResolvedValue({
       method: "POST",

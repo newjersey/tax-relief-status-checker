@@ -39,5 +39,11 @@
     "lambda",
     "lambda-anchor-autofile-api",
     "infra"
-  ]
+  ],
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "esbuild@0.28.2": true,
+    "oracledb@7.0.1": true,
+    "cypress@15.20.1": true
+  }
 }
