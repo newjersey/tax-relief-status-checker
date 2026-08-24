@@ -16,6 +16,10 @@ it("should allow the user to visit the webpage", () => {
   cy.contains("h1", "Track your 2025 property tax relief application and payment status");
 });
 
+it("should NOT have a logout button", () => {
+  cy.contains("a", "Log out").should("not.exist");
+});
+
 it("should display an error message when the user tries to submit empty fields", () => {
   cy.get(`button[type="submit"]`).click();
   const ssnError = cy.get(`span[id="ssnErrorMessage"]`);
