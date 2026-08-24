@@ -24,7 +24,7 @@
   "dependencies": {
     "@aws-crypto/sha256-js": "5.2.0",
     "@aws-sdk/credential-provider-node": "3.972.80",
-    "@smithy/signature-v4": "5.6.12",
+    "@smithy/signature-v4": "5.7.3",
     "@newjersey/njwds": "2.9.2",
     "@smithy/protocol-http": "5.6.2",
     "@testing-library/jest-dom": "7.0.1",
@@ -40,7 +40,7 @@
     "@testing-library/react": "16.3.2",
     "@types/node": "25.9.5",
     "jsdom": "30.0.1",
-    "vitest": "4.1.10",
-    "cypress": "15.20.1"
+    "vitest": "4.1.11",
+    "cypress": "15.21.0"
   }
 }
