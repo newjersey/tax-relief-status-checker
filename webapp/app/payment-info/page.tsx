@@ -95,7 +95,7 @@ const PaymentInfoPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, anchor, ptr } = dataStore;
+  const { lastFourSsnDigits, zipCode, ptr } = dataStore;
 
   return (
     <main id="main-content">
@@ -117,10 +117,6 @@ const PaymentInfoPage = () => {
               {(() => {
                 if (ptr.length === 0) return null;
                 return showProgramTransactions(ptr, TaxProgram.PTR);
-              })()}
-              {(() => {
-                if (anchor.length === 0) return null;
-                return showProgramTransactions(anchor, TaxProgram.ANCHOR);
               })()}
             </tbody>
           </Table>

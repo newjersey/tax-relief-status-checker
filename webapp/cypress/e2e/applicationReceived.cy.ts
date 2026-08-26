@@ -1,4 +1,5 @@
 import { fillFields, MOCK_SSN, MOCK_ZIP } from "./utils";
+import payment_sent_transaction from "../fixtures/payment_sent_transaction.json";
 
 const applicationReceivedAssertions = () => {
   cy.url().should("include", "/application-received");
@@ -66,5 +67,32 @@ it("should display application found page if records has an object, but no trans
   });
   cy.contains("button", `Check Status`).click();
 
+  applicationReceivedAssertions();
+});
+
+it("displays application found page if record has anchor CHECK", () => {
+  cy.fixture("v2_api_found_records.json").then((resp) => {
+    resp.records[0].ptr[0] = { status: "processing" };
+    resp.records[0].anchor[0] = payment_sent_transaction;
+    cy.intercept("POST", "/api/status", {
+      statusCode: 200,
+      body: resp,
+    });
+  });
+  cy.contains("button", `Check Status`).click();
+  applicationReceivedAssertions();
+});
+
+it("displays application found page if record has anchor DIRECT DEPOSIT", () => {
+  cy.fixture("v2_api_found_records.json").then((resp) => {
+    resp.records[0].ptr[0] = { status: "processing" };
+    resp.records[0].anchor[0] = payment_sent_transaction;
+    resp.records[0].anchor[0].payment_details.method = "direct_deposit";
+    cy.intercept("POST", "/api/status", {
+      statusCode: 200,
+      body: resp,
+    });
+  });
+  cy.contains("button", `Check Status`).click();
   applicationReceivedAssertions();
 });
