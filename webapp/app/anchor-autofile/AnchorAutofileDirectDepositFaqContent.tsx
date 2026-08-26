@@ -6,8 +6,29 @@ export const AnchorAutofileDirectDepositFaqContent: FaqItem[] = [
     content: (
       <>
         <p>
-          In your case, the Division is filing on your behalf. You do not need to file an ANCHOR
-          application.
+          In your case, the Division is filing on your behalf based on information from your 2024
+          application. However, if you live somewhere different than where you lived on October 1,
+          2024, you'll need to{" "}
+          <a
+            href="https://propertytaxreliefapp.nj.gov/ANCHOROptOut"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            opt out
+          </a>{" "}
+          of having an application filed on your behalf. To opt out, you'll need to provide your SSN
+          or ITIN, birth year (if applicable, the same information for your spouse or civil union
+          partner), and the six-character PIN that was included on your original Benefit
+          Confirmation Letter. Since you did not receive your letter, contact the Division to obtain
+          your PIN. If you are eligible for the property you resided in on October 1, 2025,{" "}
+          <a
+            href="https://propertytaxreliefapp.nj.gov/File/Eligibility"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            submit an application
+          </a>{" "}
+          on your own for that property.
         </p>
       </>
     ),
