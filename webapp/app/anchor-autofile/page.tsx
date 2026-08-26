@@ -43,8 +43,8 @@ const AnchorAutofilePage = () => {
               A 2025 ANCHOR application will be filed on your behalf.
             </h1>
             <p>
-              Our records show that you are eligible for the ANCHOR benefit. Below are next steps
-              you can expect:
+              Our records show that you are eligible for the ANCHOR benefit based on information
+              from your 2024 application. Below are next steps you can expect:
             </p>
             <ProcessList>
               <ProcessListItem>
