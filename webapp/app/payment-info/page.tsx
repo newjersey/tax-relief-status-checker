@@ -95,7 +95,7 @@ const PaymentInfoPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, anchor, ptr } = dataStore;
+  const { lastFourSsnDigits, zipCode, ptr } = dataStore;
 
   return (
     <main id="main-content">
