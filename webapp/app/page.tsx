@@ -146,7 +146,7 @@ const LandingPage = () => {
             </p>
             <ul>
               <li>
-                <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code you filed on your
+                <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code filed on your
                 application is different than the one you just entered.
               </li>
               <li>
@@ -234,7 +234,7 @@ const LandingPage = () => {
                     aria-invalid={errors.ssn ? "true" : "false"}
                     aria-describedby={errors.ssn ? "ssnErrorMessage" : undefined}
                     {...register("ssn", {
-                      required: "This question is required",
+                      required: "SSN or ITIN is required",
                       pattern: {
                         value: /\d{3}-\d{2}-\d{4}/,
                         message: "SSN or ITIN number entered must have nine digits",
@@ -262,10 +262,10 @@ const LandingPage = () => {
                     aria-invalid={errors.zipCode ? "true" : "false"}
                     aria-describedby={errors.zipCode ? "zipCodeErrorMessage" : undefined}
                     {...register("zipCode", {
-                      required: "This question is required",
+                      required: "ZIP code is required",
                       minLength: {
                         value: 5,
-                        message: "Zip code must have five digits",
+                        message: "ZIP code must have five digits",
                       },
                     })}
                   />

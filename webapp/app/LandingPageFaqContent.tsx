@@ -22,8 +22,8 @@ export const LandingPageFaqContent: FaqItem[] = [
         <p>Some common reasons this might be happening:</p>
         <ul>
           <li>
-            <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code you filed on your
-            application is different than the one you just entered.
+            <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code filed on your application
+            is different than the one you just entered.
           </li>
           <li>
             <strong>It&apos;s too soon</strong>: For online applications, it can take up to three
