@@ -118,10 +118,6 @@ const PaymentInfoPage = () => {
                 if (ptr.length === 0) return null;
                 return showProgramTransactions(ptr, TaxProgram.PTR);
               })()}
-              {(() => {
-                if (anchor.length === 0) return null;
-                return showProgramTransactions(anchor, TaxProgram.ANCHOR);
-              })()}
             </tbody>
           </Table>
           <p>

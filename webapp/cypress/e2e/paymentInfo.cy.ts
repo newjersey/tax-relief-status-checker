@@ -119,35 +119,6 @@ it("displays payments page if records has senior freeze DIRECT DEPOSIT", () => {
   paymentInfoAssertions(TaxProgram.PTR, PaymentType.DIRECT_DEPOSIT, mockDate, mockAmount);
 });
 
-it("displays payments page if records has anchor CHECK", () => {
-  cy.fixture("v2_api_found_records.json").then((resp) => {
-    resp.records[0].ptr[0] = { status: "processing" };
-    resp.records[0].anchor[0] = payment_sent_transaction;
-    cy.intercept("POST", "/api/status", {
-      statusCode: 200,
-      body: resp,
-    });
-  });
-  cy.contains("button", `Check Status`).click();
-  cy.url().should("include", "/payment-info");
-  paymentInfoAssertions(TaxProgram.ANCHOR, PaymentType.CHECK, mockDate, mockAmount);
-});
-
-it("displays payments page if records has anchor DIRECT DEPOSIT", () => {
-  cy.fixture("v2_api_found_records.json").then((resp) => {
-    resp.records[0].ptr[0] = { status: "processing" };
-    resp.records[0].anchor[0] = payment_sent_transaction;
-    resp.records[0].anchor[0].payment_details.method = "direct_deposit";
-    cy.intercept("POST", "/api/status", {
-      statusCode: 200,
-      body: resp,
-    });
-  });
-  cy.contains("button", `Check Status`).click();
-  cy.url().should("include", "/payment-info");
-  paymentInfoAssertions(TaxProgram.ANCHOR, PaymentType.DIRECT_DEPOSIT, mockDate, mockAmount);
-});
-
 it("displays the first check sent if multiple PTR transactions are payment_sent", () => {
   cy.fixture("v2_api_found_records.json").then((resp) => {
     resp.records[0].ptr[0] = payment_sent_transaction;
@@ -163,27 +134,7 @@ it("displays the first check sent if multiple PTR transactions are payment_sent"
   paymentInfoAssertions(TaxProgram.PTR, PaymentType.DIRECT_DEPOSIT, mockEarlyDate, mockEarlyAmount);
 });
 
-it("displays the first check sent if multiple ANCHOR transactions are payment_sent", () => {
-  cy.fixture("v2_api_found_records.json").then((resp) => {
-    resp.records[0].ptr[0] = { status: "processing" };
-    resp.records[0].anchor[0] = payment_sent_transaction;
-    resp.records[0].anchor[0] = earlier_transaction;
-    cy.intercept("POST", "/api/status", {
-      statusCode: 200,
-      body: resp,
-    });
-  });
-  cy.contains("button", `Check Status`).click();
-  cy.url().should("include", "/payment-info");
-  paymentInfoAssertions(
-    TaxProgram.ANCHOR,
-    PaymentType.DIRECT_DEPOSIT,
-    mockEarlyDate,
-    mockEarlyAmount,
-  );
-});
-
-it("displays first check and update payment across every payment category", () => {
+it("displays first check and update payment for PTR but not for ANCHOR or STAYNJ", () => {
   cy.intercept("POST", "/api/status", {
     statusCode: 200,
     fixture: "update_payment_records.json",
@@ -192,6 +143,14 @@ it("displays first check and update payment across every payment category", () =
   cy.url().should("include", "/payment-info");
   paymentInfoAssertions(TaxProgram.PTR, PaymentType.DIRECT_DEPOSIT, "07/16/2026", 125);
   paymentInfoAssertions(TaxProgram.PTR, PaymentType.ADJUSTED, "07/17/2026", 5);
-  paymentInfoAssertions(TaxProgram.ANCHOR, PaymentType.DIRECT_DEPOSIT, "09/06/2026", 377.56);
-  paymentInfoAssertions(TaxProgram.ANCHOR, PaymentType.ADJUSTED, "10/06/2026", 1750);
+
+  cy.contains("td", TaxProgram.ANCHOR).should("not.exist");
+  cy.contains("td", "Direct deposit issued on 09/06/2026").should("not.exist");
+  cy.contains("td", "1750.00").should("not.exist");
+
+  cy.contains("td", TaxProgram.ANCHOR).should("not.exist");
+  cy.contains("td", `Your benefit amount was adjusted. A check was sent on 10/6/2026`).should(
+    "not.exist",
+  );
+  cy.contains("td", `377.56`).should("not.exist");
 });
