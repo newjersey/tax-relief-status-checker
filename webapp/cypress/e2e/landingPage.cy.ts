@@ -22,18 +22,16 @@ it("should NOT have a logout button", () => {
 
 it("should display an error message when the user tries to submit empty fields", () => {
   cy.get(`button[type="submit"]`).click();
-  const ssnError = cy.get(`span[id="ssnErrorMessage"]`);
-  const zipError = cy.get(`span[id="zipCodeErrorMessage"]`);
-  ssnError.should("be.visible");
-  ssnError.should("contain.text", "This question is required");
-  zipError.should("be.visible");
-  zipError.should("contain.text", "This question is required");
+  cy.get(`span[id="ssnErrorMessage"]`).should("be.visible");
+  cy.get(`span[id="ssnErrorMessage"]`).should("contain.text", "SSN or ITIN is required");
+  cy.get(`span[id="zipCodeErrorMessage"]`).should("be.visible");
+  cy.get(`span[id="zipCodeErrorMessage"]`).should("contain.text", "ZIP code is required");
 });
 
 it("displays SSN error messages properly", () => {
   cy.get(`button[type="submit"]`).click();
   cy.get(`#ssnErrorMessage`).should("be.visible");
-  cy.get(`#ssnErrorMessage`).should("contain.text", "This question is required");
+  cy.get(`#ssnErrorMessage`).should("contain.text", "SSN or ITIN is required");
 
   fillField("ssn", "1");
   cy.contains("button", `Check Status`).click();
@@ -50,12 +48,12 @@ it("displays SSN error messages properly", () => {
 it("displays Zip Code error messages properly", () => {
   cy.get(`button[type="submit"]`).click();
   cy.get(`#zipCodeErrorMessage`).should("be.visible");
-  cy.get(`#zipCodeErrorMessage`).should("contain.text", "This question is required");
+  cy.get(`#zipCodeErrorMessage`).should("contain.text", "ZIP code is required");
 
   fillField("zipCode", "1");
   cy.contains("button", `Check Status`).click();
   cy.get(`#zipCodeErrorMessage`).should("be.visible");
-  cy.get(`#zipCodeErrorMessage`).should("contain.text", "Zip code must have five digits");
+  cy.get(`#zipCodeErrorMessage`).should("contain.text", "ZIP code must have five digits");
 
   fillField("zipCode", "2345");
   cy.get("#zipCodeErrorMessage").should("not.exist");
