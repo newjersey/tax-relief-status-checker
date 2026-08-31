@@ -6,7 +6,7 @@ import { LogoutButton } from "./LogoutButton";
 export const StatusCheckerHeader = () => (
   <>
     <header>
-      <Alert className="margin-0" id="beta-banner" type="info" noIcon={true} headingLevel="h1">
+      <Alert className="margin-0" id="beta-banner" type="info" noIcon={true}>
         <strong>This website is in beta.</strong> This means it is actively being worked on with new
         features coming soon.
       </Alert>
