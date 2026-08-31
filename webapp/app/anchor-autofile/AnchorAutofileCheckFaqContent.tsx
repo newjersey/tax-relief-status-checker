@@ -1,4 +1,5 @@
 import { fireEventWhenFaqOpened, type FaqItem } from "@/components/FaqSection";
+import React from "react";
 
 export const AnchorAutofileCheckFaqContent: FaqItem[] = [
   {
