@@ -84,7 +84,9 @@ const MoreInformationNeededPage = () => {
         <div className="grid-container">
           <TaxpayerInfoHeader lastFourSsnDigits={lastFourSsnDigits} zipCode={zipCode} />
           {issueFlagged !== undefined && (
-            <Alert type="warning" headingLevel="h2" heading="Additional information needed">
+            <Alert type="warning">
+              <h3 className="usa-alert__heading">Additional information needed</h3>
+
               {createAlertContent(issueFlagged)}
             </Alert>
           )}
