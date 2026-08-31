@@ -1,6 +1,7 @@
 import { Table } from "@trussworks/react-uswds";
 
 import { fireEventWhenFaqOpened, type FaqItem } from "@/components/FaqSection";
+import React from "react";
 
 export const LandingPageFaqContent: FaqItem[] = [
   {
