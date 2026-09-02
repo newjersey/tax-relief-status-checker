@@ -31,7 +31,7 @@ export const getEarliestTransaction = (transactions: Transaction[]) => {
   return earliestTransaction;
 };
 
-export const showEarliestTransaction = (transaction: Transaction, taxProgram: TaxProgram) => {
+export const showTransactionRow = (transaction: Transaction, taxProgram: TaxProgram) => {
   if (!transaction?.payment_details) return null;
   return (
     <tr>
@@ -73,7 +73,7 @@ export const showProgramTransactions = (transactions: Transaction[], taxProgram:
 
   return (
     <>
-      {showEarliestTransaction(earliest, taxProgram)}
+      {showTransactionRow(earliest, taxProgram)}
       {remainingTransactions.map((transaction) => showUpdatedTransaction(transaction, taxProgram))}
     </>
   );
@@ -95,7 +95,7 @@ const PaymentInfoPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, ptr } = dataStore;
+  const { lastFourSsnDigits, zipCode, ptr, stay_nj } = dataStore;
 
   return (
     <main id="main-content">
@@ -117,6 +117,12 @@ const PaymentInfoPage = () => {
               {(() => {
                 if (ptr.length === 0) return null;
                 return showProgramTransactions(ptr, TaxProgram.PTR);
+              })()}
+              {(() => {
+                if (stay_nj.length === 0) return null;
+                for (const transaction of stay_nj) {
+                  return showTransactionRow(transaction, TaxProgram.STAY_NJ);
+                }
               })()}
             </tbody>
           </Table>
