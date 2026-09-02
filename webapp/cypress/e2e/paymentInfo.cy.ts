@@ -175,7 +175,7 @@ it("displays payments page if records has stay NJ CHECK", () => {
 
 it("displays payments page if records has stay NJ DIRECT DEPOSIT", () => {
   cy.fixture("stay_record").then((resp) => {
-    resp.records[0].stay_nj[0].paymentType = PaymentType.DIRECT_DEPOSIT;
+    resp.records[0].stay_nj[0].payment_details.method = PaymentType.DIRECT_DEPOSIT;
     resp.records[0].stay_nj[1] = null;
     cy.intercept("POST", "/api/status", {
       statusCode: 200,
@@ -186,8 +186,32 @@ it("displays payments page if records has stay NJ DIRECT DEPOSIT", () => {
   cy.url().should("include", "/payment-info");
   paymentInfoAssertions(
     TaxProgram.STAY_NJ,
-    PaymentType.CHECK,
+    PaymentType.DIRECT_DEPOSIT,
     formatDate("1/2/2027 00:00:00"),
+    mockAmount,
+  );
+});
+
+it("displays both payments as regular if records has 2 stay NJ transaction in the same quarter", () => {
+  cy.fixture("stay_record").then((resp) => {
+    resp.records[0].stay_nj[0].payment_details.method = PaymentType.DIRECT_DEPOSIT;
+    cy.intercept("POST", "/api/status", {
+      statusCode: 200,
+      body: resp,
+    });
+  });
+  cy.contains("button", `Check Status`).click();
+  cy.url().should("include", "/payment-info");
+  paymentInfoAssertions(
+    TaxProgram.STAY_NJ,
+    PaymentType.DIRECT_DEPOSIT,
+    formatDate("1/2/2027 00:00:00"),
+    mockAmount,
+  );
+  paymentInfoAssertions(
+    TaxProgram.STAY_NJ,
+    PaymentType.CHECK,
+    formatDate("1/6/2027 00:00:00"),
     mockAmount,
   );
 });

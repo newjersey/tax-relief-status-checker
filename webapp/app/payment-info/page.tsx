@@ -120,9 +120,9 @@ const PaymentInfoPage = () => {
               })()}
               {(() => {
                 if (stay_nj.length === 0) return null;
-                for (const transaction of stay_nj) {
-                  return showTransactionRow(transaction, TaxProgram.STAY_NJ);
-                }
+                return stay_nj.map((transaction) =>
+                  showTransactionRow(transaction, TaxProgram.STAY_NJ),
+                );
               })()}
             </tbody>
           </Table>
