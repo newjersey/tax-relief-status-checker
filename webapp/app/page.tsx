@@ -33,7 +33,11 @@ interface AutofileResponse {
   readonly paymentMethod?: PaymentMethod;
 }
 
-const checkAutofile = async (params: {
+interface StatusResponse {
+  readonly records: StatusRecord[];
+}
+
+const callAutofileApi = async (params: {
   readonly ssn: string;
   readonly zip: string;
 }): Promise<AutofileResponse | null> => {
@@ -52,6 +56,28 @@ const checkAutofile = async (params: {
     return (await response.json()) as AutofileResponse;
   } catch {
     logGAEvent(`autofile_api_error`);
+    return null;
+  }
+};
+
+const callStatusApi = async (params: {
+  readonly ssn: string;
+  readonly zip: string;
+}): Promise<StatusResponse | null> => {
+  try {
+    const response = await fetch("/api/status", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ssn: params.ssn, zip: params.zip }),
+    });
+
+    if (!response.ok) {
+      logGAEvent(`api_error`);
+      return null;
+    }
+    return (await response.json()) as StatusResponse;
+  } catch {
+    logGAEvent(`api_error`);
     return null;
   }
 };
@@ -99,80 +125,70 @@ const LandingPage = () => {
     setAlertContent(null);
 
     try {
-      const autofileResult = await checkAutofile({ ssn: data.ssn, zip: data.zipCode });
-
-      if (autofileResult?.autofilePlanned) {
-        setDataStore({
-          type: DataType.AUTOFILE,
-          lastFourSsnDigits: maskSsn(data.ssn),
-          zipCode: data.zipCode,
-          paymentMethod: autofileResult.paymentMethod,
-        });
-        logGAEvent(`autofile_${autofileResult.paymentMethod}`);
-        router.push("/anchor-autofile");
-        return;
-      }
-
-      const response = await fetch("/api/status", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ssn: data.ssn, zip: data.zipCode }),
-      });
-
-      if (!response.ok) {
+      const statusResult = await callStatusApi({ ssn: data.ssn, zip: data.zipCode });
+      if (statusResult === null) {
         setAlertContent(
           <p className="usa-alert__text maxw-tablet">
             We are having an issue checking on your application status. Please try again later.
           </p>,
         );
-        logGAEvent(`api_error`);
         returnToTop();
         return;
       }
 
-      const body = (await response.json()) as {
-        records: readonly StatusRecord[];
-      };
-
-      const record2025 = body.records.find((r) => r.return_year === "2025");
+      const record2025 = statusResult.records.find((r) => r.return_year === "2025");
 
       if (!record2025) {
-        setAlertContent(
-          <>
-            <h2 className="usa-alert__heading">No 2025 application found</h2>
-            <p className="usa-alert__text">
-              We couldn't find any records matching the SSN or ITIN and ZIP code you entered. Some
-              common reasons why:
-            </p>
-            <ul>
-              <li>
-                <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code filed on your
-                application is different than the one you just entered.
-              </li>
-              <li>
-                <strong>It's too soon</strong>: For online applications, it can take up to three
-                weeks for an application to show up on this website. For paper applications, it can
-                take up to 12 weeks. For ANCHOR-only applicants, check back in the fall of 2026.
-              </li>
-            </ul>
-            <p className="usa-alert__text">
-              Find the{" "}
-              <a
-                href="#faq_no_2025_application_found"
-                onClick={(e) => {
-                  e.preventDefault();
-                  expandFaqAccordionItem("faq_no_2025_application_found");
-                }}
-              >
-                full list of other possible reasons
-              </a>{" "}
-              your application is not showing up
-            </p>
-          </>,
-        );
-        logGAEvent(`api_200_record_not_found`);
-        returnToTop();
-        return;
+        const autofileResult = await callAutofileApi({ ssn: data.ssn, zip: data.zipCode });
+        if (autofileResult?.autofilePlanned) {
+          setDataStore({
+            type: DataType.AUTOFILE,
+            lastFourSsnDigits: maskSsn(data.ssn),
+            zipCode: data.zipCode,
+            paymentMethod: autofileResult.paymentMethod,
+          });
+          logGAEvent(`autofile_${autofileResult.paymentMethod}`);
+          router.push("/anchor-autofile");
+          return;
+        } else {
+          setAlertContent(
+            <>
+              <h2 className="usa-alert__heading">No 2025 application found</h2>
+              <p className="usa-alert__text">
+                We couldn't find any records matching the SSN or ITIN and ZIP code you entered. Some
+                common reasons why:
+              </p>
+              <ul>
+                <li>
+                  <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code filed on your
+                  application is different than the one you just entered.
+                </li>
+                <li>
+                  <strong>It's too soon</strong>: For online applications, it can take up to three
+                  weeks for an application to show up on this website. For paper applications, it
+                  can take up to 12 weeks. For ANCHOR-only applicants, check back in the fall of
+                  2026.
+                </li>
+              </ul>
+              <p className="usa-alert__text">
+                Find the{" "}
+                <a
+                  href="#faq_no_2025_application_found"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    expandFaqAccordionItem("faq_no_2025_application_found");
+                  }}
+                >
+                  full list of other possible reasons
+                </a>{" "}
+                your application is not showing up
+              </p>
+            </>,
+          );
+          logGAEvent(`api_200_record_not_found`);
+          returnToTop();
+          return;
+        }
       }
 
       const lastFourSsnDigits = maskSsn(data.ssn);

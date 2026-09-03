@@ -9,10 +9,26 @@ beforeEach(() => {
   });
   cy.visit("/");
   fillFields();
+  cy.intercept("POST", "/api/status", {
+    statusCode: 200,
+    fixture: "v2_api_empty_records.json",
+  });
+});
+
+it("should route the user to the payment-info page when autofile API and status API return records", () => {
+  cy.intercept("POST", "/api/status", {
+    statusCode: 200,
+    fixture: "v2_api_found_records.json",
+  });
+  cy.intercept("POST", "/api/autofile", {
+    statusCode: 200,
+    fixture: "autofile_api_check.json",
+  });
+  cy.contains("button", `Check Status`).click();
+  cy.url().should("include", "/payment-info");
 });
 
 it("should route the user to the autofile page when autofile API returns true with CHECK", () => {
-  fillFields();
   cy.intercept("POST", "/api/autofile", {
     statusCode: 200,
     fixture: "autofile_api_check.json",
@@ -47,7 +63,6 @@ it("should route the user to the autofile page when autofile API returns true wi
 });
 
 it("should route the user to the autofile page when autofile API returns true with Direct Deposit", () => {
-  fillFields();
   cy.intercept("POST", "/api/autofile", {
     statusCode: 200,
     fixture: "autofile_api_direct_deposit.json",
