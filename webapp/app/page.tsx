@@ -95,6 +95,40 @@ const returnToTop = () => {
   topOfPage.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
+const NoApplicationFoundAlert = () => (
+  <>
+    <h2 className="usa-alert__heading">No 2025 application found</h2>
+    <p className="usa-alert__text">
+      We couldn't find any records matching the SSN or ITIN and ZIP code you entered. Some common
+      reasons why:
+    </p>
+    <ul>
+      <li>
+        <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code filed on your application is
+        different than the one you just entered.
+      </li>
+      <li>
+        <strong>It's too soon</strong>: For online applications, it can take up to three weeks for
+        an application to show up on this website. For paper applications, it can take up to 12
+        weeks. For ANCHOR-only applicants, check back in the fall of 2026.
+      </li>
+    </ul>
+    <p className="usa-alert__text">
+      Find the{" "}
+      <a
+        href="#faq_no_2025_application_found"
+        onClick={(e) => {
+          e.preventDefault();
+          expandFaqAccordionItem("faq_no_2025_application_found");
+        }}
+      >
+        full list of other possible reasons
+      </a>{" "}
+      your application is not showing up
+    </p>
+  </>
+);
+
 const LandingPage = () => {
   const router = useRouter();
   const { setDataStore } = useDataStore();
@@ -135,39 +169,7 @@ const LandingPage = () => {
       router.push("/anchor-autofile");
       return;
     } else {
-      setAlertContent(
-        <>
-          <h2 className="usa-alert__heading">No 2025 application found</h2>
-          <p className="usa-alert__text">
-            We couldn't find any records matching the SSN or ITIN and ZIP code you entered. Some
-            common reasons why:
-          </p>
-          <ul>
-            <li>
-              <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code filed on your
-              application is different than the one you just entered.
-            </li>
-            <li>
-              <strong>It's too soon</strong>: For online applications, it can take up to three weeks
-              for an application to show up on this website. For paper applications, it can take up
-              to 12 weeks. For ANCHOR-only applicants, check back in the fall of 2026.
-            </li>
-          </ul>
-          <p className="usa-alert__text">
-            Find the{" "}
-            <a
-              href="#faq_no_2025_application_found"
-              onClick={(e) => {
-                e.preventDefault();
-                expandFaqAccordionItem("faq_no_2025_application_found");
-              }}
-            >
-              full list of other possible reasons
-            </a>{" "}
-            your application is not showing up
-          </p>
-        </>,
-      );
+      setAlertContent(<NoApplicationFoundAlert />);
       logGAEvent(`api_200_record_not_found`);
       returnToTop();
       return;
