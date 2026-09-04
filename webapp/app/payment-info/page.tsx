@@ -31,7 +31,7 @@ export const getEarliestTransaction = (transactions: Transaction[]) => {
   return earliestTransaction;
 };
 
-export const showTransactionRow = (transaction: Transaction, taxProgram: TaxProgram) => {
+export const showRegularTransaction = (transaction: Transaction, taxProgram: TaxProgram) => {
   if (!transaction?.payment_details) return null;
   return (
     <tr>
@@ -66,17 +66,25 @@ export const showUpdatedTransaction = (
 };
 
 export const showProgramTransactions = (transactions: Transaction[], taxProgram: TaxProgram) => {
-  const earliest = getEarliestTransaction(transactions);
-  if (!earliest?.payment_details) return null;
+  if (taxProgram === TaxProgram.PTR || taxProgram === TaxProgram.ANCHOR) {
+    const earliest = getEarliestTransaction(transactions);
+    if (!earliest?.payment_details) return null;
 
-  const remainingTransactions = transactions.filter((transaction) => transaction !== earliest);
+    const remainingTransactions = transactions.filter((transaction) => transaction !== earliest);
 
-  return (
-    <>
-      {showTransactionRow(earliest, taxProgram)}
-      {remainingTransactions.map((transaction) => showUpdatedTransaction(transaction, taxProgram))}
-    </>
-  );
+    return (
+      <>
+        {showRegularTransaction(earliest, taxProgram)}
+        {remainingTransactions.map((transaction) =>
+          showUpdatedTransaction(transaction, taxProgram),
+        )}
+      </>
+    );
+  } else if (taxProgram === TaxProgram.STAY_NJ) {
+    return transactions.map((transaction) =>
+      showRegularTransaction(transaction, TaxProgram.STAY_NJ),
+    );
+  }
 };
 
 const PaymentInfoPage = () => {
@@ -120,9 +128,7 @@ const PaymentInfoPage = () => {
               })()}
               {(() => {
                 if (stay_nj.length === 0) return null;
-                return stay_nj.map((transaction) =>
-                  showTransactionRow(transaction, TaxProgram.STAY_NJ),
-                );
+                return showProgramTransactions(stay_nj, TaxProgram.STAY_NJ);
               })()}
             </tbody>
           </Table>

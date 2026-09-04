@@ -57,9 +57,17 @@ const checkAutofile = async (params: {
 };
 
 const determineRoute = (record: StatusRecord): string => {
-  const hasPaymentSentTransaction = [...record.ptr, ...record.stay_nj].some(
+  let hasPaymentSentTransaction = [...record.ptr].some(
     (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
   );
+
+  if (process.env.NEXT_PUBLIC_ENABLE_STAY) {
+    hasPaymentSentTransaction =
+      hasPaymentSentTransaction ||
+      [...record.stay_nj].some(
+        (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
+      );
+  }
 
   if (hasPaymentSentTransaction) {
     return "/payment-info";
