@@ -31,7 +31,7 @@ export const getEarliestTransaction = (transactions: Transaction[]) => {
   return earliestTransaction;
 };
 
-export const showEarliestTransaction = (transaction: Transaction, taxProgram: TaxProgram) => {
+export const showRegularTransaction = (transaction: Transaction, taxProgram: TaxProgram) => {
   if (!transaction?.payment_details) return null;
   return (
     <tr>
@@ -66,17 +66,25 @@ export const showUpdatedTransaction = (
 };
 
 export const showProgramTransactions = (transactions: Transaction[], taxProgram: TaxProgram) => {
-  const earliest = getEarliestTransaction(transactions);
-  if (!earliest?.payment_details) return null;
+  if (taxProgram === TaxProgram.PTR || taxProgram === TaxProgram.ANCHOR) {
+    const earliest = getEarliestTransaction(transactions);
+    if (!earliest?.payment_details) return null;
 
-  const remainingTransactions = transactions.filter((transaction) => transaction !== earliest);
+    const remainingTransactions = transactions.filter((transaction) => transaction !== earliest);
 
-  return (
-    <>
-      {showEarliestTransaction(earliest, taxProgram)}
-      {remainingTransactions.map((transaction) => showUpdatedTransaction(transaction, taxProgram))}
-    </>
-  );
+    return (
+      <>
+        {showRegularTransaction(earliest, taxProgram)}
+        {remainingTransactions.map((transaction) =>
+          showUpdatedTransaction(transaction, taxProgram),
+        )}
+      </>
+    );
+  } else if (taxProgram === TaxProgram.STAY_NJ) {
+    return transactions.map((transaction) =>
+      showRegularTransaction(transaction, TaxProgram.STAY_NJ),
+    );
+  }
 };
 
 const PaymentInfoPage = () => {
@@ -95,7 +103,7 @@ const PaymentInfoPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, ptr } = dataStore;
+  const { lastFourSsnDigits, zipCode, ptr, stay_nj } = dataStore;
 
   return (
     <main id="main-content">
@@ -117,6 +125,10 @@ const PaymentInfoPage = () => {
               {(() => {
                 if (ptr.length === 0) return null;
                 return showProgramTransactions(ptr, TaxProgram.PTR);
+              })()}
+              {(() => {
+                if (stay_nj.length === 0) return null;
+                return showProgramTransactions(stay_nj, TaxProgram.STAY_NJ);
               })()}
             </tbody>
           </Table>

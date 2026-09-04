@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import {
   getEarliestTransaction,
   showProgramTransactions,
-  showEarliestTransaction,
+  showRegularTransaction,
   showUpdatedTransaction,
 } from "./page";
 import { render } from "@testing-library/react";
@@ -91,7 +91,7 @@ describe("getEarliestTransaction", () => {
 
 describe("showEarliestTransaction", () => {
   it("shows correct message when method is check", () => {
-    const result = showEarliestTransaction(payment_sent_transaction, TaxProgram.ANCHOR);
+    const result = showRegularTransaction(payment_sent_transaction, TaxProgram.ANCHOR);
     const html = renderToStaticMarkup(result);
     checkTransactionInfo(
       html,
@@ -105,7 +105,7 @@ describe("showEarliestTransaction", () => {
   it("shows correct message when method is direct deposit", () => {
     const transaction = payment_sent_transaction;
     transaction.payment_details.method = PaymentMethod.DIRECT_DEPOSIT;
-    const result = showEarliestTransaction(transaction, TaxProgram.ANCHOR);
+    const result = showRegularTransaction(transaction, TaxProgram.ANCHOR);
     const html = renderToStaticMarkup(result);
     checkTransactionInfo(
       html,
@@ -117,7 +117,7 @@ describe("showEarliestTransaction", () => {
   });
 
   it("returns nothing if there is no payment_details", () => {
-    expect(showEarliestTransaction(error_payment_sent_transaction, TaxProgram.ANCHOR)).toBeNull;
+    expect(showRegularTransaction(error_payment_sent_transaction, TaxProgram.ANCHOR)).toBeNull;
   });
 });
 
