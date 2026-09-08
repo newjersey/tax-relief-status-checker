@@ -73,7 +73,7 @@ const callStatusApi = async (params: {
   return (await response.json()) as StatusResponse;
 };
 
-const determineRoute = (record: StatusRecord): string => {
+export const determineRoute = (record: StatusRecord): string => {
   const hasPaymentSentTransaction = [...record.ptr].some(
     (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
   );
@@ -152,7 +152,6 @@ const LandingPage = () => {
         We are having an issue checking on your application status. Please try again later.
       </p>,
     );
-    logGAEvent(`api_error`);
     returnToTop();
   };
 
