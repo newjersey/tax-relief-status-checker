@@ -43,3 +43,11 @@ export enum IssueFlaggedType {
   PROPERTY_TAX_BILL_NEEDED,
   CONTACT_TAXATION,
 }
+
+export interface StatusRecord {
+  readonly return_year: string;
+  readonly application_date: string;
+  readonly anchor: Transaction[];
+  readonly ptr: Transaction[];
+  readonly stay_nj: Transaction[];
+}
