@@ -5,7 +5,7 @@ import { setIssueFlagged } from "./setIssueFlagged";
 /** Determines the route to navigate to based on the status record's transaction data. */
 export const determineRoute = (record: StatusRecord): string => {
   let recordsToCheck = [...record.ptr];
-  if (process.env.NEXT_PUBLIC_ENABLE_STAY) {
+  if (process.env.NEXT_PUBLIC_ENABLE_STAY == "true") {
     recordsToCheck.push(...record.stay_nj);
   }
   const hasPaymentSentTransaction = recordsToCheck.some(
