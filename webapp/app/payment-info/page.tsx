@@ -127,7 +127,7 @@ const PaymentInfoPage = () => {
                 return showProgramTransactions(ptr, TaxProgram.PTR);
               })()}
               {(() => {
-                if (stay_nj.length === 0) return null;
+                if (!process.env.NEXT_PUBLIC_ENABLE_STAY || stay_nj.length === 0) return null;
                 return showProgramTransactions(stay_nj, TaxProgram.STAY_NJ);
               })()}
             </tbody>
