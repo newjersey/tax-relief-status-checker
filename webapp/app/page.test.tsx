@@ -1,11 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import LandingPage, { determineRoute } from "./page";
-import type { StatusRecord } from "./page";
+import LandingPage from "./page";
+import type { StatusRecord } from "@/components/types";
 import { TaxReliefDataProvider } from "@/components/TaxReliefDataProvider";
-import { PaymentMethod, TransactionStatus } from "@/components/types";
+import { PaymentMethod } from "@/components/types";
 import { logGAEvent } from "./utils/analytics";
+import { determineRoute } from "./utils/determineRoute";
 
 const mockPush = vi.fn();
 
@@ -15,6 +16,10 @@ vi.mock("next/navigation", () => ({
 
 vi.mock("./utils/analytics", () => ({
   logGAEvent: vi.fn(),
+}));
+
+vi.mock("./utils/determineRoute", () => ({
+  determineRoute: vi.fn(),
 }));
 
 const renderLandingPage = () =>
@@ -68,7 +73,7 @@ describe("onSubmit handler", () => {
       "/api/status",
       expect.objectContaining({ method: "POST" }),
     );
-    expect(mockPush).toHaveBeenCalledWith("/application-received");
+    expect(determineRoute).toHaveBeenCalledWith(record);
     expect(logGAEvent).toHaveBeenCalledWith("api_200_record_found");
   });
 
@@ -161,32 +166,5 @@ describe("onSubmit handler", () => {
       expect(mockPush).not.toHaveBeenCalled();
       expect(logGAEvent).toHaveBeenCalledWith("autofile_api_error");
     });
-  });
-});
-
-describe("determineRoute", () => {
-  it("routes a user to payment info when record has PTR payment sent", () => {
-    const record = buildStatusRecord({
-      ptr: [{ status: TransactionStatus.PAYMENT_SENT }],
-    });
-
-    expect(determineRoute(record)).toBe("/payment-info");
-  });
-
-  it("routes a user to more-information-needed when record has a flagged issue", () => {
-    const record = buildStatusRecord({
-      ptr: [{ status: TransactionStatus.ISSUE_FLAGGED, review_category: "SVR" }],
-      anchor: [{ status: TransactionStatus.ISSUE_FLAGGED, review_category: "MOD" }],
-    });
-
-    expect(determineRoute(record)).toBe("/more-information-needed");
-  });
-
-  it("routes a user to the application received page when no PTR payment sent and no issue is flagged", () => {
-    const record = buildStatusRecord({
-      ptr: [{ status: TransactionStatus.PROCESSING }],
-    });
-
-    expect(determineRoute(record)).toBe("/application-received");
   });
 });

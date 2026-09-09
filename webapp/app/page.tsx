@@ -13,19 +13,12 @@ import { formatDate } from "@/app/utils/formatDate";
 import { logGAEvent } from "./utils/analytics";
 import { DataType, useDataStore } from "@/components/TaxReliefDataProvider";
 import { setIssueFlagged } from "./utils/setIssueFlagged";
-import { PaymentMethod, Transaction, TransactionStatus } from "@/components/types";
+import type { PaymentMethod, StatusRecord } from "@/components/types";
+import { determineRoute } from "./utils/determineRoute";
 
 interface UserData {
   readonly ssn: string;
   readonly zipCode: string;
-}
-
-export interface StatusRecord {
-  readonly return_year: string;
-  readonly application_date: string;
-  readonly anchor: Transaction[];
-  readonly ptr: Transaction[];
-  readonly stay_nj: Transaction[];
 }
 
 interface AutofileResponse {
@@ -71,22 +64,6 @@ const callStatusApi = async (params: {
   }
 
   return (await response.json()) as StatusResponse;
-};
-
-export const determineRoute = (record: StatusRecord): string => {
-  const hasPaymentSentTransaction = [...record.ptr].some(
-    (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
-  );
-
-  if (hasPaymentSentTransaction) {
-    return "/payment-info";
-  }
-
-  if (setIssueFlagged(record) !== undefined) {
-    return "/more-information-needed";
-  }
-
-  return "/application-received";
 };
 
 const returnToTop = () => {

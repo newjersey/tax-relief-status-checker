@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 
-import type { StatusRecord } from "../page";
 import { setIssueFlagged } from "./setIssueFlagged";
-import { TransactionStatus, Transaction, IssueFlaggedType } from "@/components/types";
+import type { StatusRecord, Transaction } from "@/components/types";
+import { TransactionStatus, IssueFlaggedType } from "@/components/types";
 
 const buildRecord = (overrides: Partial<StatusRecord> = {}): StatusRecord => ({
   return_year: "2024",
