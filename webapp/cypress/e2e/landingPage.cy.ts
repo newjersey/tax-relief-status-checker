@@ -6,10 +6,6 @@ beforeEach(() => {
     win.gtag = cy.stub().as("gtag");
   });
   cy.visit("/");
-  cy.intercept("POST", "/api/autofile", {
-    statusCode: 200,
-    fixture: "autofile_api_not_planned.json",
-  });
 });
 
 it("should allow the user to visit the webpage", () => {
@@ -109,6 +105,10 @@ it("should display api alert if records is empty in a 200 response", () => {
   cy.intercept("POST", "/api/status", {
     statusCode: 200,
     fixture: "v2_api_empty_records.json",
+  });
+  cy.intercept("POST", "/api/autofile", {
+    statusCode: 200,
+    fixture: "autofile_api_not_planned.json",
   });
   cy.contains("button", `Check Status`).click();
   cy.contains("h2", "No 2025 application found").should("be.visible");

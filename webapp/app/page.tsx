@@ -13,19 +13,12 @@ import { formatDate } from "@/app/utils/formatDate";
 import { logGAEvent } from "./utils/analytics";
 import { DataType, useDataStore } from "@/components/TaxReliefDataProvider";
 import { setIssueFlagged } from "./utils/setIssueFlagged";
-import { PaymentMethod, Transaction, TransactionStatus } from "@/components/types";
+import type { PaymentMethod, StatusRecord } from "@/components/types";
+import { determineRoute } from "./utils/determineRoute";
 
 interface UserData {
   readonly ssn: string;
   readonly zipCode: string;
-}
-
-export interface StatusRecord {
-  readonly return_year: string;
-  readonly application_date: string;
-  readonly anchor: Transaction[];
-  readonly ptr: Transaction[];
-  readonly stay_nj: Transaction[];
 }
 
 interface AutofileResponse {
@@ -33,43 +26,44 @@ interface AutofileResponse {
   readonly paymentMethod?: PaymentMethod;
 }
 
-const checkAutofile = async (params: {
+interface StatusResponse {
+  readonly records: StatusRecord[];
+}
+
+const callAutofileApi = async (params: {
   readonly ssn: string;
   readonly zip: string;
-}): Promise<AutofileResponse | null> => {
-  try {
-    const response = await fetch("/api/autofile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ssn: params.ssn, zip: params.zip }),
-    });
+}): Promise<AutofileResponse> => {
+  const response = await fetch("/api/autofile", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ssn: params.ssn, zip: params.zip }),
+  });
 
-    if (!response.ok) {
-      logGAEvent(`autofile_api_error`);
-      return null;
-    }
-
-    return (await response.json()) as AutofileResponse;
-  } catch {
+  if (!response.ok) {
     logGAEvent(`autofile_api_error`);
-    return null;
+    throw new Error(`Autofile API responded with status ${response.status}`);
   }
+
+  return (await response.json()) as AutofileResponse;
 };
 
-const determineRoute = (record: StatusRecord): string => {
-  const hasPaymentSentTransaction = [...record.ptr].some(
-    (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
-  );
+const callStatusApi = async (params: {
+  readonly ssn: string;
+  readonly zip: string;
+}): Promise<StatusResponse> => {
+  const response = await fetch("/api/status", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ssn: params.ssn, zip: params.zip }),
+  });
 
-  if (hasPaymentSentTransaction) {
-    return "/payment-info";
+  if (!response.ok) {
+    logGAEvent(`api_error`);
+    throw new Error(`Status API responded with status ${response.status}`);
   }
 
-  if (setIssueFlagged(record) !== undefined) {
-    return "/more-information-needed";
-  }
-
-  return "/application-received";
+  return (await response.json()) as StatusResponse;
 };
 
 const returnToTop = () => {
@@ -77,6 +71,40 @@ const returnToTop = () => {
   if (!topOfPage) return;
   topOfPage.scrollIntoView({ behavior: "smooth", block: "start" });
 };
+
+const NoApplicationFoundAlert = () => (
+  <>
+    <h2 className="usa-alert__heading">No 2025 application found</h2>
+    <p className="usa-alert__text">
+      We couldn't find any records matching the SSN or ITIN and ZIP code you entered. Some common
+      reasons why:
+    </p>
+    <ul>
+      <li>
+        <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code filed on your application is
+        different than the one you just entered.
+      </li>
+      <li>
+        <strong>It's too soon</strong>: For online applications, it can take up to three weeks for
+        an application to show up on this website. For paper applications, it can take up to 12
+        weeks. For ANCHOR-only applicants, check back in the fall of 2026.
+      </li>
+    </ul>
+    <p className="usa-alert__text">
+      Find the{" "}
+      <a
+        href="#faq_no_2025_application_found"
+        onClick={(e) => {
+          e.preventDefault();
+          expandFaqAccordionItem("faq_no_2025_application_found");
+        }}
+      >
+        full list of other possible reasons
+      </a>{" "}
+      your application is not showing up
+    </p>
+  </>
+);
 
 const LandingPage = () => {
   const router = useRouter();
@@ -95,108 +123,67 @@ const LandingPage = () => {
     shouldFocusError: false,
   });
 
+  const handleStatusApiError = () => {
+    setAlertContent(
+      <p className="usa-alert__text maxw-tablet">
+        We are having an issue checking on your application status. Please try again later.
+      </p>,
+    );
+    returnToTop();
+  };
+
+  const handleNoRecord = async (data: UserData) => {
+    const autofileResult = await callAutofileApi({ ssn: data.ssn, zip: data.zipCode });
+    if (autofileResult?.autofilePlanned) {
+      setDataStore({
+        type: DataType.AUTOFILE,
+        lastFourSsnDigits: maskSsn(data.ssn),
+        zipCode: data.zipCode,
+        paymentMethod: autofileResult.paymentMethod,
+      });
+      logGAEvent(`autofile_${autofileResult.paymentMethod}`);
+      router.push("/anchor-autofile");
+      return;
+    } else {
+      setAlertContent(<NoApplicationFoundAlert />);
+      logGAEvent(`api_200_record_not_found`);
+      returnToTop();
+      return;
+    }
+  };
+
+  const handleRecordFound = (record: StatusRecord, data: UserData) => {
+    const lastFourSsnDigits = maskSsn(data.ssn);
+    const formattedDate = formatDate(record.application_date);
+    setDataStore({
+      type: DataType.STATUS,
+      lastFourSsnDigits: lastFourSsnDigits,
+      zipCode: data.zipCode,
+      applicationDateString: formattedDate,
+      anchor: record.anchor,
+      ptr: record.ptr,
+      stay_nj: record.stay_nj,
+      issueFlagged: setIssueFlagged(record),
+    });
+    logGAEvent(`api_200_record_found`);
+    router.push(determineRoute(record));
+  };
+
   const onSubmit: SubmitHandler<UserData> = async (data) => {
     setAlertContent(null);
 
     try {
-      const autofileResult = await checkAutofile({ ssn: data.ssn, zip: data.zipCode });
-
-      if (autofileResult?.autofilePlanned) {
-        setDataStore({
-          type: DataType.AUTOFILE,
-          lastFourSsnDigits: maskSsn(data.ssn),
-          zipCode: data.zipCode,
-          paymentMethod: autofileResult.paymentMethod,
-        });
-        logGAEvent(`autofile_${autofileResult.paymentMethod}`);
-        router.push("/anchor-autofile");
-        return;
-      }
-
-      const response = await fetch("/api/status", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ssn: data.ssn, zip: data.zipCode }),
-      });
-
-      if (!response.ok) {
-        setAlertContent(
-          <p className="usa-alert__text maxw-tablet">
-            We are having an issue checking on your application status. Please try again later.
-          </p>,
-        );
-        logGAEvent(`api_error`);
-        returnToTop();
-        return;
-      }
-
-      const body = (await response.json()) as {
-        records: readonly StatusRecord[];
-      };
-
-      const record2025 = body.records.find((r) => r.return_year === "2025");
+      const statusResult = await callStatusApi({ ssn: data.ssn, zip: data.zipCode });
+      const record2025 = statusResult.records.find((r) => r.return_year === "2025");
 
       if (!record2025) {
-        setAlertContent(
-          <>
-            <h2 className="usa-alert__heading">No 2025 application found</h2>
-            <p className="usa-alert__text">
-              We couldn't find any records matching the SSN or ITIN and ZIP code you entered. Some
-              common reasons why:
-            </p>
-            <ul>
-              <li>
-                <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code filed on your
-                application is different than the one you just entered.
-              </li>
-              <li>
-                <strong>It's too soon</strong>: For online applications, it can take up to three
-                weeks for an application to show up on this website. For paper applications, it can
-                take up to 12 weeks. For ANCHOR-only applicants, check back in the fall of 2026.
-              </li>
-            </ul>
-            <p className="usa-alert__text">
-              Find the{" "}
-              <a
-                href="#faq_no_2025_application_found"
-                onClick={(e) => {
-                  e.preventDefault();
-                  expandFaqAccordionItem("faq_no_2025_application_found");
-                }}
-              >
-                full list of other possible reasons
-              </a>{" "}
-              your application is not showing up
-            </p>
-          </>,
-        );
-        logGAEvent(`api_200_record_not_found`);
-        returnToTop();
+        await handleNoRecord(data);
         return;
       }
 
-      const lastFourSsnDigits = maskSsn(data.ssn);
-      const formattedDate = formatDate(record2025.application_date);
-      setDataStore({
-        type: DataType.STATUS,
-        lastFourSsnDigits: lastFourSsnDigits,
-        zipCode: data.zipCode,
-        applicationDateString: formattedDate,
-        anchor: record2025.anchor,
-        ptr: record2025.ptr,
-        stay_nj: record2025.stay_nj,
-        issueFlagged: setIssueFlagged(record2025),
-      });
-      logGAEvent(`api_200_record_found`);
-      router.push(determineRoute(record2025));
+      handleRecordFound(record2025, data);
     } catch {
-      setAlertContent(
-        <p className="usa-alert__text maxw-tablet">
-          We are having an issue checking on your application status. Please try again later.
-        </p>,
-      );
-      logGAEvent(`api_error`);
-      returnToTop();
+      handleStatusApiError();
     }
   };
 

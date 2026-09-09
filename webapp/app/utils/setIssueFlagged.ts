@@ -1,5 +1,5 @@
 import { IssueFlaggedType, Transaction, TransactionStatus } from "@/components/types";
-import { StatusRecord } from "../page";
+import type { StatusRecord } from "@/components/types";
 
 const ISSUE_FLAGGED_TAX_BILL_NEEDED_REVIEW_CATEGORIES = ["MOD", "MDZ"];
 const ISSUE_FLAGGED_CONTACT_TAXATION_REVIEW_CATEGORIES = ["MAX", "MHX", "PCT", "DSU", "DSO"];
