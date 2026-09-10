@@ -13,5 +13,6 @@ export const buildMockRow = (overrides = {}) => ({
   CHECK_1_AMT: 1750,
   CHECK_1_NUM: "922775385",
   TRANS_1_TAX_CDE: 13,
+  FORM_CDE: "PAS1W",
   ...overrides,
 });
