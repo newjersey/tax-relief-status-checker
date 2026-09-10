@@ -155,11 +155,44 @@ describe("handler business logic", () => {
       expect(body["records"]).toHaveLength(1);
       expect(body["records"][0].return_year).toBe("2025");
       expect(body["records"][0].application_date).toBe("10/31/2025 00:00:00");
+      expect(body["records"][0].form_code).toBe("PAS-1");
       expect(body["records"][0]["anchor"][0].status).toBe("payment_sent");
       expect(body["records"][0].ptr).toBeDefined();
       expect(body["records"][0].ptr.length).toBe(0);
       expect(body["records"][0].stay_nj).toBeDefined();
       expect(body["records"][0].stay_nj.length).toBe(0);
     });
+  });
+});
+
+describe("form code logic", () => {
+  const test_form_code = async (dbFormCode: string | null, expectedFormCode: string | null) => {
+    const row = buildMockRow({ FORM_CDE: dbFormCode });
+    mockExecute.mockResolvedValue({ rows: [row] });
+    const result = await handler({ ssn: "123456789", zip: "12345" });
+    const body = JSON.parse(result.body);
+    expect(body["records"][0].form_code).toBe(expectedFormCode);
+  };
+
+  it("handles null form code", async () => {
+    await test_form_code(null, null);
+  });
+  it("handles PAS1W form code", async () => {
+    await test_form_code("PAS1W", "PAS-1");
+  });
+  it("handles PAS1D form code", async () => {
+    await test_form_code("PAS1D", "PAS-1");
+  });
+  it("handles PAS1P form code", async () => {
+    await test_form_code("PAS1P", "PAS-1");
+  });
+  it("handles ANC1W form code", async () => {
+    await test_form_code("ANC1W", "ANC-1");
+  });
+  it("handles ANC1D form code", async () => {
+    await test_form_code("ANC1D", "ANC-1");
+  });
+  it("handles ANC1P form code", async () => {
+    await test_form_code("ANC1P", "ANC-1");
   });
 });
