@@ -1,3 +1,5 @@
+// @ts-ignore - React import needed for Cypress e2e tests with TypeScript 7
+import React from "react";
 import { fireEventWhenFaqOpened, type FaqItem } from "@/components/FaqSection";
 
 export const ApplicationReceivedFaqContent: FaqItem[] = [
