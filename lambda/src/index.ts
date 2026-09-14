@@ -29,9 +29,16 @@ interface ValidationResult {
   readonly zip?: string;
 }
 
+/** The form filed by the taxpayer for property tax relief */
+enum FormCode {
+  ANC1 = "ANC-1",
+  PAS1 = "PAS-1",
+}
+
 interface ResponseRecord {
   readonly return_year: string;
   readonly application_date: string;
+  readonly form_code: FormCode | null;
   readonly anchor: Transaction[];
   readonly ptr: Transaction[];
   readonly stay_nj: Transaction[];
@@ -85,10 +92,31 @@ const mapRowToRecord = (row: InquiryRow): ResponseRecord => {
   return {
     return_year: String(row.RETURN_YEAR_DTE),
     application_date: row.RNY_APPLIED_DTE,
+    form_code: mapFormCode(row.FORM_CDE),
     anchor: allTransactions.anchor,
     ptr: allTransactions.ptr,
     stay_nj: allTransactions.stay_nj,
   };
+};
+
+const mapFormCode = (dbFormCode: string): FormCode | null => {
+  switch (dbFormCode) {
+    case "PAS1W":
+      return FormCode.PAS1;
+    case "PAS1D":
+      return FormCode.PAS1;
+    case "PAS1P":
+      return FormCode.PAS1;
+    case "ANC1W":
+      return FormCode.ANC1;
+    case "ANC1D":
+      return FormCode.ANC1;
+    case "ANC1P":
+      return FormCode.ANC1;
+    default:
+      console.log(`Unknown FORM_CDE: ${dbFormCode}`);
+      return null;
+  }
 };
 
 const buildResponse = (rows: InquiryRow[]): BuildResponseResult => {

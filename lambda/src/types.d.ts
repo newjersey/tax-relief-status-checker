@@ -23,5 +23,6 @@ export interface InquiryRow {
   readonly RETURN_YEAR_DTE: number;
   readonly TRANS_TOTAL_NUM: number;
   readonly DLN_NUM: string;
+  readonly FORM_CDE: string;
   readonly [key: string]: unknown;
 }
