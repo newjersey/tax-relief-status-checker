@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { mockClient } from "aws-sdk-client-mock";
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
-import { buildMockRow } from "./helpers.ts";
+import { buildMockRow } from "./testHelpers.ts";
 
 const mockMetricsLogger = vi.hoisted(() => ({
   setNamespace: vi.fn(),

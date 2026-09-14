@@ -1,4 +1,3 @@
-//Only used in tests
 export const buildMockRow = (overrides = {}) => ({
   DLN_NUM: "00000001",
   SOCIAL_SECURITY_NUMBER_IDN: "123456789",
