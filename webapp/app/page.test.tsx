@@ -7,6 +7,7 @@ import { TaxReliefDataProvider } from "@/components/TaxReliefDataProvider";
 import { PaymentMethod } from "@/components/types";
 import { logGAEvent } from "./utils/analytics";
 import { determineRoute } from "./utils/determineRoute";
+import { FormCode } from "@/components/types";
 
 const mockPush = vi.fn();
 
@@ -43,6 +44,7 @@ const fillAndSubmitForm = async () => {
 const buildStatusRecord = (overrides?: Partial<StatusRecord>): StatusRecord => ({
   return_year: "2025",
   application_date: "2026-03-19T00:00:00.000Z",
+  form_code: FormCode.PAS1,
   anchor: [],
   ptr: [],
   stay_nj: [],

@@ -1,5 +1,4 @@
 import { fillFields, MOCK_SSN, MOCK_ZIP } from "./utils";
-import payment_sent_transaction from "../fixtures/payment_sent_transaction.json";
 
 const applicationReceivedAssertions = () => {
   cy.url().should("include", "/application-received");
