@@ -2,7 +2,7 @@ import { Table } from "@trussworks/react-uswds";
 
 import { fireEventWhenFaqOpened, type FaqItem } from "@/components/FaqSection";
 
-export const PaymentInfoFaqContent: FaqItem[] = [
+export const PASPaymentInfoFaqContent: FaqItem[] = [
   {
     title: "When can I expect to receive payments for Senior Freeze, ANCHOR, and Stay NJ?",
     content: (

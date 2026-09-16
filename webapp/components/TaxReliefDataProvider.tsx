@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
-import { IssueFlaggedType, PaymentMethod, Transaction } from "./types";
+import { FormCode, IssueFlaggedType, PaymentMethod, Transaction } from "./types";
 
 export enum DataType {
   AUTOFILE,
@@ -21,6 +21,7 @@ export interface StatusData {
   readonly lastFourSsnDigits: string;
   readonly zipCode: string;
   readonly applicationDateString: string;
+  readonly form_code: FormCode | null;
   readonly issueFlagged?: IssueFlaggedType;
   readonly anchor: Transaction[];
   readonly ptr: Transaction[];

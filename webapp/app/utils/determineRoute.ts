@@ -1,24 +1,28 @@
-import { TransactionStatus } from "@/components/types";
 import type { StatusRecord } from "@/components/types";
 import { setIssueFlagged } from "./setIssueFlagged";
+import { FormCode } from "@/components/types";
+import { hasPaymentSentTransaction } from "./hasPaymentSentTransaction";
 
 /** Determines the route to navigate to based on the status record's transaction data. */
 export const determineRoute = (record: StatusRecord): string => {
-  let recordsToCheck = [...record.ptr];
-  if (process.env.NEXT_PUBLIC_ENABLE_STAY == "true") {
-    recordsToCheck.push(...record.stay_nj);
-  }
-  const hasPaymentSentTransaction = recordsToCheck.some(
-    (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
-  );
+  const [hasAnchorPayment, hasPtrPayment, hasStayPayment] = hasPaymentSentTransaction(record);
+  if (record.form_code === FormCode.ANC1) {
+    if (hasAnchorPayment || hasPtrPayment || hasStayPayment) {
+      return "/payment-info";
+    }
+    if (setIssueFlagged(record) !== undefined) {
+      return "/more-information-needed";
+    }
+    return "/anchor-application-received";
+  } else {
+    if (hasPtrPayment || hasStayPayment || hasAnchorPayment) {
+      return "/payment-info";
+    }
 
-  if (hasPaymentSentTransaction) {
-    return "/payment-info";
-  }
+    if (setIssueFlagged(record) !== undefined) {
+      return "/more-information-needed";
+    }
 
-  if (setIssueFlagged(record) !== undefined) {
-    return "/more-information-needed";
+    return "/application-received";
   }
-
-  return "/application-received";
 };

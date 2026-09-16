@@ -160,6 +160,7 @@ const LandingPage = () => {
       lastFourSsnDigits: lastFourSsnDigits,
       zipCode: data.zipCode,
       applicationDateString: formattedDate,
+      form_code: record.form_code,
       anchor: record.anchor,
       ptr: record.ptr,
       stay_nj: record.stay_nj,
