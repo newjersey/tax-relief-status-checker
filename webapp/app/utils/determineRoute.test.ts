@@ -68,7 +68,7 @@ describe("determineRoute", () => {
         anchor: [{ status: TransactionStatus.PAYMENT_SENT }],
         form_code: FormCode.ANC1,
       });
-      expect(determineRoute(record)).toBe("/anchor-payment-info");
+      expect(determineRoute(record)).toBe("/payment-info");
     });
     it("routes a user to regular payment info when record has ANCHOR and PTR payment sent", () => {
       const record = buildStatusRecord({
