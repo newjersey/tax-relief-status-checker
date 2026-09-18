@@ -151,27 +151,22 @@ const PaymentInfoPage = () => {
             </tbody>
           </Table>
 
-          {form_code === FormCode.ANC1 && !hasPtrPayment && !hasStayPayment && (
+          {form_code === FormCode.ANC1 && !hasPtrPayment && !hasStayPayment ? (
             <FaqSection
               items={ANCPaymentInfoFaqContent}
               titleHeadingLevel="h2"
               itemHeadingLevel="h3"
             />
-          )}
-
-          {(form_code === FormCode.PAS1 ||
-            form_code === null ||
-            hasPtrPayment ||
-            hasStayPayment) && (
+          ) : (
             <>
               <p>
                 You must be eligible for a program to receive payment. To find out when to expect
                 payment from ANCHOR or Stay NJ, review the{" "}
                 <a
-                  href="#faq_when_can_i_expect_to_receive_payments"
+                  href="#faq_when_can_i_expect_to_receive_payments_pas1"
                   onClick={(e) => {
                     e.preventDefault();
-                    expandFaqAccordionItem("faq_when_can_i_expect_to_receive_payments");
+                    expandFaqAccordionItem("faq_when_can_i_expect_to_receive_payments_pas1");
                   }}
                 >
                   full program payment table

@@ -82,8 +82,8 @@ export const PASPaymentInfoFaqContent: FaqItem[] = [
       </>
     ),
     expanded: false,
-    id: "faq_when_can_i_expect_to_receive_payments",
-    handleToggle: () => fireEventWhenFaqOpened("faq_when_can_i_expect_to_receive_payments"),
+    id: "faq_when_can_i_expect_to_receive_payments_pas1",
+    handleToggle: () => fireEventWhenFaqOpened("faq_when_can_i_expect_to_receive_payments_pas1"),
   },
   {
     title: "A check amount is different than what I expected. Who can I contact?",
@@ -108,8 +108,8 @@ export const PASPaymentInfoFaqContent: FaqItem[] = [
       </>
     ),
     expanded: false,
-    id: "faq_check_amount_different_than_expected",
-    handleToggle: () => fireEventWhenFaqOpened("faq_check_amount_different_than_expected"),
+    id: "faq_check_amount_different_than_expected_pas1",
+    handleToggle: () => fireEventWhenFaqOpened("faq_check_amount_different_than_expected_pas1"),
   },
   {
     title: "I have not received my check in the mail. What should I do next?",
@@ -134,7 +134,7 @@ export const PASPaymentInfoFaqContent: FaqItem[] = [
       </>
     ),
     expanded: false,
-    id: "faq_have_not_received_check_next_steps",
-    handleToggle: () => fireEventWhenFaqOpened("faq_have_not_received_check_next_steps"),
+    id: "faq_have_not_received_check_next_steps_pas1",
+    handleToggle: () => fireEventWhenFaqOpened("faq_have_not_received_check_next_steps_pas1"),
   },
 ];

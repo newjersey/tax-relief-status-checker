@@ -24,8 +24,8 @@ export const ANCPaymentInfoFaqContent: FaqItem[] = [
       </>
     ),
     expanded: false,
-    id: "faq_check_amount_different_than_expected",
-    handleToggle: () => fireEventWhenFaqOpened("faq_check_amount_different_than_expected"),
+    id: "faq_check_amount_different_than_expected_anc1",
+    handleToggle: () => fireEventWhenFaqOpened("faq_check_amount_different_than_expected_anc1"),
   },
   {
     title: "I have not received my check in the mail. What should I do next?",
@@ -50,7 +50,7 @@ export const ANCPaymentInfoFaqContent: FaqItem[] = [
       </>
     ),
     expanded: false,
-    id: "faq_have_not_received_check_next_steps",
-    handleToggle: () => fireEventWhenFaqOpened("faq_have_not_received_check_next_steps"),
+    id: "faq_have_not_received_check_next_steps_anc1",
+    handleToggle: () => fireEventWhenFaqOpened("faq_have_not_received_check_next_steps_anc1"),
   },
 ];
