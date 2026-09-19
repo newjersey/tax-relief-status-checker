@@ -3,9 +3,8 @@
     {
       "return_year": "2025",
       "application_date": "2026-03-19T00:00:00.000Z",
-      "form_code": "PAS-1",
-      "anchor": [{ "status": "processing" }],
-      "ptr": [
+      "form_code": "ANC-1",
+      "anchor": [
         {
           "status": "payment_sent",
           "payment_details": {
@@ -16,7 +15,8 @@
           }
         }
       ],
-      "stay_nj": [{ "status": "processing" }]
+      "ptr": [],
+      "stay_nj": []
     }
   ]
 }

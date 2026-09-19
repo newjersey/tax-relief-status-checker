@@ -5,9 +5,16 @@ import { useRouter } from "next/navigation";
 import { DataType, useDataStore } from "@/components/TaxReliefDataProvider";
 import { Table } from "@trussworks/react-uswds";
 import { formatDate } from "../utils/formatDate";
-import { PaymentInfoFaqContent } from "@/app/payment-info/PaymentInfoFaqContent";
+import { PASPaymentInfoFaqContent } from "@/app/payment-info/PASPaymentInfoFaqContent";
+import { ANCPaymentInfoFaqContent } from "./ANCPaymentInfoFaqContent";
 import { FaqSection, expandFaqAccordionItem } from "@/components/FaqSection";
-import { Transaction, TaxProgram, PaymentMethod, TransactionStatus } from "@/components/types";
+import {
+  Transaction,
+  TaxProgram,
+  PaymentMethod,
+  TransactionStatus,
+  FormCode,
+} from "@/components/types";
 import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
 
 export const getEarliestTransaction = (transactions: Transaction[]) => {
@@ -103,7 +110,13 @@ const PaymentInfoPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, ptr, stay_nj } = dataStore;
+  const { lastFourSsnDigits, zipCode, anchor, ptr, stay_nj, form_code } = dataStore;
+  const hasPtrPayment = [...ptr].some(
+    (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
+  );
+  const hasStayPayment = [...stay_nj].some(
+    (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
+  );
 
   return (
     <main id="main-content">
@@ -127,33 +140,46 @@ const PaymentInfoPage = () => {
                 return showProgramTransactions(ptr, TaxProgram.PTR);
               })()}
               {(() => {
+                if (anchor.length === 0) return null;
+                return showProgramTransactions(anchor, TaxProgram.ANCHOR);
+              })()}
+              {(() => {
                 if (!(process.env.NEXT_PUBLIC_ENABLE_STAY == "true") || stay_nj.length === 0)
                   return null;
                 return showProgramTransactions(stay_nj, TaxProgram.STAY_NJ);
               })()}
             </tbody>
           </Table>
-          <p>
-            You must be eligible for a program to receive payment. To find out when to expect
-            payment from ANCHOR or Stay NJ, review the{" "}
-            <a
-              href="#faq_when_can_i_expect_to_receive_payments"
-              onClick={(e) => {
-                e.preventDefault();
-                expandFaqAccordionItem("faq_when_can_i_expect_to_receive_payments");
-              }}
-            >
-              full program payment table
-            </a>
-            {"."}
-          </p>
-          <div className="grid-row grid-gap margin-top-5">
+
+          {form_code === FormCode.ANC1 && !hasPtrPayment && !hasStayPayment ? (
             <FaqSection
-              items={PaymentInfoFaqContent}
+              items={ANCPaymentInfoFaqContent}
               titleHeadingLevel="h2"
               itemHeadingLevel="h3"
             />
-          </div>
+          ) : (
+            <>
+              <p>
+                You must be eligible for a program to receive payment. To find out when to expect
+                payment from ANCHOR or Stay NJ, review the{" "}
+                <a
+                  href="#faq_when_can_i_expect_to_receive_payments_pas1"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    expandFaqAccordionItem("faq_when_can_i_expect_to_receive_payments_pas1");
+                  }}
+                >
+                  full program payment table
+                </a>
+                {"."}
+              </p>
+              <FaqSection
+                items={PASPaymentInfoFaqContent}
+                titleHeadingLevel="h2"
+                itemHeadingLevel="h3"
+              />
+            </>
+          )}
         </div>
       </section>
     </main>
