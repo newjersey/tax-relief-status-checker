@@ -15,10 +15,10 @@ export const ApplicationReceivedFaqContent: FaqItem[] = [
             p.m.)
           </li>
           <li>
-            Email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
+            Or email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
           </li>
           <li>
-            Visit one of our{" "}
+            Or visit one of our{" "}
             <a href="https://www.nj.gov/treasury/taxation/contact-office.shtml">
               Regional Information Centers
             </a>
