@@ -2,26 +2,32 @@ import { fireEventWhenFaqOpened, type FaqItem } from "@/components/FaqSection";
 
 export const ApplicationReceivedFaqContent: FaqItem[] = [
   {
-    title: "What if I don't receive a Senior Freeze payment on July 15?",
+    title: "What if I didn't receive a payment yet?",
     content: (
       <>
-        <p>If you do not receive a Senior Freeze payment on July 15, it may mean:</p>
+        <p>
+          We are currently processing thousands of applications, and your application could still be
+          processing. To check on the status of a payment, contact the Division:
+        </p>
         <ul>
-          <li>Your application is still being processed.</li>
           <li>
-            You may not be eligible for Senior Freeze, specifically. You may still be eligible for
-            ANCHOR or Stay NJ.
+            Call: <a href="tel:+18882381233">1-888-238-1233</a> (Monday to Friday 8:30 a.m. to 5:30
+            p.m.)
           </li>
           <li>
-            You will not get a separate Senior Freeze check because your ANCHOR benefit, which is
-            calculated first, already covers the full amount of property taxes you paid. Across all
-            three programs, the State can only reimburse you up to that amount.
+            Email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
+          </li>
+          <li>
+            Visit one of our{" "}
+            <a href="https://www.nj.gov/treasury/taxation/contact-office.shtml">
+              Regional Information Centers
+            </a>
           </li>
         </ul>
       </>
     ),
     expanded: false,
-    id: "faq_missing_senior_freeze_payment_july_15",
-    handleToggle: () => fireEventWhenFaqOpened("faq_missing_senior_freeze_payment_july_15"),
+    id: "faq_missing_payment",
+    handleToggle: () => fireEventWhenFaqOpened("faq_missing_payment"),
   },
 ];
