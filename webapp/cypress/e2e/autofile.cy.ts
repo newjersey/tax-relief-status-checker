@@ -11,14 +11,14 @@ beforeEach(() => {
   fillFields();
   cy.intercept("POST", "/api/status", {
     statusCode: 200,
-    fixture: "v2_api_empty_records.json",
+    fixture: "empty_records.json",
   });
 });
 
 it("should route the user to the payment-info page when autofile API and status API return records", () => {
   cy.intercept("POST", "/api/status", {
     statusCode: 200,
-    fixture: "v2_api_found_records.json",
+    fixture: "pas1_found_records.json",
   });
   cy.intercept("POST", "/api/autofile", {
     statusCode: 200,

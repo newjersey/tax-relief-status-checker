@@ -136,7 +136,7 @@ beforeEach(() => {
 it("displays show payments page heading", () => {
   cy.intercept("POST", "/api/status", {
     statusCode: 200,
-    fixture: "v2_api_found_records.json",
+    fixture: "pas1_found_records.json",
   });
   cy.contains("button", `Check Status`).click();
   cy.url().should("include", "/payment-info");
@@ -152,7 +152,7 @@ describe("when form_code is PAS-1", () => {
   it("displays PAS-1 payments page if records has senior freeze CHECK", () => {
     cy.intercept("POST", "/api/status", {
       statusCode: 200,
-      fixture: "v2_api_found_records.json",
+      fixture: "pas1_found_records.json",
     });
     cy.contains("button", `Check Status`).click();
     cy.url().should("include", "/payment-info");
@@ -162,7 +162,7 @@ describe("when form_code is PAS-1", () => {
   });
 
   it("displays PAS-1 payments page if records has senior freeze DIRECT DEPOSIT", () => {
-    cy.fixture("v2_api_found_records.json").then((resp) => {
+    cy.fixture("pas1_found_records.json").then((resp) => {
       resp.records[0].ptr[0].payment_details.method = "direct_deposit";
       cy.intercept("POST", "/api/status", {
         statusCode: 200,
@@ -176,7 +176,7 @@ describe("when form_code is PAS-1", () => {
   });
 
   it("displays the first check sent if multiple PTR transactions are payment_sent", () => {
-    cy.fixture("v2_api_found_records.json").then((resp) => {
+    cy.fixture("pas1_found_records.json").then((resp) => {
       resp.records[0].ptr[0] = payment_sent_transaction;
       resp.records[0].ptr[0].payment_details.date = "7/6/2026 0:00:00";
       resp.records[0].ptr[0] = earlier_transaction;
@@ -198,7 +198,7 @@ describe("when form_code is PAS-1", () => {
   it("displays first check and update payment for PTR and ANCHOR and all regular payments for STAYNJ", () => {
     cy.intercept("POST", "/api/status", {
       statusCode: 200,
-      fixture: "update_payment_records.json",
+      fixture: "pas1_update_payment_records.json",
     });
     cy.contains("button", `Check Status`).click();
     cy.url().should("include", "/payment-info");
@@ -213,7 +213,7 @@ describe("when form_code is PAS-1", () => {
   });
 
   it("displays PAS-1 payments page if records has stay NJ CHECK", () => {
-    cy.fixture("stay_record").then((resp) => {
+    cy.fixture("pas1_stay_record").then((resp) => {
       resp.records[0].stay_nj[1] = null;
       cy.intercept("POST", "/api/status", {
         statusCode: 200,
@@ -232,7 +232,7 @@ describe("when form_code is PAS-1", () => {
   });
 
   it("displays PAS-1 payments page if records has stay NJ DIRECT DEPOSIT", () => {
-    cy.fixture("stay_record").then((resp) => {
+    cy.fixture("pas1_stay_record").then((resp) => {
       resp.records[0].stay_nj[0].payment_details.method = PaymentType.DIRECT_DEPOSIT;
       resp.records[0].stay_nj[1] = null;
       cy.intercept("POST", "/api/status", {
@@ -252,7 +252,7 @@ describe("when form_code is PAS-1", () => {
   });
 
   it("displays both payments as regular if records has 2 stay NJ transaction in the same quarter", () => {
-    cy.fixture("stay_record").then((resp) => {
+    cy.fixture("pas1_stay_record").then((resp) => {
       resp.records[0].stay_nj[0].payment_details.method = PaymentType.DIRECT_DEPOSIT;
       cy.intercept("POST", "/api/status", {
         statusCode: 200,

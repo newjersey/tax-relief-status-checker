@@ -32,7 +32,8 @@ const AnchorApplicationReceivedPage = () => {
           <TaxpayerInfoHeader lastFourSsnDigits={lastFourSsnDigits} zipCode={zipCode} />
           <div className="margin-top-4">
             <h1 className="font-heading-xl">
-              We have your 2025 ANCHOR application on file as of {applicationDateString}
+              We have your 2025 <abbr>ANCHOR</abbr> application on file as of{" "}
+              {applicationDateString}
             </h1>
             <p>
               Your 2025 ANCHOR application is being processed. If you're eligible for benefits,

@@ -30,7 +30,7 @@ beforeEach(() => {
 
 it("should display issue flagged warning - upload tax bill", () => {
   fillFields();
-  cy.fixture("v2_api_issue_flagged_upload_bill.json").then((resp) => {
+  cy.fixture("pas1_issue_flagged_upload_bill.json").then((resp) => {
     cy.intercept("POST", "/api/status", {
       statusCode: 200,
       body: resp,
@@ -47,7 +47,7 @@ it("should display issue flagged warning - upload tax bill", () => {
 
 it("should display issue flagged warning - contact taxation", () => {
   fillFields();
-  cy.fixture("v2_api_issue_flagged_contact_taxation.json").then((resp) => {
+  cy.fixture("pas1_issue_flagged_contact_taxation.json").then((resp) => {
     cy.intercept("POST", "/api/status", {
       statusCode: 200,
       body: resp,

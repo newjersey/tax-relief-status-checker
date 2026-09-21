@@ -11,7 +11,7 @@ beforeEach(() => {
 
 it("should display status page if records has an object in a 200 response, no transactions", () => {
   fillFields();
-  cy.fixture("v2_api_no_trans_records.json").then((resp) => {
+  cy.fixture("pas1_no_trans_records.json").then((resp) => {
     cy.intercept("POST", "/api/status", {
       statusCode: 200,
       body: resp,
@@ -25,7 +25,7 @@ it("should display status page if records has an object in a 200 response, no tr
 
 it("should display application found page if records has an object, but no transactions are payment_sent", () => {
   fillFields();
-  cy.fixture("v2_api_found_records.json").then((resp) => {
+  cy.fixture("pas1_found_records.json").then((resp) => {
     resp.records[0].ptr[0] = { status: "processing" };
     cy.intercept("POST", "/api/status", {
       statusCode: 200,
