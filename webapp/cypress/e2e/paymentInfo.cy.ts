@@ -77,20 +77,19 @@ const FAQAssertions = (form_code: FormCode) => {
     );
     cy.get(`div[id="faq_have_not_received_check_next_steps_anc1"]`).should("be.visible");
   } else if (form_code === FormCode.PAS1) {
-    cy.contains("p", "To find out when to expect payment").should("be.visible");
-    cy.contains("a", "program payment table").click();
-    cy.get(`div[id="faq_when_can_i_expect_to_receive_payments_pas1"]`).should("be.visible");
+    cy.contains("p", "Even though PAS-1 combines all three programs").should("be.visible");
+    cy.get(`div[id="faq_when_can_i_expect_to_receive_payments_pas1"]`).should("not.be.visible");
+    cy.contains(
+      "button",
+      "When can I expect to receive payments for Senior Freeze, ANCHOR, and Stay NJ?",
+    ).click();
     cy.get("@gtag").should(
       "have.been.calledWith",
       "event",
       `faq_when_can_i_expect_to_receive_payments_pas1_opened`,
       Cypress.sinon.match.any,
     );
-    cy.contains(
-      "button",
-      "When can I expect to receive payments for Senior Freeze, ANCHOR, and Stay NJ?",
-    ).click();
-    cy.get(`div[id="faq_when_can_i_expect_to_receive_payments_pas1"]`).should("not.be.visible");
+    cy.get(`div[id="faq_when_can_i_expect_to_receive_payments_pas1"]`).should("be.visible");
 
     cy.get(`div[id="faq_check_amount_different_than_expected_pas1"]`).should("not.be.visible");
     cy.contains(
