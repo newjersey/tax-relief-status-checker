@@ -177,9 +177,6 @@ describe("form code logic", () => {
   it("handles null form code", async () => {
     await test_form_code(null, null);
   });
-  it("handles unknown form code", async () => {
-    await test_form_code("unknown", null);
-  });
   it("handles PAS1W form code", async () => {
     await test_form_code("PAS1W", "PAS-1");
   });

@@ -4,6 +4,7 @@ import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { Transaction, InquiryRow } from "./types";
 import { buildAllTransactions } from "./transaction";
 import { createMetricsLogger, StorageResolution, Unit } from "aws-embedded-metrics";
+import { isRecordValid } from "./validation";
 
 /** SQL query to look up filer records by SSN and ZIP */
 const INQUIRY_QUERY = `SELECT * FROM ELF_SAVER_INQUIRY
@@ -120,7 +121,7 @@ const mapFormCode = (dbFormCode: string): FormCode | null => {
 };
 
 const buildResponse = (rows: InquiryRow[]): BuildResponseResult => {
-  if (!rows || rows.length === 0) {
+  if (!rows || rows.length === 0 || !isRecordValid(rows[0])) {
     return { records: [] };
   }
 
