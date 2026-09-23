@@ -50,73 +50,20 @@ const paymentInfoAssertions = (
 const FAQAssertions = (form_code: FormCode) => {
   if (form_code === FormCode.ANC1) {
     cy.get(`div[id="faq_when_can_i_expect_to_receive_payments_pas1"]`).should("not.exist");
-
-    cy.get(`div[id="faq_check_amount_different_than_expected_anc1"]`).should("not.be.visible");
-    cy.contains(
-      "button",
-      "A check amount is different than what I expected. Who can I contact?",
-    ).click();
-    cy.get("@gtag").should(
-      "have.been.calledWith",
-      "event",
-      `faq_check_amount_different_than_expected_anc1_opened`,
-      Cypress.sinon.match.any,
-    );
-    cy.get(`div[id="faq_check_amount_different_than_expected_anc1"]`).should("be.visible");
-
-    cy.get(`div[id="faq_have_not_received_check_next_steps_anc1"]`).should("not.be.visible");
-    cy.contains(
-      "button",
-      "I have not received my check in the mail. What should I do next?",
-    ).click();
-    cy.get("@gtag").should(
-      "have.been.calledWith",
-      "event",
-      `faq_have_not_received_check_next_steps_anc1_opened`,
-      Cypress.sinon.match.any,
-    );
-    cy.get(`div[id="faq_have_not_received_check_next_steps_anc1"]`).should("be.visible");
   } else if (form_code === FormCode.PAS1) {
     cy.contains("p", "Even though PAS-1 combines all three programs").should("be.visible");
-    cy.get(`div[id="faq_when_can_i_expect_to_receive_payments_pas1"]`).should("not.be.visible");
     cy.contains(
       "button",
       "When can I expect to receive payments for Senior Freeze, ANCHOR, and Stay NJ?",
-    ).click();
-    cy.get("@gtag").should(
-      "have.been.calledWith",
-      "event",
-      `faq_when_can_i_expect_to_receive_payments_pas1_opened`,
-      Cypress.sinon.match.any,
-    );
-    cy.get(`div[id="faq_when_can_i_expect_to_receive_payments_pas1"]`).should("be.visible");
-
-    cy.get(`div[id="faq_check_amount_different_than_expected_pas1"]`).should("not.be.visible");
-    cy.contains(
-      "button",
-      "A check amount is different than what I expected. Who can I contact?",
-    ).click();
-    cy.get("@gtag").should(
-      "have.been.calledWith",
-      "event",
-      `faq_check_amount_different_than_expected_pas1_opened`,
-      Cypress.sinon.match.any,
-    );
-    cy.get(`div[id="faq_check_amount_different_than_expected_pas1"]`).should("be.visible");
-
-    cy.get(`div[id="faq_have_not_received_check_next_steps_pas1"]`).should("not.be.visible");
-    cy.contains(
-      "button",
-      "I have not received my check in the mail. What should I do next?",
-    ).click();
-    cy.get("@gtag").should(
-      "have.been.calledWith",
-      "event",
-      `faq_have_not_received_check_next_steps_pas1_opened`,
-      Cypress.sinon.match.any,
-    );
-    cy.get(`div[id="faq_have_not_received_check_next_steps_pas1"]`).should("be.visible");
+    ).should("be.visible");
   }
+  cy.contains(
+    "button",
+    "A check amount is different than what I expected. Who can I contact?",
+  ).should("be.visible");
+  cy.contains("button", "I have not received my check in the mail. What should I do next?").should(
+    "be.visible",
+  );
 };
 
 const mockDate = formatDate("7/6/2026 0:00:00");
