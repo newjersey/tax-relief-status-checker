@@ -28,7 +28,7 @@ export const NjHeader = () => (
                 <ul>
                   <li>
                     <a href="https://nj.gov/governor/" target="_blank" rel="noopener">
-                      Governor Mikie Sherrill &bull; Lt. Governor Dr. Dale G. Caldwell
+                      Governor Mikie Sherrill
                     </a>
                   </li>
                 </ul>
