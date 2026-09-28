@@ -2,18 +2,11 @@
 
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
-import { FormCode, IssueFlaggedType, PaymentMethod, Transaction } from "./types";
+import { FormCode, IssueFlaggedType, Transaction } from "./types";
 
 export enum DataType {
   AUTOFILE,
   STATUS,
-}
-
-export interface AutofileData {
-  readonly type: DataType.AUTOFILE;
-  readonly lastFourSsnDigits: string;
-  readonly zipCode: string;
-  readonly paymentMethod?: PaymentMethod;
 }
 
 export interface StatusData {
@@ -28,7 +21,7 @@ export interface StatusData {
   readonly stay_nj: Transaction[];
 }
 
-export type TaxReliefStatusData = AutofileData | StatusData;
+export type TaxReliefStatusData = StatusData;
 
 const TaxReliefDataContext = createContext<{
   dataStore: TaxReliefStatusData | null;

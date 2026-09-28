@@ -13,7 +13,7 @@ import { formatDate } from "@/app/utils/formatDate";
 import { logGAEvent } from "./utils/analytics";
 import { DataType, useDataStore } from "@/components/TaxReliefDataProvider";
 import { setIssueFlagged } from "./utils/setIssueFlagged";
-import type { PaymentMethod, StatusRecord } from "@/components/types";
+import type { StatusRecord } from "@/components/types";
 import { determineRoute } from "./utils/determineRoute";
 
 interface UserData {
@@ -21,32 +21,9 @@ interface UserData {
   readonly zipCode: string;
 }
 
-interface AutofileResponse {
-  readonly autofilePlanned: boolean;
-  readonly paymentMethod?: PaymentMethod;
-}
-
 interface StatusResponse {
   readonly records: StatusRecord[];
 }
-
-const callAutofileApi = async (params: {
-  readonly ssn: string;
-  readonly zip: string;
-}): Promise<AutofileResponse> => {
-  const response = await fetch("/api/autofile", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ssn: params.ssn, zip: params.zip }),
-  });
-
-  if (!response.ok) {
-    logGAEvent(`autofile_api_error`);
-    throw new Error(`Autofile API responded with status ${response.status}`);
-  }
-
-  return (await response.json()) as AutofileResponse;
-};
 
 const callStatusApi = async (params: {
   readonly ssn: string;
@@ -133,23 +110,10 @@ const LandingPage = () => {
   };
 
   const handleNoRecord = async (data: UserData) => {
-    const autofileResult = await callAutofileApi({ ssn: data.ssn, zip: data.zipCode });
-    if (autofileResult?.autofilePlanned) {
-      setDataStore({
-        type: DataType.AUTOFILE,
-        lastFourSsnDigits: maskSsn(data.ssn),
-        zipCode: data.zipCode,
-        paymentMethod: autofileResult.paymentMethod,
-      });
-      logGAEvent(`autofile_${autofileResult.paymentMethod}`);
-      router.push("/anchor-autofile");
-      return;
-    } else {
-      setAlertContent(<NoApplicationFoundAlert />);
-      logGAEvent(`api_200_record_not_found`);
-      returnToTop();
-      return;
-    }
+    setAlertContent(<NoApplicationFoundAlert />);
+    logGAEvent(`api_200_record_not_found`);
+    returnToTop();
+    return;
   };
 
   const handleRecordFound = (record: StatusRecord, data: UserData) => {
