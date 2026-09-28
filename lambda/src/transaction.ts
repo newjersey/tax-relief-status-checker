@@ -1,4 +1,5 @@
 import { Transaction, AllTransactions, InquiryRow } from "./types";
+import { validateTransaction } from "./validation";
 
 const ANCHORCDE = "13";
 const PTRCDE = "49";
@@ -12,6 +13,16 @@ export const buildTransaction = (
   CHECK_AMT: number,
   CHECK_NUM: string,
 ): Transaction => {
+  const validatedTransaction = validateTransaction({
+    TRANS_CDE: TRANS_CDE,
+    TRANS_STATUS_CDE: TRANS_STATUS_CDE,
+    CHECK_DTE: CHECK_DTE,
+    CHECK_AMT: CHECK_AMT,
+    CHECK_NUM: CHECK_NUM,
+  });
+  if (!validatedTransaction.success) {
+    throw new Error(validatedTransaction.error.message);
+  }
   let status;
   if (TRANS_CDE === "RR" && TRANS_STATUS_CDE.startsWith("PR") && REVIEW_CATEGORY_CDE === null) {
     status = "processing";
@@ -34,23 +45,19 @@ export const buildTransaction = (
   }
 
   if (status === "payment_sent") {
-    if (!CHECK_NUM) {
-      throw new Error(`Missing CHECK_NUM`);
+    let method;
+    if (CHECK_NUM.slice(1, 3) === "NN") {
+      method = "direct_deposit";
     } else {
-      let method;
-      if (CHECK_NUM.slice(1, 3) === "NN") {
-        method = "direct_deposit";
-      } else {
-        method = "check";
-      }
-      const payment_details = {
-        amount: CHECK_AMT,
-        date: CHECK_DTE,
-        method: method,
-        check_number: CHECK_NUM,
-      };
-      return { status: status, payment_details: payment_details };
+      method = "check";
     }
+    const payment_details = {
+      amount: CHECK_AMT,
+      date: CHECK_DTE,
+      method: method,
+      check_number: CHECK_NUM,
+    };
+    return { status: status, payment_details: payment_details };
   }
   return { status: status };
 };

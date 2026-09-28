@@ -15,3 +15,13 @@ export const buildMockRow = (overrides = {}) => ({
   FORM_CDE: "PAS1W",
   ...overrides,
 });
+
+export const buildMockTransactionValidation = (overrides = {}) => ({
+  TRANS_CDE: "RF",
+  TRANS_STATUS_CDE: "APC",
+  TRANS_TAX_CDE: "13",
+  CHECK_DTE: "12/11/2025 00:00:00",
+  CHECK_AMT: 1750,
+  CHECK_NUM: "922775385",
+  ...overrides,
+});
