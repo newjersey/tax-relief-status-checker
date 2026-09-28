@@ -78,16 +78,6 @@ export const NjFooter = () => (
             <ul className="usa-list usa-list--unstyled">
               <li className="margin-bottom-1">
                 <a
-                  href="https://www.nj.gov/governor/"
-                  className="text-white"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  Lt. Governor Dr. Dale G. Caldwell
-                </a>
-              </li>
-              <li className="margin-bottom-1">
-                <a
                   href="https://nj.gov/nj/faqs/"
                   className="text-white"
                   target="_blank"

@@ -7,7 +7,7 @@ import { Table } from "@trussworks/react-uswds";
 import { formatDate } from "../utils/formatDate";
 import { PASPaymentInfoFaqContent } from "@/app/payment-info/PASPaymentInfoFaqContent";
 import { ANCPaymentInfoFaqContent } from "./ANCPaymentInfoFaqContent";
-import { FaqSection, expandFaqAccordionItem } from "@/components/FaqSection";
+import { FaqSection } from "@/components/FaqSection";
 import {
   Transaction,
   TaxProgram,
@@ -160,18 +160,8 @@ const PaymentInfoPage = () => {
           ) : (
             <>
               <p>
-                You must be eligible for a program to receive payment. To find out when to expect
-                payment from ANCHOR or Stay NJ, review the{" "}
-                <a
-                  href="#faq_when_can_i_expect_to_receive_payments_pas1"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    expandFaqAccordionItem("faq_when_can_i_expect_to_receive_payments_pas1");
-                  }}
-                >
-                  full program payment table
-                </a>
-                {"."}
+                Even though PAS-1 combines all three programs into one application, each program has
+                a different payment schedule. Find specific payment periods for each program below.
               </p>
               <FaqSection
                 items={PASPaymentInfoFaqContent}
