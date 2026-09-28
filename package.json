@@ -24,7 +24,8 @@
     "husky": "9.1.7",
     "lint-staged": "17.5.1",
     "prettier": "3.9.8",
-    "prettier-plugin-jsdoc": "1.8.1"
+    "prettier-plugin-jsdoc": "1.8.1",
+    "zod": "^4.6.5"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
