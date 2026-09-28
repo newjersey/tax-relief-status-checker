@@ -163,16 +163,6 @@ describe("build all transactions", () => {
       expect(result.stay_nj.length).toBe(1);
       expect(result.stay_nj[0].payment_details?.check_number).toBe("922775385");
     });
-    it("throws an error for invalid transaction tax code", async () => {
-      const row = buildMockRow({
-        TRANS_TOTAL_NUM: 1,
-        TRANS_1_TAX_CDE: 0,
-      });
-
-      expect(() => buildAllTransactions(row)).toThrow(
-        "Invalid transaction tax code: 0 for transaction 1",
-      );
-    });
   });
   describe("when there are NO transactions", () => {
     it("should not put any transactions into a bucket", async () => {
@@ -190,7 +180,7 @@ describe("build all transactions", () => {
     it("should sort the transactions into their respective buckets", async () => {
       const row = buildMockRow({
         CHECK_1_NUM: "111111111",
-        TRANS_1_TAX_CDE: "13",
+        TRANS_1_TAX_CDE: 13,
         TRANS_2_CDE: "RF",
         TRANS_STATUS_2_CDE: "APC",
         REVIEW_CATEGORY_2_CDE: null,
@@ -205,21 +195,21 @@ describe("build all transactions", () => {
         CHECK_3_DTE: "12/11/2025 00:00:00",
         CHECK_3_AMT: 1750,
         CHECK_3_NUM: "333333333",
-        TRANS_3_TAX_CDE: "13",
+        TRANS_3_TAX_CDE: 13,
         TRANS_4_CDE: "RF",
         TRANS_STATUS_4_CDE: "APC",
         REVIEW_CATEGORY_4_CDE: null,
         CHECK_4_DTE: "11/28/2025 0:00:00",
         CHECK_4_AMT: 246,
         CHECK_4_NUM: "444444444",
-        TRANS_4_TAX_CDE: "41",
+        TRANS_4_TAX_CDE: 41,
         TRANS_5_CDE: "RF",
         TRANS_STATUS_5_CDE: "APC",
         REVIEW_CATEGORY_5_CDE: null,
         CHECK_5_DTE: "11/28/2025 0:00:00",
         CHECK_5_AMT: 246,
         CHECK_5_NUM: "555555555",
-        TRANS_5_TAX_CDE: "41",
+        TRANS_5_TAX_CDE: 41,
       });
 
       const result = buildAllTransactions(row);
@@ -232,6 +222,42 @@ describe("build all transactions", () => {
       expect(result.ptr[0].payment_details?.check_number).toBe("222222222");
       expect(result.stay_nj[0].payment_details?.check_number).toBe("444444444");
       expect(result.stay_nj[1].payment_details?.check_number).toBe("555555555");
+    });
+    it("should skip invalid transactions", async () => {
+      const row = buildMockRow({
+        CHECK_1_NUM: "111111111",
+        TRANS_1_TAX_CDE: 13,
+        TRANS_2_CDE: null,
+        TRANS_STATUS_2_CDE: "APC",
+        REVIEW_CATEGORY_2_CDE: null,
+        CHECK_2_DTE: "11/28/2025 0:00:00",
+        CHECK_2_AMT: 246,
+        CHECK_2_NUM: "222222222",
+        TRANS_2_TAX_CDE: "49",
+        TRANS_TOTAL_NUM: 5,
+        TRANS_3_CDE: "RF",
+        TRANS_STATUS_3_CDE: "APC",
+        REVIEW_CATEGORY_3_CDE: "MDZ",
+        CHECK_3_DTE: null,
+        CHECK_3_AMT: null,
+        CHECK_3_NUM: null,
+        TRANS_3_TAX_CDE: 13,
+        TRANS_4_CDE: "RF",
+        TRANS_STATUS_4_CDE: "APC",
+        REVIEW_CATEGORY_4_CDE: null,
+        CHECK_4_DTE: "11/28/2025 0:00:00",
+        CHECK_4_AMT: 246,
+        CHECK_4_NUM: "444444444",
+        TRANS_4_TAX_CDE: 41,
+      });
+
+      const result = buildAllTransactions(row);
+      expect(result.anchor.length).toBe(1);
+      expect(result.ptr.length).toBe(0);
+      expect(result.stay_nj.length).toBe(1);
+
+      expect(result.anchor[0].payment_details?.check_number).toBe("111111111");
+      expect(result.stay_nj[0].payment_details?.check_number).toBe("444444444");
     });
   });
 });

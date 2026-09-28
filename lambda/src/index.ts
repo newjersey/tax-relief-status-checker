@@ -91,7 +91,6 @@ const buildResponse = (rows: InquiryRow[]): BuildResponseResult => {
   }
   const validRows = rows.filter((row) => isRecordValid(row));
 
-  console.log(`DLN_NUM: ${validRows[0].DLN_NUM}`);
   const records = validRows.map(mapRowToRecord);
 
   return { records };

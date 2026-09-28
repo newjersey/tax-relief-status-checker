@@ -67,26 +67,30 @@ export const buildAllTransactions = (row: InquiryRow): AllTransactions => {
   const ptr = [];
   const stay_nj = [];
   for (let i = 1; i <= row.TRANS_TOTAL_NUM; i++) {
-    const transaction = buildTransaction(
-      row[`TRANS_${i}_CDE`] as string,
-      row[`TRANS_STATUS_${i}_CDE`] as string,
-      row[`REVIEW_CATEGORY_${i}_CDE`] as string,
-      row[`CHECK_${i}_DTE`] as string,
-      row[`CHECK_${i}_AMT`] as number,
-      row[`CHECK_${i}_NUM`] as string,
-    );
-
-    const taxCode = row[`TRANS_${i}_TAX_CDE`];
-    if (taxCode == ANCHORCDE) {
-      anchor.push(transaction);
-    } else if (taxCode == PTRCDE) {
-      ptr.push(transaction);
-    } else if (taxCode == STAYNJCDE) {
-      stay_nj.push(transaction);
-    } else {
-      throw new Error(
-        `Invalid transaction tax code: ${row[`TRANS_${i}_TAX_CDE`]} for transaction ${i}`,
+    try {
+      const transaction = buildTransaction(
+        row[`TRANS_${i}_CDE`] as string,
+        row[`TRANS_STATUS_${i}_CDE`] as string,
+        row[`REVIEW_CATEGORY_${i}_CDE`] as string,
+        row[`CHECK_${i}_DTE`] as string,
+        row[`CHECK_${i}_AMT`] as number,
+        row[`CHECK_${i}_NUM`] as string,
       );
+
+      const taxCode = row[`TRANS_${i}_TAX_CDE`];
+      if (taxCode == ANCHORCDE) {
+        anchor.push(transaction);
+      } else if (taxCode == PTRCDE) {
+        ptr.push(transaction);
+      } else if (taxCode == STAYNJCDE) {
+        stay_nj.push(transaction);
+      } else {
+        throw new Error(
+          `Invalid transaction tax code: ${row[`TRANS_${i}_TAX_CDE`]} for transaction ${i}`,
+        );
+      }
+    } catch (error) {
+      console.error(`Invalid transaction #${i}, error: ${error}`);
     }
   }
   return { anchor: anchor, ptr: ptr, stay_nj: stay_nj };

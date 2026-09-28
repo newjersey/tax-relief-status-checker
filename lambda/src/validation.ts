@@ -7,6 +7,8 @@ export const isRecordValid = (row: InquiryRow) => {
   if (!validatedRecord.success) {
     console.log(validatedRecord.error.issues);
   }
+  console.log(`DLN_NUM: ${validatedRecord.data?.DLN_NUM}`);
+
   return validatedRecord.success;
 };
 
@@ -28,9 +30,7 @@ const RecordSchema = z.object({
   RETURN_YEAR_DTE: z.number("RETURN_YEAR_DTE is required"),
   RNY_APPLIED_DTE: z.string("RNY_APPLIED_DTE is required"),
   TRANS_TOTAL_NUM: z.number("TRANS_TOTAL_NUM is required"),
-  FORM_CDE: z
-    .enum(["PAS1W", "PAS1D", "PAS1P", "ANC1W", "ANC1D", "ANC1P"], "FORM_CDE is invalid")
-    .nullable(),
+  FORM_CDE: z.string().nullable(),
 });
 
 const InputSchema = z.object({

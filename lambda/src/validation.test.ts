@@ -5,7 +5,7 @@ import { isRecordValid, validateInput, validateTransaction } from "./validation"
 describe("isRecordValid", () => {
   describe("when 1 field is missing", () => {
     describe("when DLN_NUM is missing", () => {
-      it("returns result success as false and the associated error message", async () => {
+      it("returns result success as false", async () => {
         const row = buildMockRow({
           DLN_NUM: null,
         });
@@ -14,7 +14,7 @@ describe("isRecordValid", () => {
       });
     });
     describe("when SOCIAL_SECURITY_NUMBER_IDN is missing", () => {
-      it("returns result success as false and the associated error message", async () => {
+      it("returns result success as false", async () => {
         const row = buildMockRow({
           SOCIAL_SECURITY_NUMBER_IDN: null,
         });
@@ -23,7 +23,7 @@ describe("isRecordValid", () => {
       });
     });
     describe("when ZIP_ADR is missing", () => {
-      it("returns result success as false and the associated error message", async () => {
+      it("returns result success as false", async () => {
         const row = buildMockRow({
           ZIP_ADR: null,
         });
@@ -32,7 +32,7 @@ describe("isRecordValid", () => {
       });
     });
     describe("when RETURN_YEAR_DTE is missing", () => {
-      it("returns result success as false and the associated error message", async () => {
+      it("returns result success as false", async () => {
         const row = buildMockRow({
           RETURN_YEAR_DTE: null,
         });
@@ -41,7 +41,7 @@ describe("isRecordValid", () => {
       });
     });
     describe("when RNY_APPLIED_DTE is missing", () => {
-      it("returns result success as false and the associated error message", async () => {
+      it("returns result success as false", async () => {
         const row = buildMockRow({
           RNY_APPLIED_DTE: null,
         });
@@ -50,12 +50,21 @@ describe("isRecordValid", () => {
       });
     });
     describe("when TRANS_TOTAL_NUM is missing", () => {
-      it("returns result success as false and the associated error message", async () => {
+      it("returns result success as false", async () => {
         const row = buildMockRow({
           TRANS_TOTAL_NUM: null,
         });
         const result = isRecordValid(row);
         expect(result).toBe(false);
+      });
+    });
+    describe("when FORM_CDE is missing", () => {
+      it("returns result success as true", async () => {
+        const row = buildMockRow({
+          FORM_CDE: null,
+        });
+        const result = isRecordValid(row);
+        expect(result).toBe(true);
       });
     });
   });
