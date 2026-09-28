@@ -109,7 +109,7 @@ const LandingPage = () => {
     returnToTop();
   };
 
-  const handleNoRecord = async (data: UserData) => {
+  const handleNoRecord = async () => {
     setAlertContent(<NoApplicationFoundAlert />);
     logGAEvent(`api_200_record_not_found`);
     returnToTop();
@@ -142,7 +142,7 @@ const LandingPage = () => {
       const record2025 = statusResult.records.find((r) => r.return_year === "2025");
 
       if (!record2025) {
-        await handleNoRecord(data);
+        await handleNoRecord();
         return;
       }
 
