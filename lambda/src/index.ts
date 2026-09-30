@@ -57,7 +57,7 @@ const mapRowToRecord = (row: InquiryRow): ResponseRecord => {
   const allTransactions = buildAllTransactions(row);
   return {
     return_year: String(row.RETURN_YEAR_DTE),
-    application_date: row.RNY_APPLIED_DTE,
+    application_date: row.RNY_APPLIED_DTE.toISOString(),
     form_code: mapFormCode(row.FORM_CDE),
     anchor: allTransactions.anchor,
     ptr: allTransactions.ptr,

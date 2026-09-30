@@ -96,7 +96,7 @@ describe("build transaction status codes", () => {
       expect(result.payment_details?.amount).toBe(1750);
       expect(result.payment_details?.method).toBe("check");
       expect(result.payment_details?.check_number).toBe("922775385");
-      expect(result.payment_details?.date).toBe("12/11/2025 00:00:00");
+      expect(result.payment_details?.date).toBe(new Date("12/11/2025 00:00:00").toISOString());
     });
   });
 
@@ -184,7 +184,7 @@ describe("build all transactions", () => {
         TRANS_2_CDE: "RF",
         TRANS_STATUS_2_CDE: "APC",
         REVIEW_CATEGORY_2_CDE: null,
-        CHECK_2_DTE: "11/28/2025 0:00:00",
+        CHECK_2_DTE: new Date("11/28/2025 0:00:00"),
         CHECK_2_AMT: 246,
         CHECK_2_NUM: "222222222",
         TRANS_2_TAX_CDE: "49",
@@ -192,21 +192,21 @@ describe("build all transactions", () => {
         TRANS_3_CDE: "RF",
         TRANS_STATUS_3_CDE: "APC",
         REVIEW_CATEGORY_3_CDE: "MDZ",
-        CHECK_3_DTE: "12/11/2025 00:00:00",
+        CHECK_3_DTE: new Date("12/11/2025 00:00:00"),
         CHECK_3_AMT: 1750,
         CHECK_3_NUM: "333333333",
         TRANS_3_TAX_CDE: 13,
         TRANS_4_CDE: "RF",
         TRANS_STATUS_4_CDE: "APC",
         REVIEW_CATEGORY_4_CDE: null,
-        CHECK_4_DTE: "11/28/2025 0:00:00",
+        CHECK_4_DTE: new Date("11/28/2025 0:00:00"),
         CHECK_4_AMT: 246,
         CHECK_4_NUM: "444444444",
         TRANS_4_TAX_CDE: 41,
         TRANS_5_CDE: "RF",
         TRANS_STATUS_5_CDE: "APC",
         REVIEW_CATEGORY_5_CDE: null,
-        CHECK_5_DTE: "11/28/2025 0:00:00",
+        CHECK_5_DTE: new Date("11/28/2025 0:00:00"),
         CHECK_5_AMT: 246,
         CHECK_5_NUM: "555555555",
         TRANS_5_TAX_CDE: 41,
@@ -230,7 +230,7 @@ describe("build all transactions", () => {
         TRANS_2_CDE: null,
         TRANS_STATUS_2_CDE: "APC",
         REVIEW_CATEGORY_2_CDE: null,
-        CHECK_2_DTE: "11/28/2025 0:00:00",
+        CHECK_2_DTE: new Date("11/28/2025 0:00:00"),
         CHECK_2_AMT: 246,
         CHECK_2_NUM: "222222222",
         TRANS_2_TAX_CDE: "49",
@@ -245,7 +245,7 @@ describe("build all transactions", () => {
         TRANS_4_CDE: "RF",
         TRANS_STATUS_4_CDE: "APC",
         REVIEW_CATEGORY_4_CDE: null,
-        CHECK_4_DTE: "11/28/2025 0:00:00",
+        CHECK_4_DTE: new Date("11/28/2025 0:00:00"),
         CHECK_4_AMT: 246,
         CHECK_4_NUM: "444444444",
         TRANS_4_TAX_CDE: 41,

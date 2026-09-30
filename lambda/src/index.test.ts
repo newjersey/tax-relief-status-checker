@@ -112,7 +112,9 @@ describe("handler business logic", () => {
 
       expect(body["records"]).toHaveLength(1);
       expect(body["records"][0].return_year).toBe("2025");
-      expect(body["records"][0].application_date).toBe("10/31/2025 00:00:00");
+      expect(body["records"][0].application_date).toBe(
+        new Date("10/31/2025 00:00:00").toISOString(),
+      );
       expect(body["records"][0].form_code).toBe("PAS-1");
       expect(body["records"][0]["anchor"][0].status).toBe("payment_sent");
       expect(body["records"][0].ptr).toBeDefined();

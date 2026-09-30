@@ -19,7 +19,7 @@ export interface AllTransactions {
 export interface InquiryRow {
   readonly SOCIAL_SECURITY_NUMBER_IDN: string;
   readonly ZIP_ADR: string;
-  readonly RNY_APPLIED_DTE: string;
+  readonly RNY_APPLIED_DTE: Date;
   readonly RETURN_YEAR_DTE: string;
   readonly TRANS_TOTAL_NUM: number;
   readonly DLN_NUM: string;
@@ -30,7 +30,7 @@ export interface InquiryRow {
 export interface TransactionInfo {
   readonly TRANS_CDE: string;
   readonly TRANS_STATUS_CDE: string;
-  readonly CHECK_DTE: string;
+  readonly CHECK_DTE: Date;
   readonly CHECK_AMT: number;
   readonly CHECK_NUM: string;
 }

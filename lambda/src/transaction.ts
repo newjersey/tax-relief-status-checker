@@ -9,7 +9,7 @@ export const buildTransaction = (
   TRANS_CDE: string,
   TRANS_STATUS_CDE: string,
   REVIEW_CATEGORY_CDE: string,
-  CHECK_DTE: string,
+  CHECK_DTE: Date,
   CHECK_AMT: number,
   CHECK_NUM: string,
 ): Transaction => {
@@ -53,7 +53,7 @@ export const buildTransaction = (
     }
     const payment_details = {
       amount: CHECK_AMT,
-      date: CHECK_DTE,
+      date: CHECK_DTE.toISOString(),
       method: method,
       check_number: CHECK_NUM,
     };
@@ -72,7 +72,7 @@ export const buildAllTransactions = (row: InquiryRow): AllTransactions => {
         row[`TRANS_${i}_CDE`] as string,
         row[`TRANS_STATUS_${i}_CDE`] as string,
         row[`REVIEW_CATEGORY_${i}_CDE`] as string,
-        row[`CHECK_${i}_DTE`] as string,
+        row[`CHECK_${i}_DTE`] as Date,
         row[`CHECK_${i}_AMT`] as number,
         row[`CHECK_${i}_NUM`] as string,
       );
