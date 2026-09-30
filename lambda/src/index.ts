@@ -89,6 +89,22 @@ const buildResponse = (rows: InquiryRow[]): BuildResponseResult => {
   if (!rows || rows.length === 0) {
     return { records: [] };
   }
+
+  console.log(`DLN_NUM type: ` + typeof rows[0].DLN_NUM);
+  console.log(`SOCIAL_SECURITY_NUMBER_IDN type: ` + typeof rows[0].SOCIAL_SECURITY_NUMBER_IDN);
+  console.log(`ZIP_ADR type: ` + typeof rows[0].ZIP_ADR);
+  console.log(`RETURN_YEAR_DTE type: ` + typeof rows[0].RETURN_YEAR_DTE);
+  console.log(`RNY_APPLIED_DTE type: ` + typeof rows[0].RNY_APPLIED_DTE);
+  console.log(`TRANS_TOTAL_NUM type: ` + typeof rows[0].TRANS_TOTAL_NUM);
+  console.log(`FORM_CDE type: ` + typeof rows[0].FORM_CDE);
+  console.log(`TRANS_X_CDE type: ` + typeof rows[0].TRANS_1_CDE);
+  console.log(`TRANS_STATUS_X_CDE type: ` + typeof rows[0].TRANS_STATUS_1_CDE);
+  console.log(`REVIEW_CATEGORY_X_CDE type: ` + typeof rows[0].REVIEW_CATEGORY_1_CDE);
+  console.log(`CHECK_X_DTE type: ` + typeof rows[0].CHECK_1_DTE);
+  console.log(`CHECK_X_AMT type: ` + typeof rows[0].CHECK_1_AMT);
+  console.log(`CHECK_X_NUM type: ` + typeof rows[0].CHECK_1_NUM);
+  console.log(`TRANS_X_TAX_CDE type: ` + typeof rows[0].TRANS_1_TAX_CDE);
+
   const validRows = rows.filter((row) => isRecordValid(row));
 
   const records = validRows.map(mapRowToRecord);
