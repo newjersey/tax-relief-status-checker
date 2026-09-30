@@ -20,7 +20,7 @@ export interface InquiryRow {
   readonly SOCIAL_SECURITY_NUMBER_IDN: string;
   readonly ZIP_ADR: string;
   readonly RNY_APPLIED_DTE: string;
-  readonly RETURN_YEAR_DTE: number;
+  readonly RETURN_YEAR_DTE: string;
   readonly TRANS_TOTAL_NUM: number;
   readonly DLN_NUM: string;
   readonly FORM_CDE: string;

@@ -27,8 +27,8 @@ const RecordSchema = z.object({
   DLN_NUM: z.string("DLN_NUM is required"),
   SOCIAL_SECURITY_NUMBER_IDN: z.string("SOCIAL_SECURITY_NUMBER_IDN is required"),
   ZIP_ADR: z.string("ZIP_ADR is required"),
-  RETURN_YEAR_DTE: z.number("RETURN_YEAR_DTE is required"),
-  RNY_APPLIED_DTE: z.string("RNY_APPLIED_DTE is required"),
+  RETURN_YEAR_DTE: z.string("RETURN_YEAR_DTE is required"),
+  RNY_APPLIED_DTE: z.union([z.string(), z.date()]),
   TRANS_TOTAL_NUM: z.number("TRANS_TOTAL_NUM is required"),
   FORM_CDE: z.string().nullable(),
 });
@@ -63,7 +63,7 @@ const TransactionSchema = z
   .object({
     TRANS_CDE: z.enum(["RR", "RF"], "TRANS_CDE is invalid"),
     TRANS_STATUS_CDE: z.string().nullable(),
-    CHECK_DTE: z.string().nullable(),
+    CHECK_DTE: z.union([z.string(), z.date()]).nullable(),
     CHECK_AMT: z.number().nullable(),
     CHECK_NUM: z.string().nullable(),
   })
