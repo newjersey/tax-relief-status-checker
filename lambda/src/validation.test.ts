@@ -4,60 +4,21 @@ import { isRecordValid, validateInput, validateTransaction } from "./validation"
 
 describe("isRecordValid", () => {
   describe("when 1 field is missing", () => {
-    describe("when DLN_NUM is missing", () => {
-      it("returns result success as false", async () => {
-        const row = buildMockRow({
-          DLN_NUM: null,
-        });
-        const result = isRecordValid(row);
-        expect(result).toBe(false);
+    it.each([
+      "DLN_NUM",
+      "SOCIAL_SECURITY_NUMBER_IDN",
+      "ZIP_ADR",
+      "RETURN_YEAR_DTE",
+      "RNY_APPLIED_DTE",
+      "TRANS_TOTAL_NUM",
+    ])("When %s is missing, returns result success as false", (missingField: String) => {
+      const row = buildMockRow({
+        [`${missingField}`]: null,
       });
+      const result = isRecordValid(row);
+      expect(result).toBe(false);
     });
-    describe("when SOCIAL_SECURITY_NUMBER_IDN is missing", () => {
-      it("returns result success as false", async () => {
-        const row = buildMockRow({
-          SOCIAL_SECURITY_NUMBER_IDN: null,
-        });
-        const result = isRecordValid(row);
-        expect(result).toBe(false);
-      });
-    });
-    describe("when ZIP_ADR is missing", () => {
-      it("returns result success as false", async () => {
-        const row = buildMockRow({
-          ZIP_ADR: null,
-        });
-        const result = isRecordValid(row);
-        expect(result).toBe(false);
-      });
-    });
-    describe("when RETURN_YEAR_DTE is missing", () => {
-      it("returns result success as false", async () => {
-        const row = buildMockRow({
-          RETURN_YEAR_DTE: null,
-        });
-        const result = isRecordValid(row);
-        expect(result).toBe(false);
-      });
-    });
-    describe("when RNY_APPLIED_DTE is missing", () => {
-      it("returns result success as false", async () => {
-        const row = buildMockRow({
-          RNY_APPLIED_DTE: null,
-        });
-        const result = isRecordValid(row);
-        expect(result).toBe(false);
-      });
-    });
-    describe("when TRANS_TOTAL_NUM is missing", () => {
-      it("returns result success as false", async () => {
-        const row = buildMockRow({
-          TRANS_TOTAL_NUM: null,
-        });
-        const result = isRecordValid(row);
-        expect(result).toBe(false);
-      });
-    });
+
     describe("when FORM_CDE is missing", () => {
       it("returns result success as true", async () => {
         const row = buildMockRow({
@@ -70,7 +31,7 @@ describe("isRecordValid", () => {
   });
 
   describe("when all fields are missing", () => {
-    it("returns result success as false and the associated error message for each field", async () => {
+    it("returns result success as false", async () => {
       const row = buildMockRow({
         DLN_NUM: null,
         SOCIAL_SECURITY_NUMBER_IDN: null,
@@ -86,7 +47,7 @@ describe("isRecordValid", () => {
   });
 
   describe("when no fields are missing", () => {
-    it("returns result success as true with no associated error messages", async () => {
+    it("returns result success as true", async () => {
       const row = buildMockRow();
       const result = isRecordValid(row);
 
@@ -99,13 +60,13 @@ describe("validateInput", () => {
   it("returns false and reports error when ssn is missing", async () => {
     const result = validateInput({ zip: "07656" });
     expect(result.success).toBe(false);
-    expect(result.error?.message).toContain("Both ssn and zip are required");
+    expect(result.error?.message).toContain("SSN is required");
   });
 
   it("returns false and reports error when zip is missing", async () => {
     const result = validateInput({ ssn: "123456789" });
     expect(result.success).toBe(false);
-    expect(result.error?.message).toContain("Both ssn and zip are required");
+    expect(result.error?.message).toContain("ZIP is required");
   });
 
   it("returns false and reports error for invalid SSN (not 9 digits)", async () => {
@@ -151,13 +112,19 @@ describe("validateTransaction", () => {
     expect(result.error?.message).toContain("TRANS_CDE is invalid");
   });
   it("returns false and reports error when missing TRANS_STATUS_CDE (TRANS_CDE = RF)", async () => {
-    const mockTransactionInfo = buildMockTransactionValidation({ TRANS_STATUS_CDE: null });
+    const mockTransactionInfo = buildMockTransactionValidation({
+      TRANS_CDE: "RF",
+      TRANS_STATUS_CDE: null,
+    });
     const result = validateTransaction(mockTransactionInfo);
     expect(result.success).toBe(false);
     expect(result.error?.message).toContain("TRANS_STATUS_CDE is required when TRANS_CDE is RF");
   });
   it("returns false and reports error when TRANS_STATUS_CDE does not start with AP|PR (TRANS_CDE = RF)", async () => {
-    const mockTransactionInfo = buildMockTransactionValidation({ TRANS_STATUS_CDE: "ZZ" });
+    const mockTransactionInfo = buildMockTransactionValidation({
+      TRANS_CDE: "RF",
+      TRANS_STATUS_CDE: "ZZ",
+    });
     const result = validateTransaction(mockTransactionInfo);
     expect(result.success).toBe(false);
     expect(result.error?.message).toContain("TRANS_STATUS_CDE must start with AP or PR");
@@ -165,6 +132,7 @@ describe("validateTransaction", () => {
 
   it("returns false and reports error when missing Check Info (TRANS_CDE = RF)", async () => {
     const mockTransactionInfo = buildMockTransactionValidation({
+      TRANS_CDE: "RF",
       CHECK_DTE: null,
       CHECK_AMT: null,
       CHECK_NUM: null,
@@ -177,10 +145,10 @@ describe("validateTransaction", () => {
   });
   it("returns true when missing Check Info (TRANS_CDE = RR)", async () => {
     const mockTransactionInfo = buildMockTransactionValidation({
+      TRANS_CDE: "RR",
       CHECK_DTE: null,
       CHECK_AMT: null,
       CHECK_NUM: null,
-      TRANS_CDE: "RR",
     });
     const result = validateTransaction(mockTransactionInfo);
     expect(result.success).toBe(true);

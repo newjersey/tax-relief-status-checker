@@ -34,29 +34,23 @@ const RecordSchema = z.object({
 });
 
 const InputSchema = z.object({
-  ssn: z
-    .string("Both ssn and zip are required")
-    .nonempty("Social Security number is required")
-    .transform((input, ctx) => {
-      try {
-        const sanitizedSsn = String(input).replace(/-/g, "");
-        if (/^\d{9}$/.test(sanitizedSsn)) {
-          return sanitizedSsn;
-        } else {
-          ctx.issues.push({
-            code: "custom",
-            message: "SSN must be 9 digits",
-            input: input,
-          });
-        }
-      } catch {
-        return false;
+  ssn: z.string("SSN is required").transform((input, ctx) => {
+    try {
+      const sanitizedSsn = String(input).replace(/-/g, "");
+      if (/^\d{9}$/.test(sanitizedSsn)) {
+        return sanitizedSsn;
+      } else {
+        ctx.issues.push({
+          code: "custom",
+          message: "SSN must be 9 digits",
+          input: input,
+        });
       }
-    }),
-  zip: z
-    .string("Both ssn and zip are required")
-    .nonempty("Zip Code is required")
-    .regex(/^\d{5}$/, "ZIP must be 5 digits"),
+    } catch {
+      return false;
+    }
+  }),
+  zip: z.string("ZIP is required").regex(/^\d{5}$/, "ZIP must be 5 digits"),
 });
 
 const TransactionSchema = z

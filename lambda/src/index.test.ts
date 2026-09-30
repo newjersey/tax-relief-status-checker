@@ -75,7 +75,8 @@ describe("handler error handling", () => {
     const result = await handler({});
     expect(result.statusCode).toBe(400);
     assertMetrics("400");
-    expect(JSON.parse(result.body).error).toContain("Both ssn and zip are required");
+    expect(JSON.parse(result.body).error).toContain("ZIP is required");
+    expect(JSON.parse(result.body).error).toContain("SSN is required");
   });
 
   it("closes the database connection even on error", async () => {

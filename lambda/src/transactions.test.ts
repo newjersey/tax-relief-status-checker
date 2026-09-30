@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { buildMockRow } from "./testHelpers.ts";
+import {
+  buildMockRow,
+  invalidPTRTransactionNoDTE,
+  invalidStayTransactionNoAMT,
+  validAnchorTransaction,
+  validStayTransaction,
+} from "./testHelpers.ts";
 import { buildAllTransactions, buildTransaction } from "./transaction.ts";
 
 const callBuildTransaction = (row: any, i: number) => {
@@ -130,7 +136,7 @@ describe("build all transactions", () => {
     it("correctly sorts transaction into ANCHOR bucket when tax code is ANCHOR", async () => {
       const row = buildMockRow({
         TRANS_TOTAL_NUM: 1,
-        TRANS_1_TAX_CDE: 13,
+        TRANS_1_TAX_CDE: "13",
       });
 
       const result = buildAllTransactions(row);
@@ -142,7 +148,7 @@ describe("build all transactions", () => {
     it("correctly sorts transaction into ptr bucket when tax code is PTR", async () => {
       const row = buildMockRow({
         TRANS_TOTAL_NUM: 1,
-        TRANS_1_TAX_CDE: 49,
+        TRANS_1_TAX_CDE: "49",
       });
 
       const result = buildAllTransactions(row);
@@ -154,7 +160,7 @@ describe("build all transactions", () => {
     it("correctly sorts transaction into stay_nj bucket when tax code is stay_nj", async () => {
       const row = buildMockRow({
         TRANS_TOTAL_NUM: 1,
-        TRANS_1_TAX_CDE: 41,
+        TRANS_1_TAX_CDE: "41",
       });
 
       const result = buildAllTransactions(row);
@@ -180,7 +186,7 @@ describe("build all transactions", () => {
     it("should sort the transactions into their respective buckets", async () => {
       const row = buildMockRow({
         CHECK_1_NUM: "111111111",
-        TRANS_1_TAX_CDE: 13,
+        TRANS_1_TAX_CDE: "13",
         TRANS_2_CDE: "RF",
         TRANS_STATUS_2_CDE: "APC",
         REVIEW_CATEGORY_2_CDE: null,
@@ -188,28 +194,28 @@ describe("build all transactions", () => {
         CHECK_2_AMT: 246,
         CHECK_2_NUM: "222222222",
         TRANS_2_TAX_CDE: "49",
-        TRANS_TOTAL_NUM: 5,
+        TRANS_TOTAL_NUM: "5",
         TRANS_3_CDE: "RF",
         TRANS_STATUS_3_CDE: "APC",
         REVIEW_CATEGORY_3_CDE: "MDZ",
         CHECK_3_DTE: new Date("12/11/2025 00:00:00"),
         CHECK_3_AMT: 1750,
         CHECK_3_NUM: "333333333",
-        TRANS_3_TAX_CDE: 13,
+        TRANS_3_TAX_CDE: "13",
         TRANS_4_CDE: "RF",
         TRANS_STATUS_4_CDE: "APC",
         REVIEW_CATEGORY_4_CDE: null,
         CHECK_4_DTE: new Date("11/28/2025 0:00:00"),
         CHECK_4_AMT: 246,
         CHECK_4_NUM: "444444444",
-        TRANS_4_TAX_CDE: 41,
+        TRANS_4_TAX_CDE: "41",
         TRANS_5_CDE: "RF",
         TRANS_STATUS_5_CDE: "APC",
         REVIEW_CATEGORY_5_CDE: null,
         CHECK_5_DTE: new Date("11/28/2025 0:00:00"),
         CHECK_5_AMT: 246,
         CHECK_5_NUM: "555555555",
-        TRANS_5_TAX_CDE: 41,
+        TRANS_5_TAX_CDE: "41",
       });
 
       const result = buildAllTransactions(row);
@@ -225,30 +231,11 @@ describe("build all transactions", () => {
     });
     it("should skip invalid transactions", async () => {
       const row = buildMockRow({
-        CHECK_1_NUM: "111111111",
-        TRANS_1_TAX_CDE: 13,
-        TRANS_2_CDE: null,
-        TRANS_STATUS_2_CDE: "APC",
-        REVIEW_CATEGORY_2_CDE: null,
-        CHECK_2_DTE: new Date("11/28/2025 0:00:00"),
-        CHECK_2_AMT: 246,
-        CHECK_2_NUM: "222222222",
-        TRANS_2_TAX_CDE: "49",
-        TRANS_TOTAL_NUM: 5,
-        TRANS_3_CDE: "RF",
-        TRANS_STATUS_3_CDE: "APC",
-        REVIEW_CATEGORY_3_CDE: "MDZ",
-        CHECK_3_DTE: null,
-        CHECK_3_AMT: null,
-        CHECK_3_NUM: null,
-        TRANS_3_TAX_CDE: 13,
-        TRANS_4_CDE: "RF",
-        TRANS_STATUS_4_CDE: "APC",
-        REVIEW_CATEGORY_4_CDE: null,
-        CHECK_4_DTE: new Date("11/28/2025 0:00:00"),
-        CHECK_4_AMT: 246,
-        CHECK_4_NUM: "444444444",
-        TRANS_4_TAX_CDE: 41,
+        TRANS_TOTAL_NUM: 4,
+        ...validAnchorTransaction,
+        ...invalidPTRTransactionNoDTE,
+        ...invalidStayTransactionNoAMT,
+        ...validStayTransaction,
       });
 
       const result = buildAllTransactions(row);
