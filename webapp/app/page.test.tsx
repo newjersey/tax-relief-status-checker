@@ -2,12 +2,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LandingPage from "./page";
-import type { StatusRecord } from "@/components/types";
+import { FormCode, type StatusRecord } from "@/components/types";
 import { TaxReliefDataProvider } from "@/components/TaxReliefDataProvider";
-import { PaymentMethod } from "@/components/types";
 import { logGAEvent } from "./utils/analytics";
 import { determineRoute } from "./utils/determineRoute";
-import { FormCode } from "@/components/types";
 
 const mockPush = vi.fn();
 
@@ -95,45 +93,12 @@ describe("onSubmit handler", () => {
   describe("when status API record not found", () => {
     const statusResponseNoRecord = { records: [buildStatusRecord({ return_year: "2024" })] };
 
-    it("it calls autofile API, when autofile record is found, sets datastore and routes user to autofile", async () => {
-      globalThis.fetch = vi
-        .fn()
-        .mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          json: () => Promise.resolve(statusResponseNoRecord),
-        })
-        .mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          json: () =>
-            Promise.resolve({ autofilePlanned: true, paymentMethod: PaymentMethod.DIRECT_DEPOSIT }),
-        }) as unknown as typeof fetch;
-
-      renderLandingPage();
-      await fillAndSubmitForm();
-
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        "/api/autofile",
-        expect.objectContaining({ method: "POST" }),
-      );
-      expect(mockPush).toHaveBeenCalledWith("/anchor-autofile");
-      expect(logGAEvent).toHaveBeenCalledWith(`autofile_${PaymentMethod.DIRECT_DEPOSIT}`);
-    });
-
-    it("it calls autofile API, when autofile record is NOT found, it shows the application not found alert", async () => {
-      globalThis.fetch = vi
-        .fn()
-        .mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          json: () => Promise.resolve(statusResponseNoRecord),
-        })
-        .mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          json: () => Promise.resolve({ autofilePlanned: false }),
-        }) as unknown as typeof fetch;
+    it("when record is NOT found, it shows the application not found alert", async () => {
+      globalThis.fetch = vi.fn().mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(statusResponseNoRecord),
+      }) as unknown as typeof fetch;
 
       renderLandingPage();
       await fillAndSubmitForm();
@@ -143,30 +108,6 @@ describe("onSubmit handler", () => {
       ).toBeInTheDocument();
       expect(mockPush).not.toHaveBeenCalled();
       expect(logGAEvent).toHaveBeenCalledWith("api_200_record_not_found");
-    });
-
-    it("it calls autofile API, when response is not 200, it shows the error message", async () => {
-      globalThis.fetch = vi
-        .fn()
-        .mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          json: () => Promise.resolve(statusResponseNoRecord),
-        })
-        .mockResolvedValueOnce({
-          ok: false,
-          status: 500,
-          json: () => Promise.resolve({}),
-        }) as unknown as typeof fetch;
-
-      renderLandingPage();
-      await fillAndSubmitForm();
-
-      expect(
-        screen.getByText(/We are having an issue checking on your application status/i),
-      ).toBeInTheDocument();
-      expect(mockPush).not.toHaveBeenCalled();
-      expect(logGAEvent).toHaveBeenCalledWith("autofile_api_error");
     });
   });
 });

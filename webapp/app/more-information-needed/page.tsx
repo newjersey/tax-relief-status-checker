@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { DataType, useDataStore } from "@/components/TaxReliefDataProvider";
+import { useDataStore } from "@/components/TaxReliefDataProvider";
 import { IssueFlaggedType } from "@/components/types";
 import { Alert } from "@trussworks/react-uswds";
 import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
@@ -12,14 +12,14 @@ const MoreInformationNeededPage = () => {
   const { dataStore } = useDataStore();
 
   useEffect(() => {
-    if (!dataStore || dataStore.type !== DataType.STATUS) {
+    if (!dataStore) {
       router.replace("/");
     }
   }, [dataStore, router]);
 
   // Next.js prerenders client components during the build,
   // returning null here allows it to render only client-side
-  if (!dataStore || dataStore.type !== DataType.STATUS) {
+  if (!dataStore) {
     return null;
   }
 
