@@ -1,4 +1,4 @@
-name: Weekly Agentic Maintenance
+name: Fix failing Renovate PRs
 
 on:
   schedule:
@@ -11,18 +11,15 @@ permissions:
 
 jobs:
   fix-renovate-prs:
-    environment: "Agentic Maintenance GH Workflow"
-    permissions:
-      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 24
 
@@ -36,6 +33,7 @@ jobs:
 
       - name: Find and fix failing Renovate PRs
         env:
+          GH_TOKEN: ${{ github.token }}
           CLAUDE_CODE_USE_BEDROCK: "1"
           AWS_REGION: us-east-1
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
