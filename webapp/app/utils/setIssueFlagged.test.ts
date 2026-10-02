@@ -3,10 +3,13 @@ import { describe, it, expect } from "vitest";
 import { setIssueFlagged } from "./setIssueFlagged";
 import type { StatusRecord, Transaction } from "@/components/types";
 import { TransactionStatus, IssueFlaggedType } from "@/components/types";
+import { FormCode } from "@/components/types";
 
 const buildRecord = (overrides: Partial<StatusRecord> = {}): StatusRecord => ({
   return_year: "2024",
   application_date: "2024-01-01",
+  form_code: FormCode.PAS1,
+
   anchor: [],
   ptr: [],
   stay_nj: [],

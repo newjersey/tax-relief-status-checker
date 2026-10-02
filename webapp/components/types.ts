@@ -47,7 +47,13 @@ export enum IssueFlaggedType {
 export interface StatusRecord {
   readonly return_year: string;
   readonly application_date: string;
+  readonly form_code: FormCode | null;
   readonly anchor: Transaction[];
   readonly ptr: Transaction[];
   readonly stay_nj: Transaction[];
+}
+
+export enum FormCode {
+  ANC1 = "ANC-1",
+  PAS1 = "PAS-1",
 }
