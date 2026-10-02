@@ -11,7 +11,7 @@ import { FaqSection, expandFaqAccordionItem } from "@/components/FaqSection";
 import { maskSsn } from "@/app/utils/maskSsn";
 import { formatDate } from "@/app/utils/formatDate";
 import { logGAEvent } from "./utils/analytics";
-import { DataType, useDataStore } from "@/components/TaxReliefDataProvider";
+import { useDataStore } from "@/components/TaxReliefDataProvider";
 import { setIssueFlagged } from "./utils/setIssueFlagged";
 import type { StatusRecord } from "@/components/types";
 import { determineRoute } from "./utils/determineRoute";
@@ -120,7 +120,6 @@ const LandingPage = () => {
     const lastFourSsnDigits = maskSsn(data.ssn);
     const formattedDate = formatDate(record.application_date);
     setDataStore({
-      type: DataType.STATUS,
       lastFourSsnDigits: lastFourSsnDigits,
       zipCode: data.zipCode,
       applicationDateString: formattedDate,

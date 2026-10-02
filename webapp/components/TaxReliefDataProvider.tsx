@@ -4,13 +4,7 @@ import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 import { FormCode, IssueFlaggedType, Transaction } from "./types";
 
-export enum DataType {
-  AUTOFILE,
-  STATUS,
-}
-
 export interface StatusData {
-  readonly type: DataType.STATUS;
   readonly lastFourSsnDigits: string;
   readonly zipCode: string;
   readonly applicationDateString: string;
