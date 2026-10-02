@@ -1,4 +1,5 @@
 import { Transaction, AllTransactions, InquiryRow } from "./types";
+import { validateTransaction } from "./validation";
 
 const ANCHORCDE = "13";
 const PTRCDE = "49";
@@ -8,10 +9,20 @@ export const buildTransaction = (
   TRANS_CDE: string,
   TRANS_STATUS_CDE: string,
   REVIEW_CATEGORY_CDE: string,
-  CHECK_DTE: string,
+  CHECK_DTE: Date,
   CHECK_AMT: number,
   CHECK_NUM: string,
 ): Transaction => {
+  const validatedTransaction = validateTransaction({
+    TRANS_CDE: TRANS_CDE,
+    TRANS_STATUS_CDE: TRANS_STATUS_CDE,
+    CHECK_DTE: CHECK_DTE,
+    CHECK_AMT: CHECK_AMT,
+    CHECK_NUM: CHECK_NUM,
+  });
+  if (!validatedTransaction.success) {
+    throw new Error(validatedTransaction.error.message);
+  }
   let status;
   if (TRANS_CDE === "RR" && TRANS_STATUS_CDE.startsWith("PR") && REVIEW_CATEGORY_CDE === null) {
     status = "processing";
@@ -34,23 +45,19 @@ export const buildTransaction = (
   }
 
   if (status === "payment_sent") {
-    if (!CHECK_NUM) {
-      throw new Error(`Missing CHECK_NUM`);
+    let method;
+    if (CHECK_NUM.slice(1, 3) === "NN") {
+      method = "direct_deposit";
     } else {
-      let method;
-      if (CHECK_NUM.slice(1, 3) === "NN") {
-        method = "direct_deposit";
-      } else {
-        method = "check";
-      }
-      const payment_details = {
-        amount: CHECK_AMT,
-        date: CHECK_DTE,
-        method: method,
-        check_number: CHECK_NUM,
-      };
-      return { status: status, payment_details: payment_details };
+      method = "check";
     }
+    const payment_details = {
+      amount: CHECK_AMT,
+      date: CHECK_DTE.toISOString(),
+      method: method,
+      check_number: CHECK_NUM,
+    };
+    return { status: status, payment_details: payment_details };
   }
   return { status: status };
 };
@@ -60,26 +67,30 @@ export const buildAllTransactions = (row: InquiryRow): AllTransactions => {
   const ptr = [];
   const stay_nj = [];
   for (let i = 1; i <= row.TRANS_TOTAL_NUM; i++) {
-    const transaction = buildTransaction(
-      row[`TRANS_${i}_CDE`] as string,
-      row[`TRANS_STATUS_${i}_CDE`] as string,
-      row[`REVIEW_CATEGORY_${i}_CDE`] as string,
-      row[`CHECK_${i}_DTE`] as string,
-      row[`CHECK_${i}_AMT`] as number,
-      row[`CHECK_${i}_NUM`] as string,
-    );
-
-    const taxCode = row[`TRANS_${i}_TAX_CDE`];
-    if (taxCode == ANCHORCDE) {
-      anchor.push(transaction);
-    } else if (taxCode == PTRCDE) {
-      ptr.push(transaction);
-    } else if (taxCode == STAYNJCDE) {
-      stay_nj.push(transaction);
-    } else {
-      throw new Error(
-        `Invalid transaction tax code: ${row[`TRANS_${i}_TAX_CDE`]} for transaction ${i}`,
+    try {
+      const transaction = buildTransaction(
+        row[`TRANS_${i}_CDE`] as string,
+        row[`TRANS_STATUS_${i}_CDE`] as string,
+        row[`REVIEW_CATEGORY_${i}_CDE`] as string,
+        row[`CHECK_${i}_DTE`] as Date,
+        row[`CHECK_${i}_AMT`] as number,
+        row[`CHECK_${i}_NUM`] as string,
       );
+
+      const taxCode = row[`TRANS_${i}_TAX_CDE`];
+      if (taxCode == ANCHORCDE) {
+        anchor.push(transaction);
+      } else if (taxCode == PTRCDE) {
+        ptr.push(transaction);
+      } else if (taxCode == STAYNJCDE) {
+        stay_nj.push(transaction);
+      } else {
+        throw new Error(
+          `Invalid transaction tax code: ${row[`TRANS_${i}_TAX_CDE`]} for transaction ${i}`,
+        );
+      }
+    } catch (error) {
+      console.error(`Invalid transaction #${i}, error: ${error}`);
     }
   }
   return { anchor: anchor, ptr: ptr, stay_nj: stay_nj };

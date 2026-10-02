@@ -25,7 +25,7 @@ vi.mock("aws-embedded-metrics", () => ({
   StorageResolution: { Standard: 60 },
 }));
 
-import { handler, validateInput } from "./index.ts";
+import { handler } from "./index.ts";
 
 const secretsMock = mockClient(SecretsManagerClient);
 const mockExecute = vi.fn();
@@ -61,48 +61,6 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe("handler input validation", () => {
-  it("returns 400 when ssn is missing", async () => {
-    const result = validateInput({ zip: "07656" });
-    expect(result.valid).toBe(false);
-    expect(result.error).toBe("Both ssn and zip are required");
-  });
-
-  it("returns 400 when zip is missing", async () => {
-    const result = validateInput({ ssn: "123456789" });
-    expect(result.valid).toBe(false);
-    expect(result.error).toBe("Both ssn and zip are required");
-  });
-
-  it("returns 400 for invalid SSN (not 9 digits)", async () => {
-    const result = validateInput({ ssn: "12345", zip: "07656" });
-    expect(result.valid).toBe(false);
-    expect(result.error).toBe("SSN must be 9 digits");
-  });
-
-  it("returns 400 for invalid ZIP (not 5 digits)", async () => {
-    const result = validateInput({ ssn: "123456789", zip: "123" });
-    expect(result.valid).toBe(false);
-    expect(result.error).toBe("ZIP must be 5 digits");
-  });
-
-  it("accepts SSN with hyphens and strips them", async () => {
-    const result = validateInput({ ssn: "123-45-6789", zip: "07656" });
-    expect(result.valid).toBe(true);
-    expect(result.ssn).toBe("123456789");
-    expect(result.zip).toBe("07656");
-  });
-
-  it("handles API Gateway proxy format with stringified body", async () => {
-    const result = validateInput({
-      body: JSON.stringify({ ssn: "123456789", zip: "07656" }),
-    });
-    expect(result.valid).toBe(true);
-    expect(result.ssn).toBe("123456789");
-    expect(result.zip).toBe("07656");
-  });
-});
-
 describe("handler error handling", () => {
   it("returns 500 when database query fails", async () => {
     mockExecute.mockRejectedValue(new Error("ORA-12541: TNS:no listener"));
@@ -117,7 +75,8 @@ describe("handler error handling", () => {
     const result = await handler({});
     expect(result.statusCode).toBe(400);
     assertMetrics("400");
-    expect(JSON.parse(result.body).error).toBe("Both ssn and zip are required");
+    expect(JSON.parse(result.body).error).toContain("ZIP is required");
+    expect(JSON.parse(result.body).error).toContain("SSN is required");
   });
 
   it("closes the database connection even on error", async () => {
@@ -154,7 +113,9 @@ describe("handler business logic", () => {
 
       expect(body["records"]).toHaveLength(1);
       expect(body["records"][0].return_year).toBe("2025");
-      expect(body["records"][0].application_date).toBe("10/31/2025 00:00:00");
+      expect(body["records"][0].application_date).toBe(
+        new Date("10/31/2025 00:00:00").toISOString(),
+      );
       expect(body["records"][0].form_code).toBe("PAS-1");
       expect(body["records"][0]["anchor"][0].status).toBe("payment_sent");
       expect(body["records"][0].ptr).toBeDefined();

@@ -4,6 +4,7 @@ import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { Transaction, InquiryRow } from "./types";
 import { buildAllTransactions } from "./transaction";
 import { createMetricsLogger, StorageResolution, Unit } from "aws-embedded-metrics";
+import { isRecordValid, validateInput } from "./validation";
 
 /** SQL query to look up filer records by SSN and ZIP */
 const INQUIRY_QUERY = `SELECT * FROM ELF_SAVER_INQUIRY
@@ -16,18 +17,6 @@ const METRICS_NAMESPACE = "TaxReliefStatusApi";
 const RESPONSE_COUNT_METRIC_NAME = "ResponseCount";
 
 const metrics = createMetricsLogger();
-
-/** Result of input validation */
-interface ValidationResult {
-  /** Whether the input passed validation */
-  readonly valid: boolean;
-  /** Error message if validation failed */
-  readonly error?: string;
-  /** Sanitized SSN (digits only) */
-  readonly ssn?: string;
-  /** Sanitized ZIP code */
-  readonly zip?: string;
-}
 
 /** The form filed by the taxpayer for property tax relief */
 enum FormCode {
@@ -64,34 +53,11 @@ export const logStatusCode = async (statusCode: string): Promise<void> => {
   await metrics.flush();
 };
 
-export const validateInput = (
-  event: APIGatewayProxyEvent | Record<string, unknown>,
-): ValidationResult => {
-  const body = typeof event.body === "string" ? JSON.parse(event.body) : event;
-  const { ssn, zip } = body;
-
-  if (!ssn || !zip) {
-    return { valid: false, error: "Both ssn and zip are required" };
-  }
-
-  const sanitizedSsn = String(ssn).replace(/-/g, "");
-  if (!/^\d{9}$/.test(sanitizedSsn)) {
-    return { valid: false, error: "SSN must be 9 digits" };
-  }
-
-  const sanitizedZip = String(zip);
-  if (!/^\d{5}$/.test(sanitizedZip)) {
-    return { valid: false, error: "ZIP must be 5 digits" };
-  }
-
-  return { valid: true, ssn: sanitizedSsn, zip: sanitizedZip };
-};
-
 const mapRowToRecord = (row: InquiryRow): ResponseRecord => {
   const allTransactions = buildAllTransactions(row);
   return {
     return_year: String(row.RETURN_YEAR_DTE),
-    application_date: row.RNY_APPLIED_DTE,
+    application_date: row.RNY_APPLIED_DTE.toISOString(),
     form_code: mapFormCode(row.FORM_CDE),
     anchor: allTransactions.anchor,
     ptr: allTransactions.ptr,
@@ -124,8 +90,9 @@ const buildResponse = (rows: InquiryRow[]): BuildResponseResult => {
     return { records: [] };
   }
 
-  console.log(`DLN_NUM: ${rows[0].DLN_NUM}`);
-  const records = rows.map(mapRowToRecord);
+  const validRows = rows.filter((row) => isRecordValid(row));
+
+  const records = validRows.map(mapRowToRecord);
 
   return { records };
 };
@@ -153,12 +120,13 @@ const getCreds = async (): Promise<DatabaseCredentials> => {
 export const handler = async (
   event: APIGatewayProxyEvent | Record<string, unknown>,
 ): Promise<APIGatewayProxyResult> => {
-  const validation = validateInput(event);
-  if (!validation.valid) {
+  const validated = validateInput(event);
+
+  if (!validated.success) {
     await logStatusCode("400");
     return {
       statusCode: 400,
-      body: JSON.stringify({ error: validation.error }),
+      body: JSON.stringify({ error: validated.error.message }),
     };
   }
 
@@ -174,7 +142,7 @@ export const handler = async (
 
     const result = await connection.execute(
       INQUIRY_QUERY,
-      { ssn: validation.ssn, zip: validation.zip },
+      { ssn: validated.data.ssn, zip: validated.data.zip },
       { outFormat: oracledb.OUT_FORMAT_OBJECT },
     );
 

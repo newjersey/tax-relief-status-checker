@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "aws-embedded-metrics": "4.2.1",
-    "oracledb": "7.0.1"
+    "oracledb": "7.0.1",
+    "zod": "4.6.5"
   },
   "devDependencies": {
     "@aws-sdk/client-secrets-manager": "3.1142.0",
