@@ -1,4 +1,4 @@
-name: Fix failing Renovate PRs
+name: Weekly Agentic Maintenance
 
 on:
   schedule:
@@ -11,6 +11,9 @@ permissions:
 
 jobs:
   fix-renovate-prs:
+    environment: "Agentic Maintenance GH Workflow"
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
