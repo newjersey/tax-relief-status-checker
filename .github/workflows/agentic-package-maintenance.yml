@@ -1,0 +1,57 @@
+name: Fix failing Renovate PRs
+
+on:
+  schedule:
+    - cron: "0 19 * * 4" # Thursday 19:00 UTC = 3 PM ET
+  workflow_dispatch: # manual trigger for testing
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  fix-renovate-prs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Configure git identity
+        run: |
+          git config user.name "CLAUDE_CODE_BOT"
+          git config user.email "claude-code-bot@noreply.github.com"
+
+      - name: Find and fix failing Renovate PRs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLAUDE_CODE_USE_BEDROCK: "1"
+          AWS_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          prs=$(gh pr list --label renovate --state open --json number,headRefName)
+
+          for pr_number in $(echo "$prs" | jq -r '.[].number'); do
+            has_failure=$(gh pr checks "$pr_number" --json state \
+              | jq '[.[] | select(.state == "FAILURE")] | length > 0')
+
+            if [ "$has_failure" = "true" ]; then
+              echo "::group::Fixing PR #$pr_number"
+              claude -p "/resolve-renovate-pr-failures $pr_number"
+              git checkout main
+              git clean -fd
+              echo "::endgroup::"
+            else
+              echo "PR #$pr_number has no failing checks, skipping"
+            fi
+          done
