@@ -17,9 +17,9 @@
     "zod": "4.6.5"
   },
   "devDependencies": {
-    "@aws-sdk/client-secrets-manager": "3.1141.0",
-    "@types/aws-lambda": "8.10.163",
-    "@types/node": "25.9.8",
+    "@aws-sdk/client-secrets-manager": "3.1145.0",
+    "@types/aws-lambda": "8.10.164",
+    "@types/node": "25.9.9",
     "@types/oracledb": "7.0.3",
     "aws-sdk-client-mock": "4.1.0",
     "esbuild": "0.28.2",
