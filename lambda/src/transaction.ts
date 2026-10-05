@@ -1,5 +1,5 @@
 import { Transaction, AllTransactions, InquiryRow } from "./types";
-import { validateTransaction } from "./validation";
+import { TransactionSchema } from "./validation";
 
 const ANCHORCDE = "13";
 const PTRCDE = "49";
@@ -13,16 +13,13 @@ export const buildTransaction = (
   CHECK_AMT: number,
   CHECK_NUM: string,
 ): Transaction => {
-  const validatedTransaction = validateTransaction({
+  TransactionSchema.parse({
     TRANS_CDE: TRANS_CDE,
     TRANS_STATUS_CDE: TRANS_STATUS_CDE,
     CHECK_DTE: CHECK_DTE,
     CHECK_AMT: CHECK_AMT,
     CHECK_NUM: CHECK_NUM,
   });
-  if (!validatedTransaction.success) {
-    throw new Error(validatedTransaction.error.message);
-  }
   let status;
   if (TRANS_CDE === "RR" && TRANS_STATUS_CDE.startsWith("PR") && REVIEW_CATEGORY_CDE === null) {
     status = "processing";

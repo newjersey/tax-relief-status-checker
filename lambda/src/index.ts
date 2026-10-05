@@ -4,7 +4,8 @@ import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { Transaction, InquiryRow } from "./types";
 import { buildAllTransactions } from "./transaction";
 import { createMetricsLogger, StorageResolution, Unit } from "aws-embedded-metrics";
-import { isRecordValid, validateInput } from "./validation";
+import { validateInput } from "./validation";
+import { InputSchema, InquiryRowSchema } from "./validation";
 
 /** SQL query to look up filer records by SSN and ZIP */
 const INQUIRY_QUERY = `SELECT * FROM ELF_SAVER_INQUIRY
@@ -90,7 +91,10 @@ const buildResponse = (rows: InquiryRow[]): BuildResponseResult => {
     return { records: [] };
   }
 
-  const validRows = rows.filter((row) => isRecordValid(row));
+  const validRows = rows.filter((row) => InquiryRowSchema.validate(row));
+  validRows.forEach((row) => {
+    console.log(`DLN_NUM: ${row.DLN_NUM}`);
+  });
 
   const records = validRows.map(mapRowToRecord);
 
@@ -120,7 +124,7 @@ const getCreds = async (): Promise<DatabaseCredentials> => {
 export const handler = async (
   event: APIGatewayProxyEvent | Record<string, unknown>,
 ): Promise<APIGatewayProxyResult> => {
-  const validated = validateInput(event);
+  const validated = InputSchema.safeParse(event);
 
   if (!validated.success) {
     await logStatusCode("400");

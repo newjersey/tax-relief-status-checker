@@ -26,11 +26,3 @@ export interface InquiryRow {
   readonly FORM_CDE: string;
   readonly [key: string]: unknown;
 }
-
-export interface TransactionInfo {
-  readonly TRANS_CDE: string;
-  readonly TRANS_STATUS_CDE: string;
-  readonly CHECK_DTE: Date;
-  readonly CHECK_AMT: number;
-  readonly CHECK_NUM: string;
-}
