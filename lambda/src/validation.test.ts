@@ -1,0 +1,145 @@
+import { describe, it, expect } from "vitest";
+import { buildMockRow, buildMockTransactionValidation } from "./testHelpers";
+import { TransactionSchema, InputSchema, InquiryRowSchema } from "./validation";
+
+describe("isRecordValid", () => {
+  describe("when 1 field is missing", () => {
+    it.each([
+      "DLN_NUM",
+      "SOCIAL_SECURITY_NUMBER_IDN",
+      "ZIP_ADR",
+      "RETURN_YEAR_DTE",
+      "RNY_APPLIED_DTE",
+      "TRANS_TOTAL_NUM",
+    ])("When %s is missing, throws error", (missingField: String) => {
+      const row = buildMockRow({
+        [`${missingField}`]: null,
+      });
+      expect(() => InquiryRowSchema.parse(row)).toThrow();
+    });
+    describe("when FORM_CDE is missing", () => {
+      it("does not throw error", async () => {
+        const row = buildMockRow({
+          FORM_CDE: null,
+        });
+        expect(() => InquiryRowSchema.parse(row)).not.toThrow();
+      });
+    });
+  });
+
+  describe("when all fields are missing", () => {
+    it("throws error", async () => {
+      const row = buildMockRow({
+        DLN_NUM: null,
+        SOCIAL_SECURITY_NUMBER_IDN: null,
+        ZIP_ADR: null,
+        RETURN_YEAR_DTE: null,
+        RNY_APPLIED_DTE: null,
+        TRANS_TOTAL_NUM: null,
+      });
+      expect(() => InquiryRowSchema.parse(row)).toThrow();
+    });
+  });
+
+  describe("when no fields are missing", () => {
+    it("does not throw error", async () => {
+      const row = buildMockRow();
+      expect(() => InquiryRowSchema.parse(row)).not.toThrow();
+    });
+  });
+});
+
+describe("validateInput", () => {
+  it("returns false and reports error when ssn is missing", async () => {
+    const result = InputSchema.safeParse({ zip: "07656" });
+    expect(result.success).toBe(false);
+    expect(result.error?.message).toContain("SSN is required");
+  });
+
+  it("returns false and reports error when zip is missing", async () => {
+    const result = InputSchema.safeParse({ ssn: "123456789" });
+    expect(result.success).toBe(false);
+    expect(result.error?.message).toContain("ZIP is required");
+  });
+
+  it("returns false and reports error for invalid SSN (not 9 digits)", async () => {
+    const result = InputSchema.safeParse({ ssn: "12345", zip: "07656" });
+    expect(result.success).toBe(false);
+    expect(result.error?.message).toContain("SSN is invalid");
+  });
+
+  it("returns false and reports error for invalid ZIP (not 5 digits)", async () => {
+    const result = InputSchema.safeParse({ ssn: "123456789", zip: "123" });
+    expect(result.success).toBe(false);
+    expect(result.error?.message).toContain("ZIP must be 5 digits");
+  });
+
+  it("accepts SSN with hyphens and strips them", async () => {
+    const result = InputSchema.safeParse({ ssn: "123-45-6789", zip: "07656" });
+    expect(result.success).toBe(true);
+    expect(result.data?.ssn).toBe("123456789");
+    expect(result.data?.zip).toBe("07656");
+  });
+
+  it("handles API Gateway proxy format with stringified body", async () => {
+    const result = InputSchema.safeParse({
+      body: JSON.stringify({ ssn: "123456789", zip: "07656" }),
+    });
+    console.log(JSON.stringify({ ssn: "123456789", zip: "07656" }));
+    expect(result.success).toBe(true);
+    expect(result.data?.ssn).toBe("123456789");
+    expect(result.data?.zip).toBe("07656");
+  });
+});
+
+describe("validateTransaction", () => {
+  it("returns false and reports error when missing TRANS_CDE", async () => {
+    const mockTransactionInfo = buildMockTransactionValidation({ TRANS_CDE: null });
+    expect(() => TransactionSchema.parse(mockTransactionInfo)).toThrow("Expected 'RR' | 'RF'");
+  });
+  it("returns false and reports error when TRANS_CDE not RF or RR", async () => {
+    const mockTransactionInfo = buildMockTransactionValidation({ TRANS_CDE: "ZZ" });
+    expect(() => TransactionSchema.parse(mockTransactionInfo)).toThrow("Expected 'RR' | 'RF'");
+  });
+  it("returns false and reports error when missing TRANS_STATUS_CDE (TRANS_CDE = RF)", async () => {
+    const mockTransactionInfo = buildMockTransactionValidation({
+      TRANS_CDE: "RF",
+      TRANS_STATUS_CDE: null,
+    });
+    expect(() => TransactionSchema.parse(mockTransactionInfo)).toThrow(
+      "Invalid input: expected string, received null",
+    );
+  });
+  it("returns false and reports error when TRANS_STATUS_CDE does not start with AP|PR (TRANS_CDE = RF)", async () => {
+    const mockTransactionInfo = buildMockTransactionValidation({
+      TRANS_CDE: "RF",
+      TRANS_STATUS_CDE: "ZZ",
+    });
+    expect(() => TransactionSchema.parse(mockTransactionInfo)).toThrow(
+      "TRANS_STATUS_CDE must start with AP or PR",
+    );
+  });
+
+  it("returns false and reports error when missing Check Info (TRANS_CDE = RF)", async () => {
+    const mockTransactionInfo = buildMockTransactionValidation({
+      TRANS_CDE: "RF",
+      CHECK_DTE: null,
+      CHECK_AMT: null,
+      CHECK_NUM: null,
+    });
+    const result = TransactionSchema.safeParse(mockTransactionInfo);
+    expect(result.success).toBe(false);
+    expect(result.error?.message).toContain("Invalid input: expected date, received null");
+    expect(result.error?.message).toContain("Invalid input: expected number, received null");
+    expect(result.error?.message).toContain("Invalid input: expected string, received null");
+  });
+  it("returns true when missing Check Info (TRANS_CDE = RR)", async () => {
+    const mockTransactionInfo = buildMockTransactionValidation({
+      TRANS_CDE: "RR",
+      CHECK_DTE: null,
+      CHECK_AMT: null,
+      CHECK_NUM: null,
+    });
+    expect(() => TransactionSchema.parse(mockTransactionInfo)).not.toThrow();
+  });
+});
