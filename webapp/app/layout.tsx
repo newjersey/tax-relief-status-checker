@@ -7,6 +7,8 @@ import "./globals.css";
 import Script from "next/script";
 import { FeedbackWidget } from "@/components/FeedbackWidget";
 import { TaxReliefDataProvider } from "@/components/TaxReliefDataProvider";
+import "i18next";
+import "../../i18n/config";
 
 /** {@link https://nextjs.org/docs/app/api-reference/functions/generate-metadata} */
 export const metadata: Metadata = {

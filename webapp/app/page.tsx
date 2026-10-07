@@ -15,6 +15,7 @@ import { useDataStore } from "@/components/TaxReliefDataProvider";
 import { setIssueFlagged } from "./utils/setIssueFlagged";
 import type { StatusRecord } from "@/components/types";
 import { determineRoute } from "./utils/determineRoute";
+import { useTranslation } from "react-i18next";
 
 interface UserData {
   readonly ssn: string;
@@ -84,6 +85,7 @@ const NoApplicationFoundAlert = () => (
 );
 
 const LandingPage = () => {
+  const { t } = useTranslation("landing");
   const router = useRouter();
   const { setDataStore } = useDataStore();
   const [alertContent, setAlertContent] = useState<ReactNode | null>(null);
@@ -167,6 +169,7 @@ const LandingPage = () => {
           <div className="grid-row grid-gap margin-bottom-10">
             <div className="tablet:grid-col-6">
               <h1 className="font-heading-lg">
+                {t("test")}
                 Track your 2025 property tax relief application and payment status
               </h1>
               <Form onSubmit={handleSubmit(onSubmit)} className="maxw-full" noValidate>
