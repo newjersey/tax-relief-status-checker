@@ -30,9 +30,9 @@ const renderLandingPage = () =>
 
 const fillAndSubmitForm = async () => {
   const user = userEvent.setup();
-  const ssnInput = screen.getByLabelText(/Social Security/i);
-  const zipInput = screen.getByLabelText(/ZIP code/i);
-  const submitButton = screen.getByRole("button", { name: /Check Status/i });
+  const ssnInput = screen.getByLabelText(/ssnLabel/i);
+  const zipInput = screen.getByLabelText(/zipLabel/i);
+  const submitButton = screen.getByRole("button", { name: /checkStatus/i });
 
   await user.type(ssnInput, "123456789");
   await user.type(zipInput, "07001");
@@ -83,9 +83,7 @@ describe("onSubmit handler", () => {
     renderLandingPage();
     await fillAndSubmitForm();
 
-    expect(
-      screen.getByText(/We are having an issue checking on your application status/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/apiErrorAlertContent/i)).toBeInTheDocument();
     expect(mockPush).not.toHaveBeenCalled();
     expect(logGAEvent).toHaveBeenCalledWith("api_error");
   });
@@ -104,7 +102,7 @@ describe("onSubmit handler", () => {
       await fillAndSubmitForm();
 
       expect(
-        screen.getByRole("heading", { name: "No 2025 application found" }),
+        screen.getByRole("heading", { name: "noApplicationFound.heading" }),
       ).toBeInTheDocument();
       expect(mockPush).not.toHaveBeenCalled();
       expect(logGAEvent).toHaveBeenCalledWith("api_200_record_not_found");

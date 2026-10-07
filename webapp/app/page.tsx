@@ -15,7 +15,7 @@ import { useDataStore } from "@/components/TaxReliefDataProvider";
 import { setIssueFlagged } from "./utils/setIssueFlagged";
 import type { StatusRecord } from "@/components/types";
 import { determineRoute } from "./utils/determineRoute";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 interface UserData {
   readonly ssn: string;
@@ -50,39 +50,44 @@ const returnToTop = () => {
   topOfPage.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
-const NoApplicationFoundAlert = () => (
-  <>
-    <h2 className="usa-alert__heading">No 2025 application found</h2>
-    <p className="usa-alert__text">
-      We couldn't find any records matching the SSN or ITIN and ZIP code you entered. Some common
-      reasons why:
-    </p>
-    <ul>
-      <li>
-        <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code filed on your application is
-        different than the one you just entered.
-      </li>
-      <li>
-        <strong>It's too soon</strong>: For online applications, it can take up to three weeks for
-        an application to show up on this website. For paper applications, it can take up to 12
-        weeks. For ANCHOR-only applicants, check back in the fall of 2026.
-      </li>
-    </ul>
-    <p className="usa-alert__text">
-      Find the{" "}
-      <a
-        href="#faq_no_2025_application_found"
-        onClick={(e) => {
-          e.preventDefault();
-          expandFaqAccordionItem("faq_no_2025_application_found");
-        }}
-      >
-        full list of other possible reasons
-      </a>{" "}
-      your application is not showing up
-    </p>
-  </>
-);
+const NoApplicationFoundAlert = () => {
+  const { t } = useTranslation("landing");
+
+  return (
+    <>
+      <h2 className="usa-alert__heading">{t("noApplicationFound.heading")}</h2>
+      <p className="usa-alert__text">{t("noApplicationFound.text")}</p>
+      <ul>
+        <li>
+          <Trans i18nKey={"noApplicationFound.identityMismatch"} ns="landing">
+            <strong>Identity mismatch</strong>: The SSN/ITIN and ZIP code filed on your application
+            is different than the one you just entered.
+          </Trans>
+        </li>
+        <li>
+          <Trans i18nKey={"noApplicationFound.tooSoon"} ns="landing">
+            <strong>It's too soon</strong>: For online applications, it can take up to three weeks
+            for an application to show up on this website. For paper applications, it can take up to
+            12 weeks. For ANCHOR-only applicants, check back in the fall of 2026.
+          </Trans>
+        </li>
+      </ul>
+      <p className="usa-alert__text">
+        Find the{" "}
+        <a
+          href="#faq_no_2025_application_found"
+          onClick={(e) => {
+            e.preventDefault();
+            expandFaqAccordionItem("faq_no_2025_application_found");
+          }}
+        >
+          full list of other possible reasons
+        </a>{" "}
+        your application is not showing up
+      </p>
+    </>
+  );
+};
 
 const LandingPage = () => {
   const { t } = useTranslation("landing");
@@ -103,11 +108,7 @@ const LandingPage = () => {
   });
 
   const handleStatusApiError = () => {
-    setAlertContent(
-      <p className="usa-alert__text maxw-tablet">
-        We are having an issue checking on your application status. Please try again later.
-      </p>,
-    );
+    setAlertContent(<p className="usa-alert__text maxw-tablet">{t("apiErrorAlertContent")} </p>);
     returnToTop();
   };
 
@@ -168,14 +169,11 @@ const LandingPage = () => {
 
           <div className="grid-row grid-gap margin-bottom-10">
             <div className="tablet:grid-col-6">
-              <h1 className="font-heading-lg">
-                {t("test")}
-                Track your 2025 property tax relief application and payment status
-              </h1>
+              <h1 className="font-heading-lg">{t("landingHeader")}</h1>
               <Form onSubmit={handleSubmit(onSubmit)} className="maxw-full" noValidate>
-                <p className="text-bold font-heading-md">Enter your SSN or ITIN and ZIP Code</p>
+                <p className="text-bold font-heading-md">{t("enterSSNZIP")}</p>
                 <Label htmlFor="ssn" requiredMarker={true}>
-                  Social Security or Individual Taxpayer Identification Number
+                  {t("ssnLabel")}
                 </Label>
                 <div className="tablet:grid-col-10">
                   <TextInputMask
@@ -203,7 +201,7 @@ const LandingPage = () => {
                 </div>
 
                 <Label htmlFor="zipCode" requiredMarker={true}>
-                  ZIP code you submitted with your application
+                  {t("zipLabel")}
                 </Label>
                 <div className="tablet:grid-col-10">
                   <TextInputMask
@@ -233,7 +231,7 @@ const LandingPage = () => {
                   type="submit"
                   className="usa-button usa-button--small margin-top-5 margin-bottom-3"
                 >
-                  Check Status
+                  {t("checkStatus")}
                   <svg focusable="false" role="img" width="20" height="20" fill="white">
                     <use href="/img/sprite.svg#login"></use>
                   </svg>
@@ -243,7 +241,7 @@ const LandingPage = () => {
           </div>
           <div className="grid-row grid-gap margin-top-5">
             <FaqSection
-              items={LandingPageFaqContent}
+              items={LandingPageFaqContent()}
               titleHeadingLevel="h2"
               itemHeadingLevel="h3"
             />
@@ -251,7 +249,7 @@ const LandingPage = () => {
         </div>
       </section>
       <div className="grid-container usa-footer__return-to-top">
-        <a href="#nj-header">Return to top</a>
+        <a href="#nj-header">{t("returnToTop")}</a>
       </div>
     </main>
   );

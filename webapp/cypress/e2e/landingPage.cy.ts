@@ -56,18 +56,21 @@ it("displays Zip Code error messages properly", () => {
 });
 
 it("should expand/collapse the accordion FAQ when clicked", () => {
-  for (const faq of LandingPageFaqContent) {
-    cy.contains("button", faq.title as string).click();
-    cy.get(`div[id="${faq.id}"]`).should("be.visible");
+  cy.get('button[class*="usa-accordion__button"]').each(($button) => {
+    const faqId = $button.attr("aria-controls");
+    cy.get(`[data-testid="accordionButton_${faqId}"]`).click();
+    cy.get(`div[id="${faqId}"]`).should("be.visible");
+    cy.get(`[data-testid="accordionButton_${faqId}"]`).should("have.attr", "aria-expanded", "true");
     cy.get("@gtag").should(
       "have.been.calledWith",
       "event",
-      `${faq.id}_opened`,
+      `${faqId}_opened`,
       Cypress.sinon.match.any,
     );
-    cy.contains("button", faq.title as string).click();
-    cy.get(`div[id="${faq.id}"]`).should("not.be.visible");
-  }
+
+    cy.get(`[data-testid="accordionButton_${faqId}"]`).click();
+    cy.get(`div[id="${faqId}"]`).should("not.be.visible");
+  });
 });
 
 it("should display an error message when api returns a 500 error", () => {
