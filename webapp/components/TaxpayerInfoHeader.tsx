@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 export interface TaxpayerInfoHeaderProps {
   readonly lastFourSsnDigits: string;
   readonly zipCode: string;
@@ -10,23 +12,23 @@ export const TaxpayerInfoHeader = ({
   paymentType,
 }: TaxpayerInfoHeaderProps) => {
   const colSize = "tablet:grid-col-4";
-
+  const { t } = useTranslation("common");
   return (
     <div>
       <div className="grid-row">
         <div className={colSize}>
           <p>
-            SSN/ITIN: <strong>***-**-{lastFourSsnDigits}</strong>
+            {t("taxpayerInfoHeader.ssn")} <strong>***-**-{lastFourSsnDigits}</strong>
           </p>
         </div>
         <div className={colSize}>
           <p>
-            ZIP Code: <strong>{zipCode}</strong>
+            {t("taxpayerInfoHeader.zip")} <strong>{zipCode}</strong>
           </p>
         </div>
         <div className={colSize}>
           <p>
-            Tax Year: <strong>2025</strong>
+            {t("taxpayerInfoHeader.taxYear")} <strong>2025</strong>
           </p>
         </div>
       </div>
@@ -34,7 +36,7 @@ export const TaxpayerInfoHeader = ({
         <div className="grid-row">
           <div className="tablet:grid-col-6">
             <p>
-              Payment Type: <strong>{paymentType}</strong>
+              {t("taxpayerInfoHeader.paymentType")} <strong>{paymentType}</strong>
             </p>
           </div>
         </div>

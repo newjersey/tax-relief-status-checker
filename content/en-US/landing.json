@@ -1,0 +1,94 @@
+{
+  "landingHeader": "Track your 2025 property tax relief application and payment status",
+  "enterSSNZIP": "Enter your SSN or ITIN and ZIP Code",
+  "ssnLabel": "Social Security or Individual Taxpayer Identification Number",
+  "zipLabel": "ZIP code you submitted with your application",
+  "checkStatus": "Check Status",
+  "returnToTop": "Return to top",
+  "apiErrorAlertContent": "We are having an issue checking on your application status. Please try again later.",
+  "noApplicationFound": {
+    "heading": "No 2025 application found",
+    "text": "We couldn't find any records matching the SSN or ITIN and ZIP code you entered. Some common reasons why:",
+    "identityMismatch": "<0>Identity mismatch</0>: The SSN/ITIN and ZIP code filed on your application is different than the one you just entered.",
+    "tooSoon": "<0>It's too soon</0>: For online applications, it can take up to three weeks for an application to show up on this website. For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants, check back in the fall of 2026."
+  },
+  "faq": {
+    "whenCanIExpect": {
+      "title": "When can I expect my application to show up?",
+      "content": "For online applications, it can take up to three weeks for an application to show up on this website. For paper applications, it can take up to 12 weeks."
+    },
+    "no2025Application": {
+      "title": "I applied, but I keep getting \u201CNo 2025 application found.\u201D Why?",
+      "content": {
+        "commonReasons": "Some common reasons this might be happening:",
+        "identityMismatch": "<0>Identity mismatch</0>: The SSN/ITIN and ZIP code filed on your application is different than the one you just entered.",
+        "tooSoon": "<0>It's too soon</0>: For online applications, it can take up to three weeks for an application to show up on this website. For paper applications, it can take up to 12 weeks. For ANCHOR-only applicants, check back in the fall of 2026.",
+        "forgotToSubmit": "<0>Forgot to press submit</0>: If you filed your 2025 application online, you should have received a Web Reference Number on the confirmation screen. Otherwise, your application was not successfully submitted. The filing deadline is November 2, 2026.",
+        "priorYears": {
+          "text": "<0>Prior year PAS-1 filers</0>: If you applied for a prior tax year (2024 or previous), check your ",
+          "link": "<1> application status </1> on this page."
+        }
+      }
+    },
+    "updateAfterSubmission": {
+      "title": "What if I need to update something after I\u2019ve submitted my application?",
+      "content": "To update your application after submitting, reach out to us directly via phone or email. In order for us to locate your record, be ready to provide your full name and the full address of the property you applied for:"
+    },
+    "whenToExpectSeniorFreeze": {
+      "title": "When can I expect to receive a Senior Freeze payment?",
+      "content": {
+        "julToSep": {
+          "date": "July 2026-September 2026",
+          "text": "If you applied before May 1, you can expect to receive your payment between July 15 and September 15."
+        },
+        "sepToOct": {
+          "date": "September 2026-October 2026",
+          "text": "If you applied between May 1 and June 1, you can expect to receive your payment between September 1 and October 1."
+        },
+        "nov": {
+          "date": "November 2026",
+          "text": "If you applied between June 2 and September 1, you can expect to receive your payment between November 2 and January 2, 2027."
+        },
+        "dec": {
+          "date": "December 2026",
+          "text": "If you applied between September 2 and October 31, you can expect to receive your payment between December 2, 2026 and February 2, 2027."
+        }
+      }
+    },
+    "whenToExpectAnchor": {
+      "title": "When can I expect to receive an ANCHOR payment?",
+      "content": {
+        "oct": {
+          "date": "October 2026",
+          "text": "Payments start going out October 1, 2026. In some cases, payments will be made after 2026."
+        }
+      }
+    },
+    "whenToExpectStay": {
+      "title": "When can I expect to receive a Stay NJ payment?",
+      "content": {
+        "quarterly": "Stay NJ payments are paid out quarterly",
+        "feb": {
+          "date": "February 2027",
+          "text": "Payments start going out next year in February of next year."
+        },
+        "may": {
+          "date": "May 2027",
+          "text": "The second payment starts going out in May of next year."
+        },
+        "aug": {
+          "date": "August 2027",
+          "text": "The third payment starts going out in August of next year."
+        },
+        "nov": {
+          "date": "November 2027",
+          "text": "The fourth payment starts going out in November of next year."
+        }
+      }
+    },
+    "appTakingTooLong": {
+      "title": "My application is taking too long. Who do I contact?",
+      "content": "If you have any questions or if processing has taken longer than expected, reach out to us directly via phone or email. In order for us to locate your record, be ready to provide your full name and the full address of the property you applied for:"
+    }
+  }
+}

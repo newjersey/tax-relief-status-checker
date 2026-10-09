@@ -1,0 +1,8 @@
+{
+  "contactAlert": "We need additional information to continue processing your application. Please contact the Division by using one of the following:",
+  "propertyTaxBillAlert": "We need additional information to continue processing your application. <0> Please send us a copy of your final property tax bill </0> by using one of the following:",
+  "uploadTaxBill": "Upload using <1> the secure NJ Online Notice Response Service (ONRS) </1>",
+  "mailTaxBill": "Mail to: PO Box 900, Trenton, NJ 08646-0900",
+  "bringTaxBill": "Bring to one of our <1> Regional Information Centers </1>",
+  "additionalInfoNeeded": "Additional information needed"
+}

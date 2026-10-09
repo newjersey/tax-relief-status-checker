@@ -1,52 +1,70 @@
 import { fireEventWhenFaqOpened, type FaqItem } from "@/components/FaqSection";
+import { Trans, useTranslation } from "react-i18next";
 
-export const AnchorApplicationReceivedFaqContent: FaqItem[] = [
-  {
-    title: "My application is taking too long. Who do I contact?",
-    content: (
-      <>
-        <p>
-          If you have any questions or if processing has taken longer than expected, reach out to us
-          directly via phone or email. In order for us to locate your record, be ready to provide
-          your full name and the full address of the property you applied for:
-        </p>
-        <ul>
-          <li>
-            Call: <a href="tel:+18882381233">1-888-238-1233</a> (Mondays to Fridays 8:30 a.m. to
-            5:30 p.m.)
-          </li>
-          <li>
-            Email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
-          </li>
-        </ul>
-      </>
-    ),
-    expanded: false,
-    id: "faq_application_taking_too_long",
-    handleToggle: () => fireEventWhenFaqOpened("faq_application_taking_too_long"),
-  },
-  {
-    title: "What if I need to update something after I\u2019ve submitted my application?",
-    content: (
-      <>
-        <p>
-          To update your application after submitting, reach out to us directly via phone or email.
-          In order for us to locate your record, be ready to provide your full name and the full
-          address of the property you applied for:
-        </p>
-        <ul>
-          <li>
-            Call: <a href="tel:+18882381233">1-888-238-1233</a> (Mondays to Fridays 8:30 a.m. to
-            5:30 p.m.)
-          </li>
-          <li>
-            Email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
-          </li>
-        </ul>
-      </>
-    ),
-    expanded: false,
-    id: "faq_update_after_submission",
-    handleToggle: () => fireEventWhenFaqOpened("faq_update_after_submission"),
-  },
-];
+export const AnchorApplicationReceivedFaqContent = (): FaqItem[] => {
+  const { t } = useTranslation(["ancAppRec", "common"]);
+  return [
+    {
+      title: t("faq.appTakingTooLong.title"),
+      content: (
+        <>
+          <p>{t("faq.appTakingTooLong.content")}</p>
+          <ul>
+            <li>
+              <Trans
+                i18nKey={"call"}
+                ns="common"
+                components={{
+                  1: <a href="tel:+18882381233" />,
+                }}
+              ></Trans>
+            </li>
+            <li>
+              <Trans
+                i18nKey={"email"}
+                ns="common"
+                components={{
+                  1: <a href="mailto:nj.anchor@treas.nj.gov" />,
+                }}
+              ></Trans>
+            </li>
+          </ul>
+        </>
+      ),
+      expanded: false,
+      id: "faq_application_taking_too_long",
+      handleToggle: () => fireEventWhenFaqOpened("faq_application_taking_too_long"),
+    },
+    {
+      title: t("faq.updateAfterSubmission.title"),
+      content: (
+        <>
+          <p>{t("faq.updateAfterSubmission.content")}</p>
+          <ul>
+            <li>
+              <Trans
+                i18nKey={"call"}
+                ns="common"
+                components={{
+                  1: <a href="tel:+18882381233" />,
+                }}
+              ></Trans>
+            </li>
+            <li>
+              <Trans
+                i18nKey={"email"}
+                ns="common"
+                components={{
+                  1: <a href="mailto:nj.anchor@treas.nj.gov" />,
+                }}
+              ></Trans>
+            </li>
+          </ul>
+        </>
+      ),
+      expanded: false,
+      id: "faq_update_after_submission",
+      handleToggle: () => fireEventWhenFaqOpened("faq_update_after_submission"),
+    },
+  ];
+};
