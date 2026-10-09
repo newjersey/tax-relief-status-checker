@@ -90,7 +90,7 @@ const NoApplicationFoundAlert = () => {
 };
 
 const LandingPage = () => {
-  const { t } = useTranslation("landing");
+  const { t } = useTranslation(["landing", "common"]);
   const router = useRouter();
   const { setDataStore } = useDataStore();
   const [alertContent, setAlertContent] = useState<ReactNode | null>(null);

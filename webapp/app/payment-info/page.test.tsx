@@ -29,6 +29,7 @@ const checkTransactionInfo = (
   amount: number,
   paymentType: PaymentType,
 ) => {
+  console.log(rowHTML);
   if (paymentType === PaymentType.ADJUSTED) {
     expect(rowHTML).toContain(`<td>${category}</td>`);
     expect(rowHTML).toContain(`Your benefit amount was adjusted. A check was sent on ${date}`);
@@ -92,6 +93,7 @@ describe("getEarliestTransaction", () => {
 describe("showEarliestTransaction", () => {
   it("shows correct message when method is check", () => {
     const result = showRegularTransaction(payment_sent_transaction, TaxProgram.ANCHOR);
+    console.log(result);
     const html = renderToStaticMarkup(result);
     checkTransactionInfo(
       html,

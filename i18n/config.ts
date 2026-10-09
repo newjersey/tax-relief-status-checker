@@ -6,6 +6,7 @@ import enAppRec from "../content/en-US/app-received.json";
 import enLanding from "../content/en-US/landing.json";
 import enMoreInfo from "../content/en-US/more-information-needed.json";
 import enPaymentInfo from "../content/en-US/payment-info.json";
+import enCommon from "../content/en-US/common.json";
 import { DEFAULT_LOCALE } from "../i18n/locales";
 
 i18n.use(initReactI18next).init({
@@ -16,6 +17,7 @@ i18n.use(initReactI18next).init({
       landing: enLanding,
       moreInfo: enMoreInfo,
       paymentInfo: enPaymentInfo,
+      common: enCommon,
     },
   },
   lng: DEFAULT_LOCALE,

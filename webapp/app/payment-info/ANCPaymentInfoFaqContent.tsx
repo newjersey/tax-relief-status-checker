@@ -1,56 +1,88 @@
 import { fireEventWhenFaqOpened, type FaqItem } from "@/components/FaqSection";
+import { Trans, useTranslation } from "react-i18next";
 
-export const ANCPaymentInfoFaqContent: FaqItem[] = [
-  {
-    title: "A check amount is different than what I expected. Who can I contact?",
-    content: (
-      <>
-        <p>Please contact the Division using one of the following:</p>
-        <ul>
-          <li>
-            Call: <a href="tel:+18882381233">1-888-238-1233</a> (Monday to Friday 8:30 a.m. to 5:30
-            p.m.)
-          </li>
-          <li>
-            Email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
-          </li>
-          <li>
-            Visit one of our{" "}
-            <a href="https://www.nj.gov/treasury/taxation/contact-office.shtml">
-              Regional Information Centers
-            </a>
-          </li>
-        </ul>
-      </>
-    ),
-    expanded: false,
-    id: "faq_check_amount_different_than_expected_anc1",
-    handleToggle: () => fireEventWhenFaqOpened("faq_check_amount_different_than_expected_anc1"),
-  },
-  {
-    title: "I have not received my check in the mail. What should I do next?",
-    content: (
-      <>
-        <p>Please contact the Division using one of the following:</p>
-        <ul>
-          <li>
-            Call: <a href="tel:+18882381233">1-888-238-1233</a> (Monday to Friday 8:30 a.m. to 5:30
-            p.m.)
-          </li>
-          <li>
-            Email: <a href="mailto:nj.anchor@treas.nj.gov">nj.anchor@treas.nj.gov</a>
-          </li>
-          <li>
-            Visit one of our{" "}
-            <a href="https://www.nj.gov/treasury/taxation/contact-office.shtml">
-              Regional Information Centers
-            </a>
-          </li>
-        </ul>
-      </>
-    ),
-    expanded: false,
-    id: "faq_have_not_received_check_next_steps_anc1",
-    handleToggle: () => fireEventWhenFaqOpened("faq_have_not_received_check_next_steps_anc1"),
-  },
-];
+export const ANCPaymentInfoFaqContent = (): FaqItem[] => {
+  const { t } = useTranslation(["paymentInfo", "common"]);
+  return [
+    {
+      title: t("faq.checkAmountDifferent.title"),
+      content: (
+        <>
+          <p>{t("common:contactDivision")}</p>
+          <ul>
+            <li>
+              <Trans
+                i18nKey={"call"}
+                ns="common"
+                components={{
+                  1: <a href="tel:+18882381233" />,
+                }}
+              ></Trans>
+            </li>
+            <li>
+              <Trans
+                i18nKey={"email"}
+                ns="common"
+                components={{
+                  1: <a href="mailto:nj.anchor@treas.nj.gov" />,
+                }}
+              ></Trans>
+            </li>
+            <li>
+              <Trans
+                i18nKey={"infoCenter"}
+                ns="common"
+                components={{
+                  1: <a href="https://www.nj.gov/treasury/taxation/contact-office.shtml" />,
+                }}
+              ></Trans>
+            </li>
+          </ul>
+        </>
+      ),
+      expanded: false,
+      id: "faq_check_amount_different_than_expected_anc1",
+      handleToggle: () => fireEventWhenFaqOpened("faq_check_amount_different_than_expected_anc1"),
+    },
+    {
+      title: t("faq.notReceivedCheck.title"),
+      content: (
+        <>
+          <p>{t("common:contactDivision")}</p>
+          <ul>
+            <li>
+              <Trans
+                i18nKey={"call"}
+                ns="common"
+                components={{
+                  1: <a href="tel:+18882381233" />,
+                }}
+              ></Trans>
+            </li>
+            <li>
+              <Trans
+                i18nKey={"email"}
+                ns="common"
+                components={{
+                  1: <a href="mailto:nj.anchor@treas.nj.gov" />,
+                }}
+              ></Trans>
+            </li>
+            <li>
+              <Trans
+                i18nKey={"infoCenter"}
+                ns="common"
+                components={{
+                  1: <a href="https://www.nj.gov/treasury/taxation/contact-office.shtml" />,
+                }}
+              ></Trans>
+            </li>
+          </ul>
+        </>
+      ),
+      expanded: false,
+      id: "faq_have_not_received_check_next_steps_anc1",
+      handleToggle: () => fireEventWhenFaqOpened("faq_have_not_received_check_next_steps_anc1"),
+    },
+  ];
+};

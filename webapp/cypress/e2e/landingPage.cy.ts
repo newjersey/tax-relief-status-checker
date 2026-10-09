@@ -1,4 +1,3 @@
-import { LandingPageFaqContent } from "@/app/LandingPageFaqContent";
 import { fillField, fillFields } from "./utils";
 
 beforeEach(() => {

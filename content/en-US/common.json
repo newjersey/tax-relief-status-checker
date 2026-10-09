@@ -1,0 +1,21 @@
+{
+  "call": "Call: <1>1-888-238-1233</1> (Mondays to Fridays 8:30 a.m. to 5:30 p.m.)",
+  "email": "Email: <1>nj.anchor@treas.nj.gov</1>",
+  "infoCenter": "Visit one of our <1> Regional Information Centers </1>",
+  "contactDivision": "Please contact the Division using one of the following:",
+  "paymentPeriod": "Payment period",
+  "seniorFreeze": "Senior Freeze",
+  "anchor": "ANCHOR",
+  "stayNJ": "Stay NJ",
+  "appReceived": "Your application was received on {{date}}",
+  "taxpayerInfoHeader": {
+    "ssn": "SSN/ITIN:",
+    "zip": "ZIP Code:",
+    "taxYear": "Tax Year:",
+    "paymentType": "Payment Type:"
+  },
+  "statusCheckerHeader": {
+    "betaAlert": "<0>This website is in beta.</0> This means it is actively being worked on with new features coming soon.",
+    "ptrStatusChecker": "Property Tax Relief Status Checker"
+  }
+}

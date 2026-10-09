@@ -3,7 +3,7 @@ import { Trans, useTranslation } from "react-i18next";
 import { fireEventWhenFaqOpened, type FaqItem } from "@/components/FaqSection";
 
 export const LandingPageFaqContent = (): FaqItem[] => {
-  const { t } = useTranslation("landing");
+  const { t } = useTranslation(["landing", "common"]);
   return [
     {
       title: t("faq.whenCanIExpect.title"),
@@ -67,7 +67,7 @@ export const LandingPageFaqContent = (): FaqItem[] => {
             <li>
               <Trans
                 i18nKey={"call"}
-                ns="landing"
+                ns="common"
                 components={{
                   1: <a href="tel:+18882381233" />,
                 }}
@@ -76,7 +76,7 @@ export const LandingPageFaqContent = (): FaqItem[] => {
             <li>
               <Trans
                 i18nKey={"email"}
-                ns="landing"
+                ns="common"
                 components={{
                   1: <a href="mailto:nj.anchor@treas.nj.gov" />,
                 }}
@@ -216,7 +216,7 @@ export const LandingPageFaqContent = (): FaqItem[] => {
             <li>
               <Trans
                 i18nKey={"call"}
-                ns="landing"
+                ns="common"
                 components={{
                   1: <a href="tel:+18882381233" />,
                 }}
@@ -225,11 +225,11 @@ export const LandingPageFaqContent = (): FaqItem[] => {
             <li>
               <Trans
                 i18nKey={"email"}
-                ns="landing"
+                ns="common"
                 components={{
                   1: <a href="mailto:nj.anchor@treas.nj.gov" />,
                 }}
-              ></Trans>{" "}
+              ></Trans>
             </li>
           </ul>
         </>

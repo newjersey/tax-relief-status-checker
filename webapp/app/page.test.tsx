@@ -30,9 +30,13 @@ const renderLandingPage = () =>
 
 const fillAndSubmitForm = async () => {
   const user = userEvent.setup();
-  const ssnInput = screen.getByLabelText(/ssnLabel/i);
-  const zipInput = screen.getByLabelText(/zipLabel/i);
-  const submitButton = screen.getByRole("button", { name: /checkStatus/i });
+  const ssnInput = screen.getByRole("textbox", {
+    name: /Social Security or Individual Taxpayer Identification Number */i,
+  });
+  const zipInput = screen.getByRole("textbox", {
+    name: /ZIP code you submitted with your application */i,
+  });
+  const submitButton = screen.getByRole("button", { name: /Check Status/i });
 
   await user.type(ssnInput, "123456789");
   await user.type(zipInput, "07001");
@@ -83,7 +87,9 @@ describe("onSubmit handler", () => {
     renderLandingPage();
     await fillAndSubmitForm();
 
-    expect(screen.getByText(/apiErrorAlertContent/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/We are having an issue checking on your application status/i),
+    ).toBeInTheDocument();
     expect(mockPush).not.toHaveBeenCalled();
     expect(logGAEvent).toHaveBeenCalledWith("api_error");
   });
@@ -102,7 +108,7 @@ describe("onSubmit handler", () => {
       await fillAndSubmitForm();
 
       expect(
-        screen.getByRole("heading", { name: "noApplicationFound.heading" }),
+        screen.getByRole("heading", { name: "No 2025 application found" }),
       ).toBeInTheDocument();
       expect(mockPush).not.toHaveBeenCalled();
       expect(logGAEvent).toHaveBeenCalledWith("api_200_record_not_found");

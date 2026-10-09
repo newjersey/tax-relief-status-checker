@@ -90,11 +90,5 @@
       "title": "My application is taking too long. Who do I contact?",
       "content": "If you have any questions or if processing has taken longer than expected, reach out to us directly via phone or email. In order for us to locate your record, be ready to provide your full name and the full address of the property you applied for:"
     }
-  },
-  "call": "Call: <1>1-888-238-1233</1> (Mondays to Fridays 8:30 a.m. to 5:30 p.m.)",
-  "email": "Email: <1>nj.anchor@treas.nj.gov</1>",
-  "paymentPeriod": "Payment period",
-  "seniorFreeze": "Senior Freeze",
-  "anchor": "ANCHOR",
-  "stayNJ": "Stay NJ"
+  }
 }

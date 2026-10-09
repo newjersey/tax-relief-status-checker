@@ -6,8 +6,11 @@ import { useDataStore } from "@/components/TaxReliefDataProvider";
 import { AnchorApplicationReceivedFaqContent } from "./AnchorApplicationReceivedFaqContent";
 import { FaqSection } from "@/components/FaqSection";
 import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
+import { useTranslation, Trans } from "react-i18next";
 
 const AnchorApplicationReceivedPage = () => {
+  const { t } = useTranslation(["ancAppRec", "common"]);
+
   const router = useRouter();
   const { dataStore } = useDataStore();
 
@@ -32,16 +35,14 @@ const AnchorApplicationReceivedPage = () => {
           <TaxpayerInfoHeader lastFourSsnDigits={lastFourSsnDigits} zipCode={zipCode} />
           <div className="margin-top-4">
             <h1 className="font-heading-xl">
-              We have your 2025 <abbr>ANCHOR</abbr> application on file as of{" "}
-              {applicationDateString}
+              <Trans i18nKey={"ancAppReceived"} ns="ancAppRec" values={{ applicationDateString }}>
+                We have your 2025 <abbr>ANCHOR</abbr> application on file as of{" "}
+                {applicationDateString}
+              </Trans>
             </h1>
-            <p>
-              Your 2025 ANCHOR application is being processed. If you're eligible for benefits,
-              payments start going out October 1, 2026. In some cases, payments will be made after
-              2026.
-            </p>
+            <p>{t("appBeingProcessed")}</p>
             <FaqSection
-              items={AnchorApplicationReceivedFaqContent}
+              items={AnchorApplicationReceivedFaqContent()}
               titleHeadingLevel="h2"
               itemHeadingLevel="h3"
             />

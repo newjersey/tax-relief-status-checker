@@ -1,1 +1,46 @@
-{}
+{
+  "paymentInfoHeader": "You are eligible for benefits",
+  "program": "Program",
+  "paymentStatus": "Payment Status",
+  "amount": "Amount",
+  "pasPaymentSchedule": "Even though PAS-1 combines all three programs into one application, each program has a different payment schedule. Find specific payment periods for each program below.",
+  "payment": {
+    "check": "Check issued on {{date}}",
+    "directDeposit": "Direct deposit made on {{date}}",
+    "update": "Your benefit amount was adjusted. A check was sent on {{date}}"
+  },
+  "faq": {
+    "whenCanIExpect": {
+      "title": "When can I expect to receive payments for Senior Freeze, ANCHOR, and Stay NJ?",
+      "content": {
+        "text1": "Even though PAS-1 combines all 3 programs into 1 application, each program has a different payment schedule. The table below outlines when you can expect to receive your payment(s) from each program that you are eligible for.",
+        "text2": "Your payment will be delayed if there is an issue with your application, or if we need additional information from you.",
+        "month": "Month",
+        "julToSep": {
+          "date": "July-September",
+          "text1": "Payments start going out on July 15, 2026. If you applied before May 1, you can expect to receive your payment between July 15 and September 15.",
+          "text2": "Stay NJ is paid in quarterly installments. The 2025 benefit will be paid in February and May of 2027."
+        },
+        "sepToOct": {
+          "date": "September-October",
+          "text1": "If you applied between May 1 and June 1, you can expect to receive your payment between September 1 and October 1.",
+          "text2": "Payments start going out on September 15, 2026. You can expect to get your payment before December 1, 2026."
+        },
+        "nov": {
+          "date": "November",
+          "text": "If you applied between June 2 and September 1, you can expect to receive your payment between November 2 and January 2, 2027."
+        },
+        "dec": {
+          "date": "December",
+          "text": "If you applied between September 2 and October 31, you can expect to receive your payment between December 2, 2026 and February 2, 2027."
+        }
+      }
+    },
+    "checkAmountDifferent": {
+      "title": "A check amount is different than what I expected. Who can I contact?"
+    },
+    "notReceivedCheck": {
+      "title": "I have not received my check in the mail. What should I do next?"
+    }
+  }
+}
