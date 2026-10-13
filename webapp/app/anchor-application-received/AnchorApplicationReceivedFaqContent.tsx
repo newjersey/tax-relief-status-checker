@@ -15,7 +15,7 @@ export const AnchorApplicationReceivedFaqContent = (): FaqItem[] => {
                 i18nKey={"call"}
                 ns="common"
                 components={{
-                  1: <a href="tel:+18882381233" />,
+                  1: <a href={t("common:callNumber")} />,
                 }}
               ></Trans>
             </li>
@@ -24,7 +24,7 @@ export const AnchorApplicationReceivedFaqContent = (): FaqItem[] => {
                 i18nKey={"email"}
                 ns="common"
                 components={{
-                  1: <a href="mailto:nj.anchor@treas.nj.gov" />,
+                  1: <a href={t("common:emailURL")} />,
                 }}
               ></Trans>
             </li>
@@ -46,7 +46,7 @@ export const AnchorApplicationReceivedFaqContent = (): FaqItem[] => {
                 i18nKey={"call"}
                 ns="common"
                 components={{
-                  1: <a href="tel:+18882381233" />,
+                  1: <a href={t("common:callNumber")} />,
                 }}
               ></Trans>
             </li>
@@ -55,7 +55,7 @@ export const AnchorApplicationReceivedFaqContent = (): FaqItem[] => {
                 i18nKey={"email"}
                 ns="common"
                 components={{
-                  1: <a href="mailto:nj.anchor@treas.nj.gov" />,
+                  1: <a href={t("common:emailURL")} />,
                 }}
               ></Trans>
             </li>

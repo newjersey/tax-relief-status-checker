@@ -73,7 +73,7 @@ const NoApplicationFoundAlert = () => {
         </li>
       </ul>
       <p className="usa-alert__text">
-        Find the{" "}
+        {t("noApplicationFound.findThe")}
         <a
           href="#faq_no_2025_application_found"
           onClick={(e) => {
@@ -81,9 +81,9 @@ const NoApplicationFoundAlert = () => {
             expandFaqAccordionItem("faq_no_2025_application_found");
           }}
         >
-          full list of other possible reasons
+          {t("noApplicationFound.fullList")}
         </a>{" "}
-        your application is not showing up
+        {t("noApplicationFound.notShowingUp")}
       </p>
     </>
   );
@@ -171,7 +171,7 @@ const LandingPage = () => {
             <div className="tablet:grid-col-6">
               <h1 className="font-heading-lg">{t("landingHeader")}</h1>
               <Form onSubmit={handleSubmit(onSubmit)} className="maxw-full" noValidate>
-                <p className="text-bold font-heading-md">{t("enterSSNZIP")}</p>
+                <p className="text-bold font-heading-md">{t("enterSsnZip")}</p>
                 <Label htmlFor="ssn" requiredMarker={true}>
                   {t("ssnLabel")}
                 </Label>
@@ -186,10 +186,10 @@ const LandingPage = () => {
                     aria-invalid={errors.ssn ? "true" : "false"}
                     aria-describedby={errors.ssn ? "ssnErrorMessage" : undefined}
                     {...register("ssn", {
-                      required: "SSN or ITIN is required",
+                      required: t("ssnRequired"),
                       pattern: {
                         value: /\d{3}-\d{2}-\d{4}/,
-                        message: "SSN or ITIN number entered must have nine digits",
+                        message: t("ssnDigits"),
                       },
                     })}
                   />
@@ -214,10 +214,10 @@ const LandingPage = () => {
                     aria-invalid={errors.zipCode ? "true" : "false"}
                     aria-describedby={errors.zipCode ? "zipCodeErrorMessage" : undefined}
                     {...register("zipCode", {
-                      required: "ZIP code is required",
+                      required: t("zipRequired"),
                       minLength: {
                         value: 5,
-                        message: "ZIP code must have five digits",
+                        message: t("zipDigits"),
                       },
                     })}
                   />

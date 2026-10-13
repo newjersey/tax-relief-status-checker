@@ -1,5 +1,6 @@
 import { logGAEvent } from "@/app/utils/analytics";
 import { Accordion, type HeadingLevel, type AccordionProps } from "@trussworks/react-uswds";
+import { useTranslation } from "react-i18next";
 
 type AccordionItemProps = AccordionProps["items"][number];
 
@@ -13,6 +14,7 @@ interface FaqSectionProps {
 }
 
 export const FaqSection = (props: FaqSectionProps) => {
+  const { t } = useTranslation("common");
   const { items, titleHeadingLevel, itemHeadingLevel } = props;
 
   const FaqHeaderTag = titleHeadingLevel;
@@ -24,7 +26,7 @@ export const FaqSection = (props: FaqSectionProps) => {
 
   return (
     <>
-      <FaqHeaderTag className="font-heading-l">Frequently Asked Questions (FAQs)</FaqHeaderTag>
+      <FaqHeaderTag className="font-heading-l">{t("faqs")}</FaqHeaderTag>
       <Accordion multiselectable={true} items={accordionItems} />
     </>
   );

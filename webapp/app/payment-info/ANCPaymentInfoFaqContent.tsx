@@ -15,7 +15,7 @@ export const ANCPaymentInfoFaqContent = (): FaqItem[] => {
                 i18nKey={"call"}
                 ns="common"
                 components={{
-                  1: <a href="tel:+18882381233" />,
+                  1: <a href={t("common:callNumber")} />,
                 }}
               ></Trans>
             </li>
@@ -24,7 +24,7 @@ export const ANCPaymentInfoFaqContent = (): FaqItem[] => {
                 i18nKey={"email"}
                 ns="common"
                 components={{
-                  1: <a href="mailto:nj.anchor@treas.nj.gov" />,
+                  1: <a href={t("common:emailURL")} />,
                 }}
               ></Trans>
             </li>
@@ -33,7 +33,7 @@ export const ANCPaymentInfoFaqContent = (): FaqItem[] => {
                 i18nKey={"infoCenter"}
                 ns="common"
                 components={{
-                  1: <a href="https://www.nj.gov/treasury/taxation/contact-office.shtml" />,
+                  1: <a href={t("common:infoCenterURL")} />,
                 }}
               ></Trans>
             </li>
@@ -55,7 +55,7 @@ export const ANCPaymentInfoFaqContent = (): FaqItem[] => {
                 i18nKey={"call"}
                 ns="common"
                 components={{
-                  1: <a href="tel:+18882381233" />,
+                  1: <a href={t("common:callNumber")} />,
                 }}
               ></Trans>
             </li>
@@ -64,7 +64,7 @@ export const ANCPaymentInfoFaqContent = (): FaqItem[] => {
                 i18nKey={"email"}
                 ns="common"
                 components={{
-                  1: <a href="mailto:nj.anchor@treas.nj.gov" />,
+                  1: <a href={t("common:emailURL")} />,
                 }}
               ></Trans>
             </li>
@@ -73,7 +73,7 @@ export const ANCPaymentInfoFaqContent = (): FaqItem[] => {
                 i18nKey={"infoCenter"}
                 ns="common"
                 components={{
-                  1: <a href="https://www.nj.gov/treasury/taxation/contact-office.shtml" />,
+                  1: <a href={t("common:infoCenterURL")} />,
                 }}
               ></Trans>
             </li>

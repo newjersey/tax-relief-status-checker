@@ -47,7 +47,7 @@ export const LandingPageFaqContent = (): FaqItem[] => {
                 i18nKey={"faq.no2025Application.content.priorYears.link"}
                 ns="landing"
                 components={{
-                  1: <a href="https://www1.state.nj.us/TYTR_Saver/jsp/common/HRInquiry.jsp" />,
+                  1: <a href={t("faq.no2025Application.content.priorYears.URL")} />,
                 }}
               ></Trans>
             </li>
@@ -69,7 +69,7 @@ export const LandingPageFaqContent = (): FaqItem[] => {
                 i18nKey={"call"}
                 ns="common"
                 components={{
-                  1: <a href="tel:+18882381233" />,
+                  1: <a href={t("common:callNumber")} />,
                 }}
               ></Trans>
             </li>
@@ -78,7 +78,7 @@ export const LandingPageFaqContent = (): FaqItem[] => {
                 i18nKey={"email"}
                 ns="common"
                 components={{
-                  1: <a href="mailto:nj.anchor@treas.nj.gov" />,
+                  1: <a href={t("common:emailURL")} />,
                 }}
               ></Trans>
             </li>
@@ -96,8 +96,8 @@ export const LandingPageFaqContent = (): FaqItem[] => {
           <Table className="usa-table" bordered={true} scrollable={true}>
             <thead>
               <tr>
-                <th className="width-card">{t("paymentPeriod")}</th>
-                <th className="width-mobile">{t("seniorFreeze")}</th>
+                <th className="width-card">{t("common:paymentPeriod")}</th>
+                <th className="width-mobile">{t("common:seniorFreeze")}</th>
               </tr>
             </thead>
             <tbody>
@@ -141,8 +141,8 @@ export const LandingPageFaqContent = (): FaqItem[] => {
           <Table className="usa-table" bordered={true} scrollable={true}>
             <thead>
               <tr>
-                <th className="width-card">{t("paymentPeriod")}</th>
-                <th className="width-mobile">{t("anchor")}</th>
+                <th className="width-card">{t("common:paymentPeriod")}</th>
+                <th className="width-mobile">{t("common:anchor")}</th>
               </tr>
             </thead>
             <tbody>
@@ -169,8 +169,8 @@ export const LandingPageFaqContent = (): FaqItem[] => {
           <Table className="usa-table" bordered={true} scrollable={true}>
             <thead>
               <tr>
-                <th className="width-card">{t("paymentPeriod")}</th>
-                <th className="width-mobile">{t("stayNJ")}</th>
+                <th className="width-card">{t("common:paymentPeriod")}</th>
+                <th className="width-mobile">{t("common:stayNJ")}</th>
               </tr>
             </thead>
             <tbody>
@@ -218,7 +218,7 @@ export const LandingPageFaqContent = (): FaqItem[] => {
                 i18nKey={"call"}
                 ns="common"
                 components={{
-                  1: <a href="tel:+18882381233" />,
+                  1: <a href={t("common:callNumber")} />,
                 }}
               ></Trans>
             </li>
@@ -227,7 +227,7 @@ export const LandingPageFaqContent = (): FaqItem[] => {
                 i18nKey={"email"}
                 ns="common"
                 components={{
-                  1: <a href="mailto:nj.anchor@treas.nj.gov" />,
+                  1: <a href={t("common:emailURL")} />,
                 }}
               ></Trans>
             </li>

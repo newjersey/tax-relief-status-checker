@@ -29,7 +29,6 @@ const checkTransactionInfo = (
   amount: number,
   paymentType: PaymentType,
 ) => {
-  console.log(rowHTML);
   if (paymentType === PaymentType.ADJUSTED) {
     expect(rowHTML).toContain(`<td>${category}</td>`);
     expect(rowHTML).toContain(`Your benefit amount was adjusted. A check was sent on ${date}`);
