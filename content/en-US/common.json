@@ -13,6 +13,7 @@
   "appReceived": "Your application was received on {{date}}",
   "taxpayerInfoHeader": {
     "ssn": "SSN/ITIN:",
+    "ssnTitle": "Social Security / Individual Taxpayer Identification Number",
     "zip": "ZIP Code:",
     "taxYear": "Tax Year:",
     "paymentType": "Payment Type:"

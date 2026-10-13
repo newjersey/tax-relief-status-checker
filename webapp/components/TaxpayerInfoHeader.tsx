@@ -18,7 +18,13 @@ export const TaxpayerInfoHeader = ({
       <div className="grid-row">
         <div className={colSize}>
           <p>
-            {t("taxpayerInfoHeader.ssn")} <strong>***-**-{lastFourSsnDigits}</strong>
+            <abbr
+              title={t("taxpayerInfoHeader.ssnTitle")}
+              style={{ textDecoration: "none", borderBottom: "none" }}
+            >
+              {t("taxpayerInfoHeader.ssn")}
+            </abbr>{" "}
+            <strong>***-**-{lastFourSsnDigits}</strong>
           </p>
         </div>
         <div className={colSize}>
