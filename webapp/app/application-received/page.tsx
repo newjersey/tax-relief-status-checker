@@ -7,8 +7,10 @@ import { ProcessList, ProcessListHeading, ProcessListItem } from "@trussworks/re
 import { ApplicationReceivedFaqContent } from "./ApplicationReceivedFaqContent";
 import { FaqSection } from "@/components/FaqSection";
 import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
+import { useTranslation } from "react-i18next";
 
 const ApplicationReceivedPage = () => {
+  const { t } = useTranslation(["appRec", "common"]);
   const router = useRouter();
   const { dataStore } = useDataStore();
 
@@ -33,30 +35,26 @@ const ApplicationReceivedPage = () => {
           <TaxpayerInfoHeader lastFourSsnDigits={lastFourSsnDigits} zipCode={zipCode} />
           <div className="margin-top-4">
             <h1 className="font-heading-xl">
-              Your application was received on {applicationDateString}
+              {t("common:appReceived", { date: applicationDateString })}
             </h1>
-            <p>
-              Your application is being reviewed for three property tax relief programs: Senior
-              Freeze, ANCHOR, and Stay NJ. Each program makes payments on different timelines, and
-              not everyone qualifies for all three programs.
-            </p>
+            <p>{t("appUnderReview")}</p>
             <ProcessList>
               <ProcessListItem>
-                <ProcessListHeading type="p">Senior Freeze</ProcessListHeading>
-                <p>Senior Freeze payments start July 15, 2026.</p>
+                <ProcessListHeading type="p">{t("common:seniorFreeze")}</ProcessListHeading>
+                <p>{t("seniorFreezePayments")}</p>
               </ProcessListItem>
               <ProcessListItem>
-                <ProcessListHeading type="p">ANCHOR</ProcessListHeading>
-                <p>ANCHOR payments begin September 2026.</p>
+                <ProcessListHeading type="p">{t("common:anchor")}</ProcessListHeading>
+                <p>{t("anchorPayments")}</p>
               </ProcessListItem>
               <ProcessListItem>
-                <ProcessListHeading type="p">Stay NJ</ProcessListHeading>
-                <p>Stay NJ quarterly payments begin February 2027.</p>
+                <ProcessListHeading type="p">{t("common:stayNJ")}</ProcessListHeading>
+                <p>{t("stayPayments")}</p>
               </ProcessListItem>
             </ProcessList>
           </div>
           <FaqSection
-            items={ApplicationReceivedFaqContent}
+            items={ApplicationReceivedFaqContent()}
             titleHeadingLevel="h2"
             itemHeadingLevel="h3"
           />

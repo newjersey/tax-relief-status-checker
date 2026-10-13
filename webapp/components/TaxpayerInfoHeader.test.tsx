@@ -5,6 +5,7 @@ import { TaxpayerInfoHeader } from "./TaxpayerInfoHeader";
 describe("header component", () => {
   it("renders the header with no payment method", () => {
     render(<TaxpayerInfoHeader lastFourSsnDigits="0123" zipCode="12345" />);
+    console.log(document.body);
     expect(document.body.textContent).toContain("SSN/ITIN: ***-**-0123");
     expect(document.body.textContent).toContain("ZIP Code: 12345");
     expect(document.body.textContent).toContain("Tax Year: 2025");

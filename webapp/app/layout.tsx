@@ -7,6 +7,7 @@ import "./globals.css";
 import Script from "next/script";
 import { FeedbackWidget } from "@/components/FeedbackWidget";
 import { TaxReliefDataProvider } from "@/components/TaxReliefDataProvider";
+import { I18nProvider } from "@/components/I18nProvider";
 
 /** {@link https://nextjs.org/docs/app/api-reference/functions/generate-metadata} */
 export const metadata: Metadata = {
@@ -36,13 +37,15 @@ const RootLayout = ({ children }: { readonly children: React.ReactNode }) => (
       )}
     </head>
     <body>
-      <TaxReliefDataProvider>
-        <NjHeader />
-        <StatusCheckerHeader />
-        {children}
-        <FeedbackWidget />
-        <NjFooter />
-      </TaxReliefDataProvider>
+      <I18nProvider>
+        <TaxReliefDataProvider>
+          <NjHeader />
+          <StatusCheckerHeader />
+          {children}
+          <FeedbackWidget />
+          <NjFooter />
+        </TaxReliefDataProvider>
+      </I18nProvider>
     </body>
   </html>
 );

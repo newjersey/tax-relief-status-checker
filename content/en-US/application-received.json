@@ -1,0 +1,14 @@
+{
+  "appUnderReview": "Your application is being reviewed for three property tax relief programs: Senior Freeze, ANCHOR, and Stay NJ. Each program makes payments on different timelines, and not everyone qualifies for all three programs.",
+  "seniorFreezePayments": "Senior Freeze payments start July 15, 2026.",
+  "anchorPayments": "ANCHOR payments begin September 2026.",
+  "stayPayments": "Stay NJ quarterly payments begin February 2027.",
+  "faq": {
+    "noPayment": {
+      "title": "What if I didn't receive a payment yet?",
+      "content": "We are currently processing thousands of applications, and your application could still be processing. To check on the status of a payment, contact the Division:",
+      "email": "Or email: <1>nj.anchor@treas.nj.gov</1>",
+      "infoCenter": "Or visit one of our <1> Regional Information Centers </1>"
+    }
+  }
+}

@@ -30,8 +30,12 @@ const renderLandingPage = () =>
 
 const fillAndSubmitForm = async () => {
   const user = userEvent.setup();
-  const ssnInput = screen.getByLabelText(/Social Security/i);
-  const zipInput = screen.getByLabelText(/ZIP code/i);
+  const ssnInput = screen.getByRole("textbox", {
+    name: /Social Security or Individual Taxpayer Identification Number */i,
+  });
+  const zipInput = screen.getByRole("textbox", {
+    name: /ZIP code you submitted with your application */i,
+  });
   const submitButton = screen.getByRole("button", { name: /Check Status/i });
 
   await user.type(ssnInput, "123456789");

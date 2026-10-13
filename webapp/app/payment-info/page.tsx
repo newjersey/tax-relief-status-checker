@@ -16,6 +16,7 @@ import {
   FormCode,
 } from "@/components/types";
 import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
+import { useTranslation, Trans } from "react-i18next";
 
 export const getEarliestTransaction = (transactions: Transaction[]) => {
   const valid = transactions.filter(
@@ -44,9 +45,21 @@ export const showRegularTransaction = (transaction: Transaction, taxProgram: Tax
     <tr>
       <td>{taxProgram}</td>
       {transaction.payment_details.method === PaymentMethod.CHECK ? (
-        <td>Check issued on {formatDate(transaction.payment_details.date)}</td>
+        <td>
+          <Trans
+            i18nKey="payment.check"
+            ns="paymentInfo"
+            values={{ date: formatDate(transaction.payment_details.date) }}
+          />
+        </td>
       ) : (
-        <td>Direct deposit made on {formatDate(transaction.payment_details.date)}</td>
+        <td>
+          <Trans
+            i18nKey="payment.directDeposit"
+            ns="paymentInfo"
+            values={{ date: formatDate(transaction.payment_details.date) }}
+          />
+        </td>
       )}
       <td>${transaction.payment_details.amount}</td>
     </tr>
@@ -63,8 +76,11 @@ export const showUpdatedTransaction = (
       <td>{taxProgram}</td>
       <td>
         <div className="transaction-table--payment-status">
-          Your benefit amount was adjusted. A check was sent on{" "}
-          {formatDate(transaction.payment_details.date)}
+          <Trans
+            i18nKey="payment.update"
+            ns="paymentInfo"
+            values={{ date: formatDate(transaction.payment_details.date) }}
+          />
         </div>
       </td>
       <td>${transaction.payment_details.amount}</td>
@@ -95,6 +111,7 @@ export const showProgramTransactions = (transactions: Transaction[], taxProgram:
 };
 
 const PaymentInfoPage = () => {
+  const { t } = useTranslation(["paymentInfo", "common"]);
   const router = useRouter();
   const { dataStore } = useDataStore();
 
@@ -124,14 +141,14 @@ const PaymentInfoPage = () => {
         <div className="grid-container">
           <TaxpayerInfoHeader lastFourSsnDigits={lastFourSsnDigits} zipCode={zipCode} />
           <div className="margin-top-4">
-            <h1 className="font-heading-xl">You are eligible for benefits</h1>
+            <h1 className="font-heading-xl">{t("paymentInfoHeader")}</h1>
           </div>
           <Table className="usa-table payment-table" bordered={false} scrollable={true}>
             <thead>
               <tr>
-                <th className="width-card">Program</th>
-                <th className="width-mobile">Payment Status</th>
-                <th className="width-mobile">Amount</th>
+                <th className="width-card">{t("program")}</th>
+                <th className="width-mobile">{t("paymentStatus")}</th>
+                <th className="width-mobile">{t("amount")}</th>
               </tr>
             </thead>
             <tbody>
@@ -153,18 +170,15 @@ const PaymentInfoPage = () => {
 
           {form_code === FormCode.ANC1 && !hasPtrPayment && !hasStayPayment ? (
             <FaqSection
-              items={ANCPaymentInfoFaqContent}
+              items={ANCPaymentInfoFaqContent()}
               titleHeadingLevel="h2"
               itemHeadingLevel="h3"
             />
           ) : (
             <>
-              <p>
-                Even though PAS-1 combines all three programs into one application, each program has
-                a different payment schedule. Find specific payment periods for each program below.
-              </p>
+              <p>{t("pasPaymentSchedule")}</p>
               <FaqSection
-                items={PASPaymentInfoFaqContent}
+                items={PASPaymentInfoFaqContent()}
                 titleHeadingLevel="h2"
                 itemHeadingLevel="h3"
               />

@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 import { vi } from "vitest";
+import "../i18n/config";
 
 beforeEach(() => {
   vi.mock("next/script", () => ({

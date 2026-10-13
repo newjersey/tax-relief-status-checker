@@ -92,6 +92,7 @@ describe("getEarliestTransaction", () => {
 describe("showEarliestTransaction", () => {
   it("shows correct message when method is check", () => {
     const result = showRegularTransaction(payment_sent_transaction, TaxProgram.ANCHOR);
+    console.log(result);
     const html = renderToStaticMarkup(result);
     checkTransactionInfo(
       html,
