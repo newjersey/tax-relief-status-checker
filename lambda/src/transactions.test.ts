@@ -120,28 +120,18 @@ describe("build transaction status codes", () => {
     );
   });
 
-  describe("when CHECK_X_NUMBER second + third characters are NN", () => {
-    it("returns payment method as direct deposit", async () => {
-      const row = buildMockRow({
-        TRANS_1_CDE: "RF",
-        CHECK_1_NUM: "0NN345678",
-      });
-
-      const result = callBuildTransaction(row, 1);
-      expect(result.payment_details?.method).toBe("direct_deposit");
-    });
-  });
-
   describe("when CHECK_X_NUMBER second + third characters are nonnumeric", () => {
-    it("returns payment method as direct deposit", async () => {
-      const row = buildMockRow({
-        TRANS_1_CDE: "RF",
-        CHECK_1_NUM: "0VV345678",
-      });
-
-      const result = callBuildTransaction(row, 1);
-      expect(result.payment_details?.method).toBe("direct_deposit");
-    });
+    it.each(["0NN345678", "0VV345678", "0AB345678"])(
+      "returns payment method as direct deposit",
+      async (check_number) => {
+        const row = buildMockRow({
+          TRANS_1_CDE: "RF",
+          CHECK_1_NUM: check_number,
+        });
+        const result = callBuildTransaction(row, 1);
+        expect(result.payment_details?.method).toBe("direct_deposit");
+      },
+    );
   });
 });
 
