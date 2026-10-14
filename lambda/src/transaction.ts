@@ -43,7 +43,7 @@ export const buildTransaction = (
 
   if (status === "payment_sent") {
     let method;
-    if (CHECK_NUM.slice(1, 3) === "NN") {
+    if (!/\d/.test(CHECK_NUM.slice(1, 3))) {
       method = "direct_deposit";
     } else {
       method = "check";

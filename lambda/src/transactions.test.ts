@@ -106,28 +106,32 @@ describe("build transaction status codes", () => {
     });
   });
 
-  describe("when CHECK_X_NUMBER second + third characters are NOT NN", () => {
-    it("returns payment method as check", async () => {
-      const row = buildMockRow({
-        TRANS_1_CDE: "RF",
-        CHECK_1_NUM: "012345678",
-      });
-
-      const result = callBuildTransaction(row, 1);
-      expect(result.payment_details?.method).toBe("check");
-    });
+  describe("when CHECK_X_NUMBER second or third characters are NOT NN", () => {
+    it.each(["012345678", "0N2345678", "01N345678"])(
+      "returns payment method as check",
+      async (check_number) => {
+        const row = buildMockRow({
+          TRANS_1_CDE: "RF",
+          CHECK_1_NUM: check_number,
+        });
+        const result = callBuildTransaction(row, 1);
+        expect(result.payment_details?.method).toBe("check");
+      },
+    );
   });
 
-  describe("when CHECK_X_NUMBER second + third characters are NN", () => {
-    it("returns payment method as direct deposit", async () => {
-      const row = buildMockRow({
-        TRANS_1_CDE: "RF",
-        CHECK_1_NUM: "0NN345678",
-      });
-
-      const result = callBuildTransaction(row, 1);
-      expect(result.payment_details?.method).toBe("direct_deposit");
-    });
+  describe("when CHECK_X_NUMBER second + third characters are nonnumeric", () => {
+    it.each(["0NN345678", "0VV345678", "0AB345678"])(
+      "returns payment method as direct deposit",
+      async (check_number) => {
+        const row = buildMockRow({
+          TRANS_1_CDE: "RF",
+          CHECK_1_NUM: check_number,
+        });
+        const result = callBuildTransaction(row, 1);
+        expect(result.payment_details?.method).toBe("direct_deposit");
+      },
+    );
   });
 });
 
