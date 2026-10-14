@@ -16,6 +16,7 @@ import { setIssueFlagged } from "./utils/setIssueFlagged";
 import type { StatusRecord } from "@/components/types";
 import { determineRoute } from "./utils/determineRoute";
 import { Trans, useTranslation } from "react-i18next";
+import { FadeLoader } from "react-spinners";
 
 interface UserData {
   readonly ssn: string;
@@ -90,6 +91,7 @@ const NoApplicationFoundAlert = () => {
 };
 
 const LandingPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation(["landing", "common"]);
   const router = useRouter();
   const { setDataStore } = useDataStore();
@@ -138,7 +140,7 @@ const LandingPage = () => {
 
   const onSubmit: SubmitHandler<UserData> = async (data) => {
     setAlertContent(null);
-
+    setIsLoading(true);
     try {
       const statusResult = await callStatusApi({ ssn: data.ssn, zip: data.zipCode });
       const record2025 = statusResult.records.find((r) => r.return_year === "2025");
@@ -151,6 +153,8 @@ const LandingPage = () => {
       handleRecordFound(record2025, data);
     } catch {
       handleStatusApiError();
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -227,15 +231,26 @@ const LandingPage = () => {
                     </span>
                   )}
                 </div>
-                <Button
-                  type="submit"
-                  className="usa-button usa-button--small margin-top-5 margin-bottom-3"
-                >
-                  {t("checkStatus")}
-                  <svg focusable="false" role="img" width="20" height="20" fill="white">
-                    <use href="/img/sprite.svg#login"></use>
-                  </svg>
-                </Button>
+                {isLoading ? (
+                  <div className="loader-container padding-top-2">
+                    <FadeLoader
+                      id="loading-spinner"
+                      color="#0076d6"
+                      speedMultiplier={1}
+                      aria-label="Loading Spinner"
+                    />
+                  </div>
+                ) : (
+                  <Button
+                    type="submit"
+                    className="usa-button usa-button--small margin-top-5 margin-bottom-3"
+                  >
+                    {t("checkStatus")}
+                    <svg focusable="false" role="img" width="20" height="20" fill="white">
+                      <use href="/img/sprite.svg#login"></use>
+                    </svg>
+                  </Button>
+                )}
               </Form>
             </div>
           </div>

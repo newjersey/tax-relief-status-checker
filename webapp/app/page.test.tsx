@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LandingPage from "./page";
 import { FormCode, type StatusRecord } from "@/components/types";
@@ -92,6 +92,61 @@ describe("onSubmit handler", () => {
     ).toBeInTheDocument();
     expect(mockPush).not.toHaveBeenCalled();
     expect(logGAEvent).toHaveBeenCalledWith("api_error");
+  });
+
+  it("shows loading spinner and hides check status button while loading, if record found set data store and call determineRoute", async () => {
+    const record = buildStatusRecord();
+    let resolveRequest: (value: any) => void = () => {};
+    const promise = new Promise((resolve) => {
+      resolveRequest = resolve;
+    });
+    globalThis.fetch = vi.fn(() => promise) as any;
+    renderLandingPage();
+    await fillAndSubmitForm();
+
+    expect(screen.queryByRole("button", { name: /Check Status/i })).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Loading Spinner")).toBeInTheDocument();
+
+    resolveRequest!({
+      ok: true,
+      json: async () => ({ records: [record] }),
+    });
+
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      "/api/status",
+      expect.objectContaining({ method: "POST" }),
+    );
+    expect(determineRoute).toHaveBeenCalledWith(record);
+    expect(logGAEvent).toHaveBeenCalledWith("api_200_record_found");
+  });
+
+  it("shows loading spinner and hides check status button while loading, if api error stops loading and shows check status button", async () => {
+    let resolveRequest: (value: any) => void = () => {};
+    const promise = new Promise((resolve) => {
+      resolveRequest = resolve;
+    });
+    globalThis.fetch = vi.fn(() => promise) as any;
+    renderLandingPage();
+    await fillAndSubmitForm();
+
+    expect(screen.queryByRole("button", { name: /Check Status/i })).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Loading Spinner")).toBeInTheDocument();
+    resolveRequest!({
+      ok: false,
+      status: 500,
+      json: async () => ({}),
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/We are having an issue checking on your application status/i),
+      ).toBeInTheDocument();
+    });
+
+    expect(mockPush).not.toHaveBeenCalled();
+    expect(logGAEvent).toHaveBeenCalledWith("api_error");
+    expect(screen.queryByRole("button", { name: /Check Status/i })).toBeInTheDocument();
+    expect(screen.queryByLabelText("Loading Spinner")).not.toBeInTheDocument();
   });
 
   describe("when status API record not found", () => {
