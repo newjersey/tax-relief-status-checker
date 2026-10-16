@@ -1,9 +1,9 @@
 /**
  * Local helper script to compute the SHA-256 hash of a SSN/ZIP pair.
  *
- * Usage: npx tsx scripts/hash-ssn-zip.ts <ssn> <zip>
+ * Usage: npx tsx scripts/hashSsnZip.ts <ssn> <zip>
  *
- * Example: npx tsx scripts/hash-ssn-zip.ts 123456789 07001
+ * Example: npx tsx scripts/hashSsnZip.ts 123456789 07001
  */
 import { computeSsnZipHash } from "../src/util/computeSsnZipHash";
 
