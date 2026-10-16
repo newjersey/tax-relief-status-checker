@@ -10,6 +10,7 @@
     "build": "cd webapp && next build",
     "cypress": "cd webapp && cypress run",
     "package": "npm run package --prefix lambda",
+    "package:autofile": "npm run package --prefix lambda-anchor-autofile-api",
     "deploy:dev": "npm run package && cd infra && cdk deploy -c stage=dev",
     "deploy:prod": "npm run package && cd infra && cdk deploy -c stage=prod",
     "test": "vitest run",
@@ -36,6 +37,7 @@
   "workspaces": [
     "webapp",
     "lambda",
+    "lambda-missed-mailer-api",
     "infra"
   ],
   "allowScripts": {
