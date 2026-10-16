@@ -6,8 +6,7 @@
  * Usage: npx tsx scripts/populateDbFromCsv.ts <path-to-csv> [--table <table-name>] [--region
  * <region>]
  *
- * Example: npx tsx scripts/populateDbFromCsv.ts ~/Desktop/autofile-test-data.csv --table
- * anchor-autofile-ssn-zip-dev
+ * Example: npx tsx scripts/populateDbFromCsv.ts ~/Desktop/test-data.csv --table test-table
  */
 
 import { createReadStream } from "node:fs";
