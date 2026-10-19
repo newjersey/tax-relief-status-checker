@@ -1,0 +1,18 @@
+{
+  "alert": {
+    "status": "We could not file an ANCHOR benefit application on your behalf",
+    "text": "We mailed you a letter confirming that the Division would file your ANCHOR benefit application on your behalf. However, the letter was returned back to us because the post office was unable to deliver to the mailing address we have on file."
+  },
+  "mustFile": "You <bold>must</bold> file the <1>ANCHOR application</1> yourself by November 2, 2026.",
+  "applicationURL": "https://propertytaxreliefapp.nj.gov/",
+  "faq": {
+    "notAutofiled": {
+      "title": "Why was my ANCHOR benefit application was not automatically filed for me?",
+      "content": "The Division is unable to automatically file your ANCHOR benefit application on your behalf if our ANCHOR Benefit Confirmation Letter is returned back to us."
+    },
+    "recentlyApplied": {
+      "title": "I recently applied for the ANCHOR benefit and I'm seeing the message “We do not have a 2025 ANCHOR application on file”. What should I do?",
+      "content": "Since you recently applied, allow up to 3 weeks for your application to be processed in our system. For paper applications, it can take up to 12 weeks."
+    }
+  }
+}
