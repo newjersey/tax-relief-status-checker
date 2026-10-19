@@ -42,8 +42,8 @@ const signRequest = async (config: {
  * POST /api/status
  *
  * Proxies the SSN + ZIP lookup to the AWS Lambda endpoint configured via
- * NEXT_PUBLIC_AUTOFILE_LAMBDA_API_URL. Signs the request with SigV4 for AWS_IAM authentication on
- * the Lambda Function URL.
+ * NEXT_PUBLIC_MISSED_MAILER_LAMBDA_API_URL. Signs the request with SigV4 for AWS_IAM authentication
+ * on the Lambda Function URL.
  */
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
   const lambdaUrl = process.env.NEXT_PUBLIC_MISSED_MAILER_LAMBDA_API_URL;
