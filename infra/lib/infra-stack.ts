@@ -1,9 +1,10 @@
-import { Duration, Stack } from "aws-cdk-lib";
+import { Duration, RemovalPolicy, Stack } from "aws-cdk-lib";
 import type { StackProps } from "aws-cdk-lib";
 import type { Construct } from "constructs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as iam from "aws-cdk-lib/aws-iam";
+import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as path from "path";
 import { fileURLToPath } from "url";
 import * as cw from "aws-cdk-lib/aws-cloudwatch";
@@ -26,6 +27,8 @@ export interface InfraStackProps extends StackProps {
 export class InfraStack extends Stack {
   /** The Lambda function serving the Property Tax Relief Status API. */
   public readonly lambdaFunction: lambda.Function;
+  public readonly missedMailerAnchorFunction: lambda.Function;
+  public readonly missedMailerAnchorTable: dynamodb.Table;
 
   constructor(scope: Construct, id: string, props: InfraStackProps) {
     super(scope, id, props);
@@ -95,12 +98,42 @@ export class InfraStack extends Stack {
 
     this.lambdaFunction.role?.attachInlinePolicy(customPolicy);
 
+    this.missedMailerAnchorTable = new dynamodb.Table(this, "MissedMailerAnchorTable", {
+      tableName: `missed-mailer-anchor-${props.stageName}`,
+      partitionKey: { name: "ssnZipHash", type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: RemovalPolicy.RETAIN,
+    });
+
+    this.missedMailerAnchorFunction = new lambda.Function(this, "MissedMailerAnchorApi", {
+      functionName: `missed-mailer-anchor-api-${props.stageName}`,
+      runtime: lambda.Runtime.NODEJS_22_X,
+      handler: "index.handler",
+      code: lambda.Code.fromAsset(path.join(DIRNAME, "../../lambda-missed-mailer-api/lambda.zip")),
+      timeout: Duration.seconds(LAMBDA_TIMEOUT_SECONDS),
+      memorySize: LAMBDA_MEMORY_MB,
+      environment: {
+        TABLE_NAME: this.missedMailerAnchorTable.tableName,
+      },
+      ...vpcConfig,
+    });
+
+    this.missedMailerAnchorTable.grantReadData(this.missedMailerAnchorFunction);
+
+    this.missedMailerAnchorFunction.addFunctionUrl({
+      authType: lambda.FunctionUrlAuthType.AWS_IAM,
+      cors: { allowedOrigins: props.allowedOrigins },
+    });
+
     amplifyIamRole.attachInlinePolicy(
       new iam.Policy(this, "InvokeLambdaPolicy", {
         statements: [
           new iam.PolicyStatement({
             actions: ["lambda:InvokeFunctionUrl", "lambda:InvokeFunction"],
-            resources: [this.lambdaFunction.functionArn],
+            resources: [
+              this.lambdaFunction.functionArn,
+              this.missedMailerAnchorFunction.functionArn,
+            ],
           }),
         ],
       }),
