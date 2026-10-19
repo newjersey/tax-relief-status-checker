@@ -43,7 +43,7 @@ const MissedMailerPage = () => {
 
           <TaxpayerInfoHeader lastFourSsnDigits={lastFourSsnDigits} zipCode={zipCode} />
           <div className="margin-top-4">
-            <p className="font-sans-2xl margin-top-0 margin-bottom-10">
+            <h1 className="font-sans-2xl margin-top-0 margin-bottom-10 text-normal">
               <Trans
                 i18nKey="mustFile"
                 ns="missedMailer"
@@ -52,7 +52,7 @@ const MissedMailerPage = () => {
                   1: <a href={t("applicationURL")} />,
                 }}
               />
-            </p>
+            </h1>
             <FaqSection
               items={MissedMailerFaqContent()}
               titleHeadingLevel="h2"
