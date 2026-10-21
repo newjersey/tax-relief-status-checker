@@ -152,12 +152,44 @@ describe("onSubmit handler", () => {
   describe("when status API record not found", () => {
     const statusResponseNoRecord = { records: [buildStatusRecord({ return_year: "2024" })] };
 
-    it("when record is NOT found, it shows the application not found alert", async () => {
-      globalThis.fetch = vi.fn().mockResolvedValueOnce({
-        ok: true,
-        status: 200,
-        json: () => Promise.resolve(statusResponseNoRecord),
-      }) as unknown as typeof fetch;
+    it("it calls missed mailer API, when missed mailer record is found, sets datastore and routes user to missed-mailer", async () => {
+      globalThis.fetch = vi
+        .fn()
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          json: () => Promise.resolve(statusResponseNoRecord),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          json: () => Promise.resolve({ missedMailer: true }),
+        }) as unknown as typeof fetch;
+
+      renderLandingPage();
+      await fillAndSubmitForm();
+
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        "/api/missed-mailer",
+        expect.objectContaining({ method: "POST" }),
+      );
+      expect(mockPush).toHaveBeenCalledWith("/missed-mailer");
+      expect(logGAEvent).toHaveBeenCalledWith(`missed_mailer_record_found`);
+    });
+
+    it("it calls missed mailer API, when missed mailer record is NOT found, it shows the application not found alert", async () => {
+      globalThis.fetch = vi
+        .fn()
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          json: () => Promise.resolve(statusResponseNoRecord),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          json: () => Promise.resolve({ missedMailer: false }),
+        }) as unknown as typeof fetch;
 
       renderLandingPage();
       await fillAndSubmitForm();
@@ -167,6 +199,30 @@ describe("onSubmit handler", () => {
       ).toBeInTheDocument();
       expect(mockPush).not.toHaveBeenCalled();
       expect(logGAEvent).toHaveBeenCalledWith("api_200_record_not_found");
+    });
+
+    it("it calls missed mailer API, when response is not 200, it shows the error message", async () => {
+      globalThis.fetch = vi
+        .fn()
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          json: () => Promise.resolve(statusResponseNoRecord),
+        })
+        .mockResolvedValueOnce({
+          ok: false,
+          status: 500,
+          json: () => Promise.resolve({}),
+        }) as unknown as typeof fetch;
+
+      renderLandingPage();
+      await fillAndSubmitForm();
+
+      expect(
+        screen.getByText(/We are having an issue checking on your application status/i),
+      ).toBeInTheDocument();
+      expect(mockPush).not.toHaveBeenCalled();
+      expect(logGAEvent).toHaveBeenCalledWith("missed_mailer_api_error");
     });
   });
 });

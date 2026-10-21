@@ -8,6 +8,7 @@ import enMoreInfo from "../content/en-US/more-information-needed.json";
 import enPaymentInfo from "../content/en-US/payment-info.json";
 import enCommon from "../content/en-US/common.json";
 import enNJFooter from "../content/en-US/njFooter.json";
+import enMissedMailer from "../content/en-US/missed-mailer.json";
 import { DEFAULT_LOCALE } from "../i18n/locales";
 
 i18n.use(initReactI18next).init({
@@ -20,6 +21,7 @@ i18n.use(initReactI18next).init({
       paymentInfo: enPaymentInfo,
       common: enCommon,
       njFooter: enNJFooter,
+      missedMailer: enMissedMailer,
     },
   },
   lng: DEFAULT_LOCALE,
