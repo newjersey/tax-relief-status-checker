@@ -108,6 +108,10 @@ it("should display api alert if records is empty in a 200 response", () => {
     statusCode: 200,
     fixture: "empty_records.json",
   });
+  cy.intercept("POST", "/api/missed-mailer", {
+    statusCode: 200,
+    fixture: "missed_mailer_no_records.json",
+  });
 
   cy.contains("button", `Check Status`).click();
   cy.contains("h2", "No 2025 application found").should("be.visible");

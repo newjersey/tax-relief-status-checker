@@ -8,7 +8,6 @@
   "zipRequired": "ZIP code is required",
   "zipDigits": "ZIP code must have five digits",
   "checkStatus": "Check Status",
-  "returnToTop": "Return to top",
   "apiErrorAlertContent": "We are having an issue checking on your application status. Please try again later.",
   "noApplicationFound": {
     "heading": "No 2025 application found",

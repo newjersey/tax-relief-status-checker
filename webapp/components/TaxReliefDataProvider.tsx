@@ -4,7 +4,13 @@ import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 import { FormCode, IssueFlaggedType, Transaction } from "./types";
 
+export enum DataType {
+  MISSED_MAILER,
+  STATUS,
+}
+
 export interface StatusData {
+  readonly type: DataType.STATUS;
   readonly lastFourSsnDigits: string;
   readonly zipCode: string;
   readonly applicationDateString: string;
@@ -15,7 +21,13 @@ export interface StatusData {
   readonly stay_nj: Transaction[];
 }
 
-export type TaxReliefStatusData = StatusData;
+export interface MissedMailerData {
+  readonly type: DataType.MISSED_MAILER;
+  readonly lastFourSsnDigits: string;
+  readonly zipCode: string;
+}
+
+export type TaxReliefStatusData = MissedMailerData | StatusData;
 
 const TaxReliefDataContext = createContext<{
   dataStore: TaxReliefStatusData | null;
