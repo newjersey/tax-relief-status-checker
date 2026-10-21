@@ -30,7 +30,7 @@ interface MissedMailerResponse {
   readonly missedMailer: boolean;
 }
 
-const callMissedMailerAPI = async (params: {
+const getMissedMailerStatus = async (params: {
   readonly ssn: string;
   readonly zip: string;
 }): Promise<MissedMailerResponse> => {
@@ -135,7 +135,7 @@ const LandingPage = () => {
   };
 
   const handleNoRecord = async (data: UserData) => {
-    const missedMailerResult = await callMissedMailerAPI({ ssn: data.ssn, zip: data.zipCode });
+    const missedMailerResult = await getMissedMailerStatus({ ssn: data.ssn, zip: data.zipCode });
     if (missedMailerResult.missedMailer) {
       setDataStore({
         type: DataType.MISSED_MAILER,

@@ -18,7 +18,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
   const lambdaUrl = process.env.NEXT_PUBLIC_MISSED_MAILER_LAMBDA_API_URL;
 
   if (!lambdaUrl) {
-    return NextResponse.json({ error: "Missed Mailer API is not configured." }, { status: 503 });
+    return NextResponse.json({ error: "Service Unavailable" }, { status: 503 });
   }
 
   let body: StatusRequestBody;

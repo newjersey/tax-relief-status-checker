@@ -8,11 +8,11 @@
   "faq": {
     "notAutofiled": {
       "title": "Why was my ANCHOR benefit application not automatically filed for me?",
-      "content": "The Division is unable to automatically file your ANCHOR benefit application on your behalf if our ANCHOR Benefit Confirmation Letter is returned back to us."
+      "content": "The Division is unable to automatically file your ANCHOR benefit application on your behalf if our ANCHOR Benefit Confirmation Letter is returned back to us by the post office."
     },
     "recentlyApplied": {
-      "title": "I recently applied for the ANCHOR benefit and I'm seeing the message “We could not file an ANCHOR benefit application on your behalf”. What should I do?",
-      "content": "Since you recently applied, allow up to 3 weeks for your application to be processed in our system. For paper applications, it can take up to 12 weeks."
+      "title": "I recently applied for the ANCHOR benefit and I'm seeing the message: “We could not file an ANCHOR benefit application on your behalf.” What should I do?",
+      "content": "Since you recently applied on your own, allow up to 3 weeks for you application to be processed in our system. For paper applications it can take up to 12 weeks."
     }
   }
 }
