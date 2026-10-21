@@ -16,7 +16,6 @@ import { setIssueFlagged } from "./utils/setIssueFlagged";
 import type { StatusRecord } from "@/components/types";
 import { determineRoute } from "./utils/determineRoute";
 import { Trans, useTranslation } from "react-i18next";
-import { FadeLoader } from "react-spinners";
 
 interface UserData {
   readonly ssn: string;
@@ -268,12 +267,7 @@ const LandingPage = () => {
                 </div>
                 {isLoading ? (
                   <div className="loader-container padding-top-2">
-                    <FadeLoader
-                      id="loading-spinner"
-                      color="#0076d6"
-                      speedMultiplier={1}
-                      aria-label="Loading Spinner"
-                    />
+                    <img src="/img/loader.svg" alt="Loading" width="75" height="75" />
                   </div>
                 ) : (
                   <Button
