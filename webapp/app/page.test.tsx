@@ -105,7 +105,7 @@ describe("onSubmit handler", () => {
     await fillAndSubmitForm();
 
     expect(screen.queryByRole("button", { name: /Check Status/i })).not.toBeInTheDocument();
-    expect(screen.getByLabelText("Loading Spinner")).toBeInTheDocument();
+    expect(screen.getByAltText("Loading")).toBeInTheDocument();
 
     resolveRequest!({
       ok: true,
@@ -130,7 +130,7 @@ describe("onSubmit handler", () => {
     await fillAndSubmitForm();
 
     expect(screen.queryByRole("button", { name: /Check Status/i })).not.toBeInTheDocument();
-    expect(screen.getByLabelText("Loading Spinner")).toBeInTheDocument();
+    expect(screen.getByAltText("Loading")).toBeInTheDocument();
     resolveRequest!({
       ok: false,
       status: 500,
@@ -146,7 +146,7 @@ describe("onSubmit handler", () => {
     expect(mockPush).not.toHaveBeenCalled();
     expect(logGAEvent).toHaveBeenCalledWith("api_error");
     expect(screen.queryByRole("button", { name: /Check Status/i })).toBeInTheDocument();
-    expect(screen.queryByLabelText("Loading Spinner")).not.toBeInTheDocument();
+    expect(screen.queryByAltText("Loading")).not.toBeInTheDocument();
   });
 
   describe("when status API record not found", () => {
