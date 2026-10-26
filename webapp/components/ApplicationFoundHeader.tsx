@@ -1,7 +1,7 @@
 "use client";
-import { Logo } from "@trussworks/react-uswds";
+import { Alert, Logo } from "@trussworks/react-uswds";
 import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 /** Property Tax Relief Status Checker and logo */
 export const ApplicationFoundHeader = () => {
@@ -40,6 +40,11 @@ export const ApplicationFoundHeader = () => {
     <>
       <div className="usa-overlay"></div>
       <header className="usa-header usa-header--basic">
+        <Alert className="margin-0" id="beta-banner" type="info" noIcon={true}>
+          <Trans i18nKey={"statusCheckerHeader.betaAlert"} ns="common">
+            <strong />
+          </Trans>
+        </Alert>
         <div className="usa-nav-container">
           <div className="usa-navbar">
             <div
