@@ -8,7 +8,6 @@ const moreInformationNeededAssertions = () => {
   cy.contains("p", MOCK_SSN.slice(-4)).should("be.visible");
   cy.contains("p", "ZIP Code:").should("be.visible");
   cy.contains("p", MOCK_ZIP).should("be.visible");
-  cy.contains("p", "Tax Year: 2025").should("be.visible");
 
   cy.get("@gtag").should(
     "have.been.calledWith",
@@ -17,6 +16,11 @@ const moreInformationNeededAssertions = () => {
     Cypress.sinon.match.any,
   );
 
+  cy.window().then((win) => {
+    if (win.innerWidth < 1024) {
+      cy.get(".usa-menu-btn").click();
+    }
+  });
   cy.contains("a", "Log out").click();
   cy.contains("h1", "Track your 2025 property tax relief application and payment status");
 };

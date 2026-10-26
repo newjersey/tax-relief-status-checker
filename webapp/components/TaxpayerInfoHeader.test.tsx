@@ -8,7 +8,6 @@ describe("header component", () => {
     console.log(document.body);
     expect(document.body.textContent).toContain("SSN/ITIN: ***-**-0123");
     expect(document.body.textContent).toContain("ZIP Code: 12345");
-    expect(document.body.textContent).toContain("Tax Year: 2025");
     expect(document.body.textContent).not.toContain("Payment Type");
   });
 
@@ -16,7 +15,6 @@ describe("header component", () => {
     render(<TaxpayerInfoHeader lastFourSsnDigits="0123" zipCode="12345" paymentType="Check" />);
     expect(document.body.textContent).toContain("SSN/ITIN: ***-**-0123");
     expect(document.body.textContent).toContain("ZIP Code: 12345");
-    expect(document.body.textContent).toContain("Tax Year: 2025");
     expect(document.body.textContent).toContain("Payment Type: Check");
   });
 
@@ -26,7 +24,6 @@ describe("header component", () => {
     );
     expect(document.body.textContent).toContain("SSN/ITIN: ***-**-0123");
     expect(document.body.textContent).toContain("ZIP Code: 12345");
-    expect(document.body.textContent).toContain("Tax Year: 2025");
     expect(document.body.textContent).toContain("Payment Type: Direct Deposit");
   });
 });

@@ -37,3 +37,22 @@
 p.usa-alert__text {
   max-width: none;
 }
+
+.logo-wrapper {
+  flex-shrink: 0;
+  width: 75px;
+  height: 75px;
+}
+
+.logo-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@media (max-width: 1023.75px) {
+  .logo-wrapper {
+    width: 45px;
+    height: 45px;
+  }
+}
