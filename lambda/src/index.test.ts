@@ -26,6 +26,7 @@ vi.mock("aws-embedded-metrics", () => ({
 }));
 
 import { handler } from "./index.ts";
+import { stringify } from "querystring";
 
 const secretsMock = mockClient(SecretsManagerClient);
 const mockExecute = vi.fn();
@@ -142,7 +143,9 @@ describe("handler business logic", () => {
       expect(body["records"]).toHaveLength(2);
 
       expect(body["records"][0].return_year).toBe("2024");
-      expect(body["records"][0].application_date).toBe("2025-10-31T04:00:00.000Z");
+      expect(body["records"][0].application_date).toBe(
+        new Date("10/31/2025 00:00:00").toISOString(),
+      );
       expect(body["records"][0]["anchor"][0].status).toBe("payment_sent");
       expect(body["records"][0].ptr).toBeDefined();
       expect(body["records"][0].ptr.length).toBe(0);
@@ -150,7 +153,9 @@ describe("handler business logic", () => {
       expect(body["records"][0].stay_nj.length).toBe(0);
 
       expect(body["records"][1].return_year).toBe("2025");
-      expect(body["records"][1].application_date).toBe("2026-10-31T04:00:00.000Z");
+      expect(body["records"][1].application_date).toBe(
+        new Date("10/31/2026 00:00:00").toISOString(),
+      );
       expect(body["records"][1]["anchor"][0].status).toBe("payment_sent");
       expect(body["records"][1].ptr).toBeDefined();
       expect(body["records"][1].ptr.length).toBe(0);
