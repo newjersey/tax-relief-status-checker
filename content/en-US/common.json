@@ -23,5 +23,12 @@
     "ptrStatusChecker": "Property Tax Relief Status Checker"
   },
   "faqs": "Frequently Asked Questions (FAQs)",
-  "returnToTop": "Return to top"
+  "returnToTop": "Return to top",
+  "appFoundHeader": {
+    "propertyTaxRelief": "Property Tax Relief",
+    "statusChecker": "Status Checker",
+    "menu": "Menu",
+    "logout": "Log out"
+  },
+  "year2025": "2025"
 }

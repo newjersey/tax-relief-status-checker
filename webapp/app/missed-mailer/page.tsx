@@ -30,7 +30,7 @@ const MissedMailerPage = () => {
 
   return (
     <main id="main-content">
-      <section className="usa-section">
+      <section className="usa-section padding-top-0">
         <div className="grid-container">
           <div className="padding-bottom-3">
             <div role="alert" className="usa-alert usa-alert--error usa-alert--no-icon">

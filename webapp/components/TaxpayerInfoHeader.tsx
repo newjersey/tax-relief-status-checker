@@ -11,13 +11,13 @@ export const TaxpayerInfoHeader = ({
   zipCode,
   paymentType,
 }: TaxpayerInfoHeaderProps) => {
-  const colSize = "tablet:grid-col-4";
+  const colSize = "tablet:grid-col-3";
   const { t } = useTranslation("common");
   return (
     <div>
-      <div className="grid-row">
+      <div className="grid-row padding-top-4">
         <div className={colSize}>
-          <p>
+          <p style={{ color: "#71767A", marginRight: "1rem", fontSize: "1.25rem" }}>
             <abbr
               title={t("taxpayerInfoHeader.ssnTitle")}
               style={{ textDecoration: "none", borderBottom: "none" }}
@@ -28,13 +28,8 @@ export const TaxpayerInfoHeader = ({
           </p>
         </div>
         <div className={colSize}>
-          <p>
+          <p style={{ color: "#71767A", fontSize: "1.25rem" }}>
             {t("taxpayerInfoHeader.zip")} <strong>{zipCode}</strong>
-          </p>
-        </div>
-        <div className={colSize}>
-          <p>
-            {t("taxpayerInfoHeader.taxYear")} <strong>2025</strong>
           </p>
         </div>
       </div>
