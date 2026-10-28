@@ -251,7 +251,7 @@ describe("build all transactions", () => {
       expect(result.anchor[0].payment_details?.check_number).toBe("111111111");
       expect(result.stay_nj[0].payment_details?.check_number).toBe("444444444");
     });
-    it("should skip invalid transactions", async () => {
+    it("should skip invalid transactions with no Tax CDE", async () => {
       const row = buildMockRow({
         TRANS_TOTAL_NUM: 4,
         ...validAnchorTransaction,
