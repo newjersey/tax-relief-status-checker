@@ -2,9 +2,9 @@
 
 import { usePathname } from "next/navigation";
 import { LandingHeader } from "@/components/LandingHeader";
-import { ApplicationFoundHeader } from "./ApplicationFoundHeader";
+import { SessionHeader } from "./SessionHeader";
 
-export function ConditionalHeader() {
+export function DynamicHeader() {
   const pathname = usePathname();
 
   // Show StatusCheckerHeader only on landing page
@@ -12,5 +12,5 @@ export function ConditionalHeader() {
     return <LandingHeader />;
   }
 
-  return <ApplicationFoundHeader />;
+  return <SessionHeader />;
 }

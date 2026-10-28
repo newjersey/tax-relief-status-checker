@@ -38,6 +38,7 @@ p.usa-alert__text {
   max-width: none;
 }
 
+/* workaround as NJ Grove header doesn't scale Logos correctly, remove once GROVE TICKET 419 is resolved. */
 .logo-wrapper {
   flex-shrink: 0;
   width: 75px;

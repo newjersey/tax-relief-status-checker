@@ -1,11 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { expect } from "vitest";
-import { ApplicationFoundHeader } from "./ApplicationFoundHeader";
+import { SessionHeader } from "./SessionHeader";
 import userEvent from "@testing-library/user-event";
 
 describe("header component", () => {
   it("renders the header", async () => {
-    render(<ApplicationFoundHeader />);
+    render(<SessionHeader />);
     expect(document.body.textContent).toContain("Property Tax Relief");
     expect(document.body.textContent).toContain("Status Checker");
     expect(document.body.textContent).toContain("2025");
@@ -14,7 +14,7 @@ describe("header component", () => {
 
   it("opens and closes overlay when button clicked", async () => {
     const user = userEvent.setup();
-    render(<ApplicationFoundHeader />);
+    render(<SessionHeader />);
 
     const overlay = document.querySelector(".usa-overlay");
     expect(overlay).not.toHaveClass("is-visible");

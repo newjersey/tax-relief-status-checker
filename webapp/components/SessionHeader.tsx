@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 /** Property Tax Relief Status Checker and logo */
-export const ApplicationFoundHeader = () => {
+export const SessionHeader = () => {
   const { t } = useTranslation("common");
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export const ApplicationFoundHeader = () => {
                 style={{ display: "flex", flexDirection: "column", lineHeight: "1.2" }}
               >
                 <span style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
-                  {t("appFoundHeader.ptr")}
+                  {t("appFoundHeader.propertyTaxRelief")}
                 </span>
                 <span style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
                   {t("appFoundHeader.statusChecker")}
@@ -93,7 +93,7 @@ export const ApplicationFoundHeader = () => {
                   className="usa-nav__link usa-current"
                   style={{ color: "#005ea2", pointerEvents: "none", fontSize: "1.25rem" }}
                 >
-                  <span>2025</span>
+                  <span>{t("year2025")}</span>
                 </a>
               </li>
               <li className="usa-nav__primary-item">
