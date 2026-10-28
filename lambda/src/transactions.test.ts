@@ -3,6 +3,7 @@ import {
   buildMockRow,
   invalidPTRTransactionNoDTE,
   invalidStayTransactionNoAMT,
+  invalidTransactionNoTaxCDE,
   validAnchorTransaction,
   validStayTransaction,
 } from "./testHelpers.ts";
@@ -238,6 +239,23 @@ describe("build all transactions", () => {
         TRANS_TOTAL_NUM: 4,
         ...validAnchorTransaction,
         ...invalidPTRTransactionNoDTE,
+        ...invalidStayTransactionNoAMT,
+        ...validStayTransaction,
+      });
+
+      const result = buildAllTransactions(row);
+      expect(result.anchor.length).toBe(1);
+      expect(result.ptr.length).toBe(0);
+      expect(result.stay_nj.length).toBe(1);
+
+      expect(result.anchor[0].payment_details?.check_number).toBe("111111111");
+      expect(result.stay_nj[0].payment_details?.check_number).toBe("444444444");
+    });
+    it("should skip invalid transactions", async () => {
+      const row = buildMockRow({
+        TRANS_TOTAL_NUM: 4,
+        ...validAnchorTransaction,
+        ...invalidTransactionNoTaxCDE,
         ...invalidStayTransactionNoAMT,
         ...validStayTransaction,
       });
