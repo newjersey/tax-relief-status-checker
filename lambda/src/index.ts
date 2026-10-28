@@ -9,7 +9,7 @@ import { InputSchema, InquiryRowSchema } from "./validation";
 
 /** SQL query to look up filer records by SSN and ZIP */
 const INQUIRY_QUERY = `SELECT * FROM ELF_SAVER_INQUIRY
-  WHERE SOCIAL_SECURITY_NUMBER_IDN = :ssn AND ZIP_ADR = :zip AND RETURN_YEAR_DTE = 2025`;
+  WHERE SOCIAL_SECURITY_NUMBER_IDN = :ssn AND ZIP_ADR = :zip AND (RETURN_YEAR_DTE = 2025 OR RETURN_YEAR_DTE = 2024)`;
 
 /** CloudWatch namespace under which all custom metrics emitted by this API are published. */
 const METRICS_NAMESPACE = "TaxReliefStatusApi";

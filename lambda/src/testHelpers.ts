@@ -46,6 +46,16 @@ export const invalidPTRTransactionNoDTE = {
   TRANS_2_TAX_CDE: "49",
 };
 
+export const invalidTransactionNoTaxCDE = {
+  TRANS_2_CDE: "RF",
+  TRANS_STATUS_2_CDE: "APC",
+  REVIEW_CATEGORY_2_CDE: "MDZ",
+  CHECK_2_DTE: new Date("12/11/2025 00:00:00"),
+  CHECK_2_AMT: 1750,
+  CHECK_2_NUM: "222222222",
+  TRANS_2_TAX_CDE: null,
+};
+
 export const invalidStayTransactionNoAMT = {
   TRANS_3_CDE: "RF",
   TRANS_STATUS_3_CDE: "APC",
