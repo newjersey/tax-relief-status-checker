@@ -82,9 +82,7 @@ export const buildAllTransactions = (row: InquiryRow): AllTransactions => {
       } else if (taxCode == STAYNJCDE) {
         stay_nj.push(transaction);
       } else {
-        throw new Error(
-          `Invalid transaction tax code: ${row[`TRANS_${i}_TAX_CDE`]} for transaction ${i}`,
-        );
+        throw new Error(`Invalid transaction tax code: ${row[`TRANS_${i}_TAX_CDE`]}`);
       }
     } catch (error) {
       console.error(`Invalid transaction #${i}, error: ${error}`);
