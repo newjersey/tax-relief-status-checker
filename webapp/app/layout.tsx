@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { NjHeader } from "@/components/NjHeader";
 import { NjFooter } from "@/components/NjFooter";
-import { StatusCheckerHeader } from "@/components/StatusCheckerHeader";
+import { DynamicHeader } from "@/components/DynamicHeader";
 import "@newjersey/njwds/dist/css/styles.css";
 import "./globals.css";
 import Script from "next/script";
@@ -40,7 +40,7 @@ const RootLayout = ({ children }: { readonly children: React.ReactNode }) => (
       <I18nProvider>
         <TaxReliefDataProvider>
           <NjHeader />
-          <StatusCheckerHeader />
+          <DynamicHeader />
           {children}
           <FeedbackWidget />
           <NjFooter />

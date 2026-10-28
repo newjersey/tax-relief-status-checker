@@ -99,7 +99,7 @@ const MoreInformationNeededPage = () => {
 
   return (
     <main id="main-content">
-      <section className="usa-section">
+      <section className="usa-section padding-top-0">
         <div className="grid-container">
           <TaxpayerInfoHeader lastFourSsnDigits={lastFourSsnDigits} zipCode={zipCode} />
           {issueFlagged !== undefined && (
