@@ -20,7 +20,7 @@
     "lockfile": "rm -rf webapp/node_modules lambda/node_modules lambda-missed-mailer-api/node_modules infra/node_modules node_modules package-lock.json && npm install"
   },
   "dependencies": {
-    "@newjersey/feedback-widget": "0.6.0",
+    "@newjersey/feedback-widget": "0.8.3",
     "husky": "9.1.7",
     "lint-staged": "17.6.0",
     "prettier": "3.9.10",
