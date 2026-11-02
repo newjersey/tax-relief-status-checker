@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { FormCode, IssueFlaggedType, Transaction } from "./types";
 
@@ -9,10 +9,20 @@ export enum DataType {
   STATUS,
 }
 
+export enum CurrentYear {
+  YEAR2024 = "2024",
+  YEAR2025 = "2025",
+}
+
 export interface StatusData {
+  readonly currentYear: CurrentYear;
   readonly type: DataType.STATUS;
   readonly lastFourSsnDigits: string;
   readonly zipCode: string;
+  readonly records: Readonly<Partial<Record<CurrentYear, YearRecord>>>;
+}
+
+export interface YearRecord {
   readonly applicationDateString: string;
   readonly form_code: FormCode | null;
   readonly issueFlagged?: IssueFlaggedType;
@@ -32,13 +42,29 @@ export type TaxReliefStatusData = MissedMailerData | StatusData;
 const TaxReliefDataContext = createContext<{
   dataStore: TaxReliefStatusData | null;
   setDataStore: (data: TaxReliefStatusData | null) => void;
+  setCurrentYear: (year: CurrentYear) => void;
 } | null>(null);
 
 export const TaxReliefDataProvider = ({ children }: { children: ReactNode }) => {
   const [dataStore, setDataStore] = useState<TaxReliefStatusData | null>(null);
 
+  const setCurrentYear = useCallback((year: CurrentYear) => {
+    setDataStore((prev) =>
+      prev?.type === DataType.STATUS ? { ...prev, currentYear: year } : prev,
+    );
+  }, []);
+
+  //so cypress see setCurrentYear
+  useEffect(() => {
+    if (typeof window !== "undefined" && (window as any).Cypress) {
+      (window as any).__setCurrentYear = setCurrentYear;
+    }
+  }, [setCurrentYear]);
+
   return (
-    <TaxReliefDataContext value={{ dataStore, setDataStore }}>{children}</TaxReliefDataContext>
+    <TaxReliefDataContext value={{ dataStore, setDataStore, setCurrentYear }}>
+      {children}
+    </TaxReliefDataContext>
   );
 };
 

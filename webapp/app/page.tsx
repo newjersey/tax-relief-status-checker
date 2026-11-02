@@ -11,7 +11,12 @@ import { FaqSection, expandFaqAccordionItem } from "@/components/FaqSection";
 import { maskSsn } from "@/app/utils/maskSsn";
 import { formatDate } from "@/app/utils/formatDate";
 import { logGAEvent } from "./utils/analytics";
-import { useDataStore, DataType } from "@/components/TaxReliefDataProvider";
+import {
+  useDataStore,
+  DataType,
+  CurrentYear,
+  YearRecord,
+} from "@/components/TaxReliefDataProvider";
 import { setIssueFlagged } from "./utils/setIssueFlagged";
 import type { StatusRecord } from "@/components/types";
 import { determineRoute } from "./utils/determineRoute";
@@ -111,6 +116,15 @@ const NoApplicationFoundAlert = () => {
   );
 };
 
+const toYearRecord = (record: StatusRecord): YearRecord => ({
+  applicationDateString: formatDate(record.application_date),
+  form_code: record.form_code,
+  anchor: record.anchor,
+  ptr: record.ptr,
+  stay_nj: record.stay_nj,
+  issueFlagged: setIssueFlagged(record),
+});
+
 const LandingPage = () => {
   const { t } = useTranslation(["landing", "common"]);
   const router = useRouter();
@@ -153,22 +167,22 @@ const LandingPage = () => {
     }
   };
 
-  const handleRecordFound = (record: StatusRecord, data: UserData) => {
+  const handleRecordFound = (records: StatusRecord[], data: UserData) => {
     const lastFourSsnDigits = maskSsn(data.ssn);
-    const formattedDate = formatDate(record.application_date);
+    const recordsByYear: Partial<Record<CurrentYear, YearRecord>> = {};
+    for (const r of records) {
+      recordsByYear[String(r.return_year) as CurrentYear] = toYearRecord(r);
+    }
+
     setDataStore({
+      currentYear: CurrentYear.YEAR2025,
       type: DataType.STATUS,
       lastFourSsnDigits: lastFourSsnDigits,
       zipCode: data.zipCode,
-      applicationDateString: formattedDate,
-      form_code: record.form_code,
-      anchor: record.anchor,
-      ptr: record.ptr,
-      stay_nj: record.stay_nj,
-      issueFlagged: setIssueFlagged(record),
+      records: recordsByYear,
     });
     logGAEvent(`api_200_record_found`);
-    router.push(determineRoute(record));
+    router.push(determineRoute(recordsByYear[CurrentYear.YEAR2025]!));
   };
 
   const onSubmit: SubmitHandler<UserData> = async (data) => {
@@ -183,7 +197,7 @@ const LandingPage = () => {
         return;
       }
 
-      handleRecordFound(record2025, data);
+      handleRecordFound(statusResult.records, data);
     } catch {
       handleStatusApiError();
     }

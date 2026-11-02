@@ -25,7 +25,12 @@ const MoreInformationNeededPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, applicationDateString, issueFlagged } = dataStore;
+  const { lastFourSsnDigits, zipCode, records, currentYear } = dataStore;
+  const record = records[currentYear];
+  if (!record) {
+    router.replace("/");
+  }
+  const { applicationDateString, issueFlagged } = record!;
 
   const createAlertContent = (alertType: IssueFlaggedType): ReactNode => {
     if (alertType === IssueFlaggedType.CONTACT_TAXATION) {
@@ -111,7 +116,11 @@ const MoreInformationNeededPage = () => {
           )}
           <div className="margin-top-4">
             <h1 className="font-heading-xl">
-              {t("common:appReceived", { date: applicationDateString })}
+              <Trans
+                i18nKey="appReceived"
+                ns="moreInfo"
+                values={{ date: applicationDateString, year: currentYear }}
+              />
             </h1>
           </div>
         </div>

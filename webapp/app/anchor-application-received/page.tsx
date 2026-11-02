@@ -26,7 +26,12 @@ const AnchorApplicationReceivedPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, applicationDateString } = dataStore;
+  const { lastFourSsnDigits, zipCode, records, currentYear } = dataStore;
+  const record = records[currentYear];
+  if (!record) {
+    router.replace("/");
+  }
+  const { applicationDateString } = record!;
 
   return (
     <main id="main-content">
@@ -35,9 +40,13 @@ const AnchorApplicationReceivedPage = () => {
           <TaxpayerInfoHeader lastFourSsnDigits={lastFourSsnDigits} zipCode={zipCode} />
           <div className="margin-top-4">
             <h1 className="font-heading-xl">
-              <Trans i18nKey={"ancAppReceived"} ns="ancAppRec" values={{ applicationDateString }}>
-                We have your 2025 <abbr>ANCHOR</abbr> application on file as of{" "}
-                {applicationDateString}
+              <Trans
+                i18nKey={"ancAppReceived"}
+                ns="ancAppRec"
+                values={{ date: applicationDateString, year: currentYear }}
+              >
+                We have your <abbr>ANCHOR</abbr> application on file as of {applicationDateString}{" "}
+                for the {currentYear} Tax Year
               </Trans>
             </h1>
             <p>{t("appBeingProcessed")}</p>

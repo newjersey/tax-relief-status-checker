@@ -1,4 +1,7 @@
 {
+  "appReceived": "We have your application on file as of {{date}} for the {{year}} Tax Year",
+  "appReceivedPAS": "We received your PAS-1 application on {{date}} for the {{year}} Tax Year",
+  "appProcessing": "Your 2024 application is being processed.",
   "appUnderReview": "Your application is being reviewed for three property tax relief programs: Senior Freeze, ANCHOR, and Stay NJ. Each program makes payments on different timelines, and not everyone qualifies for all three programs.",
   "seniorFreezePayments": "Senior Freeze payments start July 15, 2026.",
   "anchorPayments": "ANCHOR payments begin September 2026.",

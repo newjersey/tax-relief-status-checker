@@ -3,9 +3,10 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LandingPage from "./page";
 import { FormCode, type StatusRecord } from "@/components/types";
-import { TaxReliefDataProvider } from "@/components/TaxReliefDataProvider";
+import { TaxReliefDataProvider, YearRecord } from "@/components/TaxReliefDataProvider";
 import { logGAEvent } from "./utils/analytics";
 import { determineRoute } from "./utils/determineRoute";
+import { formatDate } from "./utils/formatDate";
 
 const mockPush = vi.fn();
 
@@ -53,6 +54,15 @@ const buildStatusRecord = (overrides?: Partial<StatusRecord>): StatusRecord => (
   ...overrides,
 });
 
+const buildYearRecord = (overrides?: Partial<YearRecord>): YearRecord => ({
+  applicationDateString: formatDate("2026-03-19T00:00:00.000Z"),
+  form_code: FormCode.PAS1,
+  anchor: [],
+  ptr: [],
+  stay_nj: [],
+  ...overrides,
+});
+
 const mockFetchResponse = (body: unknown, ok = true, status = 200) =>
   vi.fn().mockResolvedValue({
     ok,
@@ -68,6 +78,8 @@ beforeEach(() => {
 describe("onSubmit handler", () => {
   it("calls status API, if record found, sets data store and calls determineRoute", async () => {
     const record = buildStatusRecord();
+    const yearRecord = buildYearRecord();
+
     globalThis.fetch = mockFetchResponse({ records: [record] });
 
     renderLandingPage();
@@ -77,7 +89,14 @@ describe("onSubmit handler", () => {
       "/api/status",
       expect.objectContaining({ method: "POST" }),
     );
-    expect(determineRoute).toHaveBeenCalledWith(record);
+
+    /* determineRoute used to be called with a StatusRecord, but now is called with a YearRecord,
+       so have to mock both in testing. This was done because previously we knew the record that
+       would be routed against, but now that handleRecordFound takes in an array of StatusRecords
+       the year could be in a different order. E.g. we want to display 2025, so we need to determineRoute
+       on the 2025 record, but its either the first or second spot in the array. Previously we would just
+       call it with records[0], but now we have to specify the exact year. */
+    expect(determineRoute).toHaveBeenCalledWith(yearRecord);
     expect(logGAEvent).toHaveBeenCalledWith("api_200_record_found");
   });
 

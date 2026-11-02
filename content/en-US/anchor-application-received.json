@@ -1,5 +1,5 @@
 {
-  "ancAppReceived": "We have your 2025 <1>ANCHOR</1> application on file as of {{applicationDateString}}",
+  "ancAppReceived": "We have your <1>ANCHOR</1> application on file as of {{date}} for the {{year}} Tax Year",
   "appBeingProcessed": "Your 2025 ANCHOR application is being processed. If you're eligible for benefits, payments start going out October 1, 2026. In some cases, payments will be made after 2026.",
   "faq": {
     "appTakingTooLong": {
