@@ -17,10 +17,10 @@ import {
   CurrentYear,
   YearRecord,
 } from "@/components/TaxReliefDataProvider";
-import { setIssueFlagged } from "./utils/setIssueFlagged";
 import type { StatusRecord } from "@/components/types";
 import { determineRoute } from "./utils/determineRoute";
 import { Trans, useTranslation } from "react-i18next";
+import { setIssueFlagged } from "./utils/setIssueFlagged";
 
 interface UserData {
   readonly ssn: string;
@@ -122,7 +122,13 @@ const toYearRecord = (record: StatusRecord): YearRecord => ({
   anchor: record.anchor,
   ptr: record.ptr,
   stay_nj: record.stay_nj,
-  issueFlagged: setIssueFlagged(record),
+  issueFlagged: setIssueFlagged({
+    applicationDateString: formatDate(record.application_date),
+    form_code: record.form_code,
+    anchor: record.anchor,
+    ptr: record.ptr,
+    stay_nj: record.stay_nj,
+  }),
 });
 
 const LandingPage = () => {

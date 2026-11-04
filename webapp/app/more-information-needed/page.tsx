@@ -11,7 +11,8 @@ import { Trans, useTranslation } from "react-i18next";
 const MoreInformationNeededPage = () => {
   const { t } = useTranslation(["moreInfo", "common"]);
   const router = useRouter();
-  const { dataStore } = useDataStore();
+  const { dataStore, record } = useDataStore();
+  if (!record) return null;
 
   useEffect(() => {
     if (!dataStore || dataStore.type !== DataType.STATUS) {
@@ -25,12 +26,8 @@ const MoreInformationNeededPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, records, currentYear } = dataStore;
-  const record = records[currentYear];
-  if (!record) {
-    router.replace("/");
-  }
-  const { applicationDateString, issueFlagged } = record!;
+  const { lastFourSsnDigits, zipCode, currentYear } = dataStore;
+  const { applicationDateString, issueFlagged } = record;
 
   const createAlertContent = (alertType: IssueFlaggedType): ReactNode => {
     if (alertType === IssueFlaggedType.CONTACT_TAXATION) {

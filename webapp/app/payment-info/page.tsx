@@ -112,12 +112,12 @@ export const showProgramTransactions = (transactions: Transaction[], taxProgram:
 };
 
 export const PaymentFaq = ({
-  form_code,
+  formCode,
   hasPtrPayment,
   hasStayPayment,
   taxYear,
 }: {
-  form_code: FormCode | null;
+  formCode: FormCode | null;
   hasPtrPayment: boolean;
   hasStayPayment: boolean;
   taxYear: CurrentYear;
@@ -133,7 +133,7 @@ export const PaymentFaq = ({
       />
     );
   }
-  if (form_code === FormCode.ANC1 && !hasPtrPayment && !hasStayPayment) {
+  if (formCode === FormCode.ANC1 && !hasPtrPayment && !hasStayPayment) {
     return (
       <FaqSection items={ANCPaymentInfoFaqContent()} titleHeadingLevel="h2" itemHeadingLevel="h3" />
     );
@@ -150,7 +150,8 @@ export const PaymentFaq = ({
 const PaymentInfoPage = () => {
   const { t } = useTranslation(["paymentInfo", "common"]);
   const router = useRouter();
-  const { dataStore } = useDataStore();
+  const { dataStore, record } = useDataStore();
+  if (!record) return null;
 
   useEffect(() => {
     if (!dataStore || dataStore.type !== DataType.STATUS) {
@@ -164,12 +165,8 @@ const PaymentInfoPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, records, currentYear } = dataStore;
-  const record = records[currentYear];
-  if (!record) {
-    router.replace("/");
-  }
-  const { anchor, ptr, stay_nj, form_code } = record!;
+  const { lastFourSsnDigits, zipCode, currentYear } = dataStore;
+  const { anchor, ptr, stay_nj, form_code } = record;
 
   const hasPtrPayment = [...ptr].some(
     (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
@@ -214,7 +211,7 @@ const PaymentInfoPage = () => {
           </Table>
 
           <PaymentFaq
-            form_code={form_code}
+            formCode={form_code}
             hasPtrPayment={hasPtrPayment}
             hasStayPayment={hasStayPayment}
             taxYear={currentYear}

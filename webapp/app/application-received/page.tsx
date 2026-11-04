@@ -13,7 +13,8 @@ import { CurrentYear } from "@/components/TaxReliefDataProvider";
 const ApplicationReceivedPage = () => {
   const { t } = useTranslation(["appRec", "common"]);
   const router = useRouter();
-  const { dataStore } = useDataStore();
+  const { dataStore, record } = useDataStore();
+  if (!record) return null;
 
   useEffect(() => {
     if (!dataStore || dataStore.type !== DataType.STATUS) {
@@ -27,12 +28,8 @@ const ApplicationReceivedPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, records, currentYear } = dataStore;
-  const record = records[currentYear];
-  if (!record) {
-    router.replace("/");
-  }
-  const { applicationDateString } = record!;
+  const { lastFourSsnDigits, zipCode, currentYear } = dataStore;
+  const { applicationDateString } = record;
 
   return (
     <main id="main-content">

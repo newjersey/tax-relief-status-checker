@@ -57,8 +57,3 @@ export enum FormCode {
   ANC1 = "ANC-1",
   PAS1 = "PAS-1",
 }
-
-export enum TaxYear {
-  YEAR2025,
-  YEAR2024,
-}

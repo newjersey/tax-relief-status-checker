@@ -1,13 +1,10 @@
 import { YearRecord } from "@/components/TaxReliefDataProvider";
 import { IssueFlaggedType, Transaction, TransactionStatus } from "@/components/types";
-import type { StatusRecord } from "@/components/types";
 
 const ISSUE_FLAGGED_TAX_BILL_NEEDED_REVIEW_CATEGORIES = ["MOD", "MDZ"];
 const ISSUE_FLAGGED_CONTACT_TAXATION_REVIEW_CATEGORIES = ["MAX", "MHX", "PCT", "DSU", "DSO"];
 
-export const setIssueFlagged = (
-  record: YearRecord | StatusRecord,
-): undefined | IssueFlaggedType => {
+export const setIssueFlagged = (record: YearRecord): undefined | IssueFlaggedType => {
   if (hasReviewCategory(record.ptr, ["SVR"])) {
     if (hasReviewCategory(record.anchor, ISSUE_FLAGGED_TAX_BILL_NEEDED_REVIEW_CATEGORIES)) {
       return IssueFlaggedType.PROPERTY_TAX_BILL_NEEDED;

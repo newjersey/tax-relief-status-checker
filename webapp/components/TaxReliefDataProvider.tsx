@@ -1,8 +1,9 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { FormCode, IssueFlaggedType, Transaction } from "./types";
+import { usePathname, useRouter } from "next/navigation";
 
 export enum DataType {
   MISSED_MAILER,
@@ -48,13 +49,13 @@ const TaxReliefDataContext = createContext<{
 export const TaxReliefDataProvider = ({ children }: { children: ReactNode }) => {
   const [dataStore, setDataStore] = useState<TaxReliefStatusData | null>(null);
 
-  const setCurrentYear = useCallback((year: CurrentYear) => {
+  const setCurrentYear = (year: CurrentYear) => {
     setDataStore((prev) =>
       prev?.type === DataType.STATUS ? { ...prev, currentYear: year } : prev,
     );
-  }, []);
+  };
 
-  //so cypress see setCurrentYear
+  //so cypress can see setCurrentYear, will be removed once year navigator is added
   useEffect(() => {
     if (typeof window !== "undefined" && (window as any).Cypress) {
       (window as any).__setCurrentYear = setCurrentYear;
@@ -70,8 +71,20 @@ export const TaxReliefDataProvider = ({ children }: { children: ReactNode }) => 
 
 export const useDataStore = () => {
   const context = useContext(TaxReliefDataContext);
+  const dataStore = context?.dataStore ?? null;
+  const router = useRouter();
+  const pathname = usePathname();
+  const record =
+    dataStore?.type === DataType.STATUS ? (dataStore.records[dataStore.currentYear] ?? null) : null;
+
+  useEffect(() => {
+    if (pathname !== "/" && !record) {
+      router.replace("/");
+    }
+  }, [pathname, record, router]);
+
   if (!context) {
     throw new Error("useDataStore must be used within a TaxReliefDataContext");
   }
-  return context;
+  return { ...context, record };
 };

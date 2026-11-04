@@ -12,6 +12,7 @@ const mockPush = vi.fn();
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: mockPush }),
+  usePathname: () => "/",
 }));
 
 vi.mock("./utils/analytics", () => ({
@@ -43,25 +44,28 @@ const fillAndSubmitForm = async () => {
   await user.type(zipInput, "07001");
   await user.click(submitButton);
 };
+export function buildStatusFixture(overrides: Partial<StatusRecord> = {}) {
+  const record: StatusRecord = {
+    return_year: "2025",
+    application_date: "2026-03-19T00:00:00.000Z",
+    form_code: FormCode.PAS1,
+    anchor: [],
+    ptr: [],
+    stay_nj: [],
+    ...overrides,
+  };
 
-const buildStatusRecord = (overrides?: Partial<StatusRecord>): StatusRecord => ({
-  return_year: "2025",
-  application_date: "2026-03-19T00:00:00.000Z",
-  form_code: FormCode.PAS1,
-  anchor: [],
-  ptr: [],
-  stay_nj: [],
-  ...overrides,
-});
+  const yearRecord: YearRecord = {
+    applicationDateString: formatDate(record.application_date),
+    form_code: record.form_code,
+    anchor: record.anchor,
+    ptr: record.ptr,
+    stay_nj: record.stay_nj,
+    issueFlagged: undefined,
+  };
 
-const buildYearRecord = (overrides?: Partial<YearRecord>): YearRecord => ({
-  applicationDateString: formatDate("2026-03-19T00:00:00.000Z"),
-  form_code: FormCode.PAS1,
-  anchor: [],
-  ptr: [],
-  stay_nj: [],
-  ...overrides,
-});
+  return { record, yearRecord };
+}
 
 const mockFetchResponse = (body: unknown, ok = true, status = 200) =>
   vi.fn().mockResolvedValue({
@@ -77,8 +81,7 @@ beforeEach(() => {
 
 describe("onSubmit handler", () => {
   it("calls status API, if record found, sets data store and calls determineRoute", async () => {
-    const record = buildStatusRecord();
-    const yearRecord = buildYearRecord();
+    const { record, yearRecord } = buildStatusFixture();
 
     globalThis.fetch = mockFetchResponse({ records: [record] });
 
@@ -90,12 +93,6 @@ describe("onSubmit handler", () => {
       expect.objectContaining({ method: "POST" }),
     );
 
-    /* determineRoute used to be called with a StatusRecord, but now is called with a YearRecord,
-       so have to mock both in testing. This was done because previously we knew the record that
-       would be routed against, but now that handleRecordFound takes in an array of StatusRecords
-       the year could be in a different order. E.g. we want to display 2025, so we need to determineRoute
-       on the 2025 record, but its either the first or second spot in the array. Previously we would just
-       call it with records[0], but now we have to specify the exact year. */
     expect(determineRoute).toHaveBeenCalledWith(yearRecord);
     expect(logGAEvent).toHaveBeenCalledWith("api_200_record_found");
   });
@@ -114,7 +111,8 @@ describe("onSubmit handler", () => {
   });
 
   describe("when status API record not found", () => {
-    const statusResponseNoRecord = { records: [buildStatusRecord({ return_year: "2024" })] };
+    const { record } = buildStatusFixture({ return_year: "2024" });
+    const statusResponseNoRecord = { records: [record] };
 
     it("it calls missed mailer API, when missed mailer record is found, sets datastore and routes user to missed-mailer", async () => {
       globalThis.fetch = vi

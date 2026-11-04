@@ -12,7 +12,8 @@ const AnchorApplicationReceivedPage = () => {
   const { t } = useTranslation(["ancAppRec", "common"]);
 
   const router = useRouter();
-  const { dataStore } = useDataStore();
+  const { dataStore, record } = useDataStore();
+  if (!record) return null;
 
   useEffect(() => {
     if (!dataStore || dataStore.type !== DataType.STATUS) {
@@ -26,12 +27,8 @@ const AnchorApplicationReceivedPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, records, currentYear } = dataStore;
-  const record = records[currentYear];
-  if (!record) {
-    router.replace("/");
-  }
-  const { applicationDateString } = record!;
+  const { lastFourSsnDigits, zipCode, currentYear } = dataStore;
+  const { applicationDateString } = record;
 
   return (
     <main id="main-content">
@@ -45,8 +42,8 @@ const AnchorApplicationReceivedPage = () => {
                 ns="ancAppRec"
                 values={{ date: applicationDateString, year: currentYear }}
               >
-                We have your <abbr>ANCHOR</abbr> application on file as of {applicationDateString}{" "}
-                for the {currentYear} Tax Year
+                We have your ANCHOR application on file as of {applicationDateString} for the{" "}
+                {currentYear} Tax Year
               </Trans>
             </h1>
             <p>{t("appBeingProcessed")}</p>
