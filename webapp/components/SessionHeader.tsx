@@ -12,6 +12,8 @@ export const SessionHeader = () => {
     const closeButton = document.querySelector(".usa-nav__close");
     const overlay = document.querySelector(".usa-overlay");
     const nav = document.querySelector(".usa-nav");
+    const subMenu = document.querySelector(".usa-nav__submenu");
+    const yearsNavigator = document.querySelector(".usa-accordion__button");
 
     const openMenu = () => {
       nav?.classList.add("is-visible");
@@ -25,14 +27,32 @@ export const SessionHeader = () => {
       document.body.classList.remove("usa-js-mobile-nav--active");
     };
 
+    const toggleSubMenu = () => {
+      const isOpen = yearsNavigator?.getAttribute("aria-expanded") === "true";
+      if (isOpen) closeSubMenu();
+      else openSubMenu();
+    };
+
+    const openSubMenu = () => {
+      yearsNavigator?.setAttribute("aria-expanded", "true");
+      subMenu?.removeAttribute("hidden");
+    };
+
+    const closeSubMenu = () => {
+      yearsNavigator?.setAttribute("aria-expanded", "false");
+      subMenu?.setAttribute("hidden", "true");
+    };
+
     menuButton?.addEventListener("click", openMenu);
     closeButton?.addEventListener("click", closeMenu);
     overlay?.addEventListener("click", closeMenu);
+    yearsNavigator?.addEventListener("click", toggleSubMenu);
 
     return () => {
       menuButton?.removeEventListener("click", openMenu);
       closeButton?.removeEventListener("click", closeMenu);
       overlay?.removeEventListener("click", closeMenu);
+      yearsNavigator?.removeEventListener("click", toggleSubMenu);
     };
   }, []);
 
@@ -95,6 +115,33 @@ export const SessionHeader = () => {
                 >
                   <span>{t("year2025")}</span>
                 </a>
+              </li>
+              <li className="usa-nav__primary-item">
+                <button
+                  className="usa-accordion__button usa-nav__link"
+                  aria-expanded="false"
+                  aria-controls="basic-nav-section-one-acc-99bd76fa-64bc-4adc-be98-8947e5e9703b"
+                >
+                  <span>Prior Tax Years</span>
+                </button>
+                <ul
+                  className="usa-nav__submenu"
+                  hidden={true}
+                  id="basic-nav-section-one-acc-99bd76fa-64bc-4adc-be98-8947e5e9703b"
+                >
+                  <li className="usa-nav__submenu-item">
+                    <a href="#" className="">
+                      {" "}
+                      2025
+                    </a>
+                  </li>
+                  <li className="usa-nav__submenu-item">
+                    <a href="#" className="">
+                      {" "}
+                      2024
+                    </a>
+                  </li>
+                </ul>
               </li>
               <li className="usa-nav__primary-item">
                 <a className="usa-nav__link" href="/" style={{ fontSize: "1.25rem" }}>
