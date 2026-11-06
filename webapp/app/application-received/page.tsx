@@ -29,7 +29,7 @@ const ApplicationReceivedPage = () => {
   }
 
   const { lastFourSsnDigits, zipCode, currentYear } = dataStore;
-  const { applicationDateString } = record;
+  const { application_date } = record;
 
   return (
     <main id="main-content">
@@ -43,7 +43,7 @@ const ApplicationReceivedPage = () => {
                   <Trans
                     i18nKey="appReceivedPAS"
                     ns="appRec"
-                    values={{ date: applicationDateString, year: currentYear }}
+                    values={{ date: application_date, year: currentYear }}
                   />
                 </h1>
                 <p>{t("appUnderReview")}</p>{" "}
@@ -54,7 +54,7 @@ const ApplicationReceivedPage = () => {
                   <Trans
                     i18nKey="appReceived"
                     ns="common"
-                    values={{ date: applicationDateString, year: currentYear }}
+                    values={{ date: application_date, year: currentYear }}
                   />
                 </h1>
                 <p>{t("appProcessing")}</p>{" "}

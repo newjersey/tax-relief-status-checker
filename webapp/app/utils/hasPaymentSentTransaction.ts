@@ -1,8 +1,8 @@
 import { YearRecord } from "@/components/TaxReliefDataProvider";
-import { StatusRecord, TransactionStatus } from "@/components/types";
+import { TransactionStatus } from "@/components/types";
 
 /** Returns an boolean array based on a records payment sent transaction per program */
-export const hasPaymentSentTransaction = (record: YearRecord | StatusRecord): boolean[] => {
+export const hasPaymentSentTransaction = (record: YearRecord): boolean[] => {
   const hasAnchorPayment = [...record.anchor].some(
     (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
   );

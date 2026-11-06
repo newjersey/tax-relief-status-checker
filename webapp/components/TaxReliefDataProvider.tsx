@@ -24,9 +24,10 @@ export interface StatusData {
 }
 
 export interface YearRecord {
-  readonly applicationDateString: string;
+  readonly return_year: string;
+  readonly application_date: string;
   readonly form_code: FormCode | null;
-  readonly issueFlagged?: IssueFlaggedType;
+  issueFlagged?: IssueFlaggedType;
   readonly anchor: Transaction[];
   readonly ptr: Transaction[];
   readonly stay_nj: Transaction[];

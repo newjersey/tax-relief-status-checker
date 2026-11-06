@@ -17,7 +17,6 @@ import {
   CurrentYear,
   YearRecord,
 } from "@/components/TaxReliefDataProvider";
-import type { StatusRecord } from "@/components/types";
 import { determineRoute } from "./utils/determineRoute";
 import { Trans, useTranslation } from "react-i18next";
 import { setIssueFlagged } from "./utils/setIssueFlagged";
@@ -28,7 +27,7 @@ interface UserData {
 }
 
 interface StatusResponse {
-  readonly records: StatusRecord[];
+  readonly records: YearRecord[];
 }
 
 interface MissedMailerResponse {
@@ -116,19 +115,14 @@ const NoApplicationFoundAlert = () => {
   );
 };
 
-const toYearRecord = (record: StatusRecord): YearRecord => ({
-  applicationDateString: formatDate(record.application_date),
+const withIssueFlagged = (record: YearRecord): YearRecord => ({
+  return_year: record.return_year,
+  application_date: formatDate(record.application_date),
   form_code: record.form_code,
   anchor: record.anchor,
   ptr: record.ptr,
   stay_nj: record.stay_nj,
-  issueFlagged: setIssueFlagged({
-    applicationDateString: formatDate(record.application_date),
-    form_code: record.form_code,
-    anchor: record.anchor,
-    ptr: record.ptr,
-    stay_nj: record.stay_nj,
-  }),
+  issueFlagged: setIssueFlagged(record),
 });
 
 const LandingPage = () => {
@@ -173,11 +167,11 @@ const LandingPage = () => {
     }
   };
 
-  const handleRecordFound = (records: StatusRecord[], data: UserData) => {
+  const handleRecordFound = (records: YearRecord[], data: UserData) => {
     const lastFourSsnDigits = maskSsn(data.ssn);
     const recordsByYear: Partial<Record<CurrentYear, YearRecord>> = {};
     for (const r of records) {
-      recordsByYear[String(r.return_year) as CurrentYear] = toYearRecord(r);
+      recordsByYear[String(r.return_year) as CurrentYear] = withIssueFlagged(r);
     }
 
     setDataStore({

@@ -6,8 +6,9 @@ import { TransactionStatus, IssueFlaggedType } from "@/components/types";
 import { FormCode } from "@/components/types";
 import { YearRecord } from "@/components/TaxReliefDataProvider";
 
-const buildYearRecord = (overrides: Partial<YearRecord> = {}): YearRecord => ({
-  applicationDateString: "2026-03-19T00:00:00.000Z",
+const buildYearRecord = (overrides?: Partial<YearRecord>): YearRecord => ({
+  return_year: "2025",
+  application_date: "2026-03-19T00:00:00.000Z",
   form_code: FormCode.PAS1,
   anchor: [],
   ptr: [],

@@ -28,7 +28,7 @@ const AnchorApplicationReceivedPage = () => {
   }
 
   const { lastFourSsnDigits, zipCode, currentYear } = dataStore;
-  const { applicationDateString } = record;
+  const { application_date } = record;
 
   return (
     <main id="main-content">
@@ -40,9 +40,9 @@ const AnchorApplicationReceivedPage = () => {
               <Trans
                 i18nKey={"ancAppReceived"}
                 ns="ancAppRec"
-                values={{ date: applicationDateString, year: currentYear }}
+                values={{ date: application_date, year: currentYear }}
               >
-                We have your ANCHOR application on file as of {applicationDateString} for the{" "}
+                We have your ANCHOR application on file as of {application_date} for the{" "}
                 {currentYear} Tax Year
               </Trans>
             </h1>

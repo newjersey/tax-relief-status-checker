@@ -27,7 +27,7 @@ const MoreInformationNeededPage = () => {
   }
 
   const { lastFourSsnDigits, zipCode, currentYear } = dataStore;
-  const { applicationDateString, issueFlagged } = record;
+  const { application_date, issueFlagged } = record;
 
   const createAlertContent = (alertType: IssueFlaggedType): ReactNode => {
     if (alertType === IssueFlaggedType.CONTACT_TAXATION) {
@@ -116,7 +116,7 @@ const MoreInformationNeededPage = () => {
               <Trans
                 i18nKey="appReceived"
                 ns="moreInfo"
-                values={{ date: applicationDateString, year: currentYear }}
+                values={{ date: application_date, year: currentYear }}
               />
             </h1>
           </div>

@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LandingPage from "./page";
-import { FormCode, type StatusRecord } from "@/components/types";
+import { FormCode } from "@/components/types";
 import { TaxReliefDataProvider, YearRecord } from "@/components/TaxReliefDataProvider";
 import { logGAEvent } from "./utils/analytics";
 import { determineRoute } from "./utils/determineRoute";
@@ -44,28 +44,16 @@ const fillAndSubmitForm = async () => {
   await user.type(zipInput, "07001");
   await user.click(submitButton);
 };
-export function buildStatusFixture(overrides: Partial<StatusRecord> = {}) {
-  const record: StatusRecord = {
-    return_year: "2025",
-    application_date: "2026-03-19T00:00:00.000Z",
-    form_code: FormCode.PAS1,
-    anchor: [],
-    ptr: [],
-    stay_nj: [],
-    ...overrides,
-  };
 
-  const yearRecord: YearRecord = {
-    applicationDateString: formatDate(record.application_date),
-    form_code: record.form_code,
-    anchor: record.anchor,
-    ptr: record.ptr,
-    stay_nj: record.stay_nj,
-    issueFlagged: undefined,
-  };
-
-  return { record, yearRecord };
-}
+const buildYearRecord = (overrides?: Partial<YearRecord>): YearRecord => ({
+  return_year: "2025",
+  application_date: formatDate("2026-03-19T00:00:00.000Z"),
+  form_code: FormCode.PAS1,
+  anchor: [],
+  ptr: [],
+  stay_nj: [],
+  ...overrides,
+});
 
 const mockFetchResponse = (body: unknown, ok = true, status = 200) =>
   vi.fn().mockResolvedValue({
@@ -81,9 +69,9 @@ beforeEach(() => {
 
 describe("onSubmit handler", () => {
   it("calls status API, if record found, sets data store and calls determineRoute", async () => {
-    const { record, yearRecord } = buildStatusFixture();
+    const yearRecord = buildYearRecord();
 
-    globalThis.fetch = mockFetchResponse({ records: [record] });
+    globalThis.fetch = mockFetchResponse({ records: [yearRecord] });
 
     renderLandingPage();
     await fillAndSubmitForm();
@@ -111,8 +99,8 @@ describe("onSubmit handler", () => {
   });
 
   describe("when status API record not found", () => {
-    const { record } = buildStatusFixture({ return_year: "2024" });
-    const statusResponseNoRecord = { records: [record] };
+    const yearRecord = buildYearRecord({ return_year: "2024" });
+    const statusResponseNoRecord = { records: [yearRecord] };
 
     it("it calls missed mailer API, when missed mailer record is found, sets datastore and routes user to missed-mailer", async () => {
       globalThis.fetch = vi
