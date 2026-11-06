@@ -7,12 +7,14 @@ import { ProcessList, ProcessListHeading, ProcessListItem } from "@trussworks/re
 import { ApplicationReceivedFaqContent } from "./ApplicationReceivedFaqContent";
 import { FaqSection } from "@/components/FaqSection";
 import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
+import { CurrentYear } from "@/components/TaxReliefDataProvider";
 
 const ApplicationReceivedPage = () => {
   const { t } = useTranslation(["appRec", "common"]);
   const router = useRouter();
-  const { dataStore } = useDataStore();
+  const { dataStore, record } = useDataStore();
+  if (!record) return null;
 
   useEffect(() => {
     if (!dataStore || dataStore.type !== DataType.STATUS) {
@@ -26,7 +28,8 @@ const ApplicationReceivedPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, applicationDateString } = dataStore;
+  const { lastFourSsnDigits, zipCode, currentYear } = dataStore;
+  const { application_date } = record;
 
   return (
     <main id="main-content">
@@ -34,10 +37,29 @@ const ApplicationReceivedPage = () => {
         <div className="grid-container">
           <TaxpayerInfoHeader lastFourSsnDigits={lastFourSsnDigits} zipCode={zipCode} />
           <div className="margin-top-4">
-            <h1 className="font-heading-xl">
-              {t("common:appReceived", { date: applicationDateString })}
-            </h1>
-            <p>{t("appUnderReview")}</p>
+            {currentYear === CurrentYear.YEAR2025 ? (
+              <>
+                <h1 className="font-heading-xl">
+                  <Trans
+                    i18nKey="appReceivedPAS"
+                    ns="appRec"
+                    values={{ date: application_date, year: currentYear }}
+                  />
+                </h1>
+                <p>{t("appUnderReview")}</p>{" "}
+              </>
+            ) : (
+              <>
+                <h1 className="font-heading-xl">
+                  <Trans
+                    i18nKey="appReceived"
+                    ns="common"
+                    values={{ date: application_date, year: currentYear }}
+                  />
+                </h1>
+                <p>{t("appProcessing")}</p>{" "}
+              </>
+            )}
             <ProcessList>
               <ProcessListItem>
                 <ProcessListHeading type="p">{t("common:seniorFreeze")}</ProcessListHeading>

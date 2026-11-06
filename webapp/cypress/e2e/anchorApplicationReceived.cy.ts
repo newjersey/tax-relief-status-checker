@@ -1,3 +1,4 @@
+import { CurrentYear } from "@/components/TaxReliefDataProvider";
 import { fillFields, applicationReceivedAssertions } from "./utils";
 import { FormCode } from "@/components/types";
 
@@ -18,5 +19,5 @@ it("should anchor-application-received page if records has an object in a 200 re
     });
   });
   cy.contains("button", `Check Status`).click();
-  applicationReceivedAssertions(FormCode.ANC1);
+  applicationReceivedAssertions(FormCode.ANC1, CurrentYear.YEAR2025);
 });

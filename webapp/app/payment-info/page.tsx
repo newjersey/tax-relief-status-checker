@@ -2,7 +2,7 @@
 
 import { JSX, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { DataType, useDataStore } from "@/components/TaxReliefDataProvider";
+import { CurrentYear, DataType, useDataStore } from "@/components/TaxReliefDataProvider";
 import { Table } from "@trussworks/react-uswds";
 import { formatDate } from "../utils/formatDate";
 import { PASPaymentInfoFaqContent } from "@/app/payment-info/PASPaymentInfoFaqContent";
@@ -17,6 +17,7 @@ import {
 } from "@/components/types";
 import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
 import { useTranslation, Trans } from "react-i18next";
+import { PaymentInfoFaqContent2024 } from "./PaymentInfoFaqContent2024";
 
 export const getEarliestTransaction = (transactions: Transaction[]) => {
   const valid = transactions.filter(
@@ -110,10 +111,47 @@ export const showProgramTransactions = (transactions: Transaction[], taxProgram:
   }
 };
 
+export const PaymentFaq = ({
+  formCode,
+  hasPtrPayment,
+  hasStayPayment,
+  taxYear,
+}: {
+  formCode: FormCode | null;
+  hasPtrPayment: boolean;
+  hasStayPayment: boolean;
+  taxYear: CurrentYear;
+}) => {
+  const { t } = useTranslation("paymentInfo");
+
+  if (taxYear === CurrentYear.YEAR2024) {
+    return (
+      <FaqSection
+        items={PaymentInfoFaqContent2024()}
+        titleHeadingLevel="h2"
+        itemHeadingLevel="h3"
+      />
+    );
+  }
+  if (formCode === FormCode.ANC1 && !hasPtrPayment && !hasStayPayment) {
+    return (
+      <FaqSection items={ANCPaymentInfoFaqContent()} titleHeadingLevel="h2" itemHeadingLevel="h3" />
+    );
+  }
+
+  return (
+    <>
+      <p>{t("pasPaymentSchedule")}</p>
+      <FaqSection items={PASPaymentInfoFaqContent()} titleHeadingLevel="h2" itemHeadingLevel="h3" />
+    </>
+  );
+};
+
 const PaymentInfoPage = () => {
   const { t } = useTranslation(["paymentInfo", "common"]);
   const router = useRouter();
-  const { dataStore } = useDataStore();
+  const { dataStore, record } = useDataStore();
+  if (!record) return null;
 
   useEffect(() => {
     if (!dataStore || dataStore.type !== DataType.STATUS) {
@@ -127,7 +165,9 @@ const PaymentInfoPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, anchor, ptr, stay_nj, form_code } = dataStore;
+  const { lastFourSsnDigits, zipCode, currentYear } = dataStore;
+  const { anchor, ptr, stay_nj, form_code } = record;
+
   const hasPtrPayment = [...ptr].some(
     (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
   );
@@ -141,7 +181,9 @@ const PaymentInfoPage = () => {
         <div className="grid-container">
           <TaxpayerInfoHeader lastFourSsnDigits={lastFourSsnDigits} zipCode={zipCode} />
           <div className="margin-top-4">
-            <h1 className="font-heading-xl">{t("paymentInfoHeader")}</h1>
+            <h1 className="font-heading-xl">
+              <Trans i18nKey="paymentInfoHeader" ns="paymentInfo" values={{ year: currentYear }} />
+            </h1>
           </div>
           <Table className="usa-table payment-table" bordered={false} scrollable={true}>
             <thead>
@@ -168,22 +210,12 @@ const PaymentInfoPage = () => {
             </tbody>
           </Table>
 
-          {form_code === FormCode.ANC1 && !hasPtrPayment && !hasStayPayment ? (
-            <FaqSection
-              items={ANCPaymentInfoFaqContent()}
-              titleHeadingLevel="h2"
-              itemHeadingLevel="h3"
-            />
-          ) : (
-            <>
-              <p>{t("pasPaymentSchedule")}</p>
-              <FaqSection
-                items={PASPaymentInfoFaqContent()}
-                titleHeadingLevel="h2"
-                itemHeadingLevel="h3"
-              />
-            </>
-          )}
+          <PaymentFaq
+            formCode={form_code}
+            hasPtrPayment={hasPtrPayment}
+            hasStayPayment={hasStayPayment}
+            taxYear={currentYear}
+          />
         </div>
       </section>
     </main>

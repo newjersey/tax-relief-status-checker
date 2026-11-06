@@ -1,4 +1,5 @@
 import { formatDate } from "@/app/utils/formatDate";
+import { CurrentYear } from "@/components/TaxReliefDataProvider";
 import { FormCode } from "@/components/types";
 
 export const fillField = (fieldName: string, value: string): undefined => {
@@ -14,16 +15,26 @@ export const fillFields = () => {
   fillField("zipCode", MOCK_ZIP);
 };
 
-export const applicationReceivedAssertions = (form_code: FormCode) => {
-  if (form_code === FormCode.PAS1 || form_code === null) {
+export const applicationReceivedAssertions = (form_code: FormCode, currentYear: CurrentYear) => {
+  if (currentYear === CurrentYear.YEAR2024) {
     cy.url().should("include", "/application-received");
-    cy.contains("h1", `Your application was received on ${MOCK_DATE}`).should("be.visible");
-  }
-  if (form_code === FormCode.ANC1) {
+    cy.contains(
+      "h1",
+      `We have your application on file as of ${MOCK_DATE} for the 2024 Tax Year`,
+    ).should("be.visible");
+    cy.contains("p", "Your 2024 application is being processed.");
+  } else if (form_code === FormCode.PAS1 || form_code === null) {
+    cy.url().should("include", "/application-received");
+    cy.contains(
+      "h1",
+      `We received your PAS-1 application on ${MOCK_DATE} for the 2025 Tax Year`,
+    ).should("be.visible");
+  } else if (form_code === FormCode.ANC1) {
     cy.url().should("include", "/anchor-application-received");
-    cy.contains("h1", `We have your 2025 ANCHOR application on file as of ${MOCK_DATE}`).should(
-      "be.visible",
-    );
+    cy.contains(
+      "h1",
+      `We have your ANCHOR application on file as of ${MOCK_DATE} for the 2025 Tax Year`,
+    ).should("be.visible");
   }
 
   cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");

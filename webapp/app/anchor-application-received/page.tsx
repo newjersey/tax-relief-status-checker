@@ -12,7 +12,8 @@ const AnchorApplicationReceivedPage = () => {
   const { t } = useTranslation(["ancAppRec", "common"]);
 
   const router = useRouter();
-  const { dataStore } = useDataStore();
+  const { dataStore, record } = useDataStore();
+  if (!record) return null;
 
   useEffect(() => {
     if (!dataStore || dataStore.type !== DataType.STATUS) {
@@ -26,7 +27,8 @@ const AnchorApplicationReceivedPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, applicationDateString } = dataStore;
+  const { lastFourSsnDigits, zipCode, currentYear } = dataStore;
+  const { application_date } = record;
 
   return (
     <main id="main-content">
@@ -35,9 +37,13 @@ const AnchorApplicationReceivedPage = () => {
           <TaxpayerInfoHeader lastFourSsnDigits={lastFourSsnDigits} zipCode={zipCode} />
           <div className="margin-top-4">
             <h1 className="font-heading-xl">
-              <Trans i18nKey={"ancAppReceived"} ns="ancAppRec" values={{ applicationDateString }}>
-                We have your 2025 <abbr>ANCHOR</abbr> application on file as of{" "}
-                {applicationDateString}
+              <Trans
+                i18nKey={"ancAppReceived"}
+                ns="ancAppRec"
+                values={{ date: application_date, year: currentYear }}
+              >
+                We have your ANCHOR application on file as of {application_date} for the{" "}
+                {currentYear} Tax Year
               </Trans>
             </h1>
             <p>{t("appBeingProcessed")}</p>

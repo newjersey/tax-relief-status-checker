@@ -10,7 +10,7 @@
   "seniorFreeze": "Senior Freeze",
   "anchor": "ANCHOR",
   "stayNJ": "Stay NJ",
-  "appReceived": "Your application was received on {{date}}",
+  "appReceived": "We have your application on file as of {{date}} for the {{year}} Tax Year",
   "taxpayerInfoHeader": {
     "ssn": "SSN/ITIN:",
     "ssnTitle": "Social Security / Individual Taxpayer Identification Number",
