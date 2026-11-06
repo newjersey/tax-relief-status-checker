@@ -93,6 +93,7 @@ it("displays show payments page heading", () => {
   cy.contains("p", MOCK_ZIP).should("be.visible");
   cy.contains("h1", "You are eligible for benefits").should("be.visible");
 });
+
 describe("when form_code is PAS-1", () => {
   it("displays PAS-1 payments page if records has senior freeze CHECK", () => {
     cy.intercept("POST", "/api/status", {
@@ -302,5 +303,26 @@ describe("when form_code is ANC-1", () => {
 
       FAQAssertions(FormCode.PAS1);
     });
+  });
+});
+
+describe("when taxYear is 2024", () => {
+  it("displays 2024 payments page", () => {
+    cy.intercept("POST", "/api/status", {
+      statusCode: 200,
+      fixture: "found_records_2024.json",
+    });
+
+    cy.contains("button", "Check Status").click();
+    cy.window().then((win) => {
+      (win as any).__setCurrentYear("2024");
+      (win as any).next.router.push("/payment-info");
+    });
+
+    cy.url().should("include", "/payment-info");
+    cy.contains("h1", "You are eligible for benefits for the 2024 Tax Year");
+
+    paymentInfoAssertions(TaxProgram.PTR, PaymentType.CHECK, mockDate, mockAmount);
+    FAQAssertions(FormCode.ANC1);
   });
 });

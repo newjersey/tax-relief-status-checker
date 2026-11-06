@@ -1,15 +1,15 @@
 import { describe, it, expect } from "vitest";
 
 import { setIssueFlagged } from "./setIssueFlagged";
-import type { StatusRecord, Transaction } from "@/components/types";
+import type { Transaction } from "@/components/types";
 import { TransactionStatus, IssueFlaggedType } from "@/components/types";
 import { FormCode } from "@/components/types";
+import { YearRecord } from "@/components/TaxReliefDataProvider";
 
-const buildRecord = (overrides: Partial<StatusRecord> = {}): StatusRecord => ({
-  return_year: "2024",
-  application_date: "2024-01-01",
+const buildYearRecord = (overrides?: Partial<YearRecord>): YearRecord => ({
+  return_year: "2025",
+  application_date: "2026-03-19T00:00:00.000Z",
   form_code: FormCode.PAS1,
-
   anchor: [],
   ptr: [],
   stay_nj: [],
@@ -29,49 +29,49 @@ const anchorWith = (category: string): Transaction[] => [
 
 interface TestCase {
   readonly description: string;
-  readonly record: StatusRecord;
+  readonly record: YearRecord;
   readonly expected: IssueFlaggedType | undefined;
 }
 
 const testCases: readonly TestCase[] = [
   {
     description: "returns PROPERTY_TAX_BILL_NEEDED when ptr has SVR and anchor has MOD",
-    record: buildRecord({ ptr: ptrWithSVR, anchor: anchorWith("MOD") }),
+    record: buildYearRecord({ ptr: ptrWithSVR, anchor: anchorWith("MOD") }),
     expected: IssueFlaggedType.PROPERTY_TAX_BILL_NEEDED,
   },
   {
     description: "returns PROPERTY_TAX_BILL_NEEDED when ptr has SVR and anchor has MDZ",
-    record: buildRecord({ ptr: ptrWithSVR, anchor: anchorWith("MDZ") }),
+    record: buildYearRecord({ ptr: ptrWithSVR, anchor: anchorWith("MDZ") }),
     expected: IssueFlaggedType.PROPERTY_TAX_BILL_NEEDED,
   },
   {
     description: "returns CONTACT_TAXATION when ptr has SVR and anchor has MAX",
-    record: buildRecord({ ptr: ptrWithSVR, anchor: anchorWith("MAX") }),
+    record: buildYearRecord({ ptr: ptrWithSVR, anchor: anchorWith("MAX") }),
     expected: IssueFlaggedType.CONTACT_TAXATION,
   },
   {
     description: "returns CONTACT_TAXATION when ptr has SVR and anchor has MHX",
-    record: buildRecord({ ptr: ptrWithSVR, anchor: anchorWith("MHX") }),
+    record: buildYearRecord({ ptr: ptrWithSVR, anchor: anchorWith("MHX") }),
     expected: IssueFlaggedType.CONTACT_TAXATION,
   },
   {
     description: "returns CONTACT_TAXATION when ptr has SVR and anchor has PCT",
-    record: buildRecord({ ptr: ptrWithSVR, anchor: anchorWith("PCT") }),
+    record: buildYearRecord({ ptr: ptrWithSVR, anchor: anchorWith("PCT") }),
     expected: IssueFlaggedType.CONTACT_TAXATION,
   },
   {
     description: "returns CONTACT_TAXATION when ptr has SVR and anchor has DSU",
-    record: buildRecord({ ptr: ptrWithSVR, anchor: anchorWith("DSU") }),
+    record: buildYearRecord({ ptr: ptrWithSVR, anchor: anchorWith("DSU") }),
     expected: IssueFlaggedType.CONTACT_TAXATION,
   },
   {
     description: "returns CONTACT_TAXATION when ptr has SVR and anchor has DSO",
-    record: buildRecord({ ptr: ptrWithSVR, anchor: anchorWith("DSO") }),
+    record: buildYearRecord({ ptr: ptrWithSVR, anchor: anchorWith("DSO") }),
     expected: IssueFlaggedType.CONTACT_TAXATION,
   },
   {
     description: "returns undefined when ptr does not have issue_flagged status",
-    record: buildRecord({
+    record: buildYearRecord({
       ptr: [buildTransaction(TransactionStatus.PAYMENT_SENT)] as unknown as [],
       anchor: anchorWith("MOD"),
     }),
@@ -79,12 +79,12 @@ const testCases: readonly TestCase[] = [
   },
   {
     description: "returns undefined when ptr has SVR but anchor has unrecognized review category",
-    record: buildRecord({ ptr: ptrWithSVR, anchor: anchorWith("XYZ") }),
+    record: buildYearRecord({ ptr: ptrWithSVR, anchor: anchorWith("XYZ") }),
     expected: undefined,
   },
   {
     description: "returns undefined when both ptr and anchor are empty",
-    record: buildRecord(),
+    record: buildYearRecord(),
     expected: undefined,
   },
 ];

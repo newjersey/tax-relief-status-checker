@@ -1,5 +1,5 @@
 {
-  "paymentInfoHeader": "You are eligible for benefits",
+  "paymentInfoHeader": "You are eligible for benefits for the {{year}} Tax Year",
   "program": "Program",
   "paymentStatus": "Payment Status",
   "amount": "Amount",
@@ -41,6 +41,10 @@
     },
     "notReceivedCheck": {
       "title": "I have not received my check in the mail. What should I do next?"
+    },
+    "dontSeeEligibleBenefits": {
+      "title": "I don't see a benefit I am eligible for. What should I do?",
+      "contact": "Please contact the Division:"
     }
   }
 }

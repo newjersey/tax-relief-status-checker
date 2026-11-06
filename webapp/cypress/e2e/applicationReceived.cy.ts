@@ -1,3 +1,4 @@
+import { CurrentYear } from "@/components/TaxReliefDataProvider";
 import { fillFields, applicationReceivedAssertions } from "./utils";
 import { FormCode } from "@/components/types";
 
@@ -20,7 +21,7 @@ it("should display status page if records has an object in a 200 response, no tr
 
   cy.contains("button", `Check Status`).click();
 
-  applicationReceivedAssertions(FormCode.PAS1);
+  applicationReceivedAssertions(FormCode.PAS1, CurrentYear.YEAR2025);
 });
 
 it("should display application found page if records has an object, but no transactions are payment_sent", () => {
@@ -34,5 +35,23 @@ it("should display application found page if records has an object, but no trans
   });
   cy.contains("button", `Check Status`).click();
 
-  applicationReceivedAssertions(FormCode.PAS1);
+  applicationReceivedAssertions(FormCode.PAS1, CurrentYear.YEAR2025);
+});
+
+it("should display 2024 application found page if currentYear is 2024", () => {
+  fillFields();
+  cy.fixture("no_trans_records_2024.json").then((resp) => {
+    cy.intercept("POST", "/api/status", {
+      statusCode: 200,
+      body: resp,
+    });
+  });
+
+  cy.contains("button", `Check Status`).click();
+  cy.window().then((win) => {
+    (win as any).__setCurrentYear("2024");
+    (win as any).next.router.push("/application-received");
+  });
+
+  applicationReceivedAssertions(FormCode.PAS1, CurrentYear.YEAR2024);
 });

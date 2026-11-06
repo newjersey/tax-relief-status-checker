@@ -6,5 +6,6 @@
   "mailTaxBill": "Mail to: PO Box 900, Trenton, NJ 08646-0900",
   "mailTaxBillURL": "https://www.nj.gov/treasury/taxation/contact-office.shtml",
   "bringTaxBill": "Bring to one of our <1> Regional Information Centers </1>",
-  "additionalInfoNeeded": "Additional information needed"
+  "additionalInfoNeeded": "Additional information needed",
+  "appReceived": "Your application was received on {{date}} for the {{year}} Tax Year"
 }

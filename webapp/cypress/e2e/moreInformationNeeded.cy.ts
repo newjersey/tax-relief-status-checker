@@ -1,8 +1,12 @@
-import { fillFields, MOCK_SSN, MOCK_ZIP } from "./utils";
+import { CurrentYear } from "@/components/TaxReliefDataProvider";
+import { fillFields, MOCK_SSN, MOCK_ZIP, MOCK_DATE } from "./utils";
 
-const moreInformationNeededAssertions = () => {
+const moreInformationNeededAssertions = (currentYear: CurrentYear) => {
   cy.url().should("include", "/more-information-needed");
-  cy.contains("h1", "Your application was received on").should("be.visible");
+  cy.contains(
+    "h1",
+    `Your application was received on ${MOCK_DATE} for the ${currentYear} Tax Year`,
+  ).should("be.visible");
 
   cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
   cy.contains("p", MOCK_SSN.slice(-4)).should("be.visible");
@@ -46,7 +50,7 @@ it("should display issue flagged warning - upload tax bill", () => {
     "p",
     "We need additional information to continue processing your application. Please send us a copy of your final property tax bill by using one of the following:",
   ).should("be.visible");
-  moreInformationNeededAssertions();
+  moreInformationNeededAssertions(CurrentYear.YEAR2025);
 });
 
 it("should display issue flagged warning - contact taxation", () => {
@@ -63,5 +67,25 @@ it("should display issue flagged warning - contact taxation", () => {
     "p",
     "We need additional information to continue processing your application. Please contact the Division by using one of the following:",
   ).should("be.visible");
-  moreInformationNeededAssertions();
+  moreInformationNeededAssertions(CurrentYear.YEAR2025);
+});
+
+it("should display issue flagged warning - contact taxation for the 2024 year", () => {
+  fillFields();
+  cy.fixture("issue_flagged_contact_taxation_2024.json").then((resp) => {
+    cy.intercept("POST", "/api/status", {
+      statusCode: 200,
+      body: resp,
+    });
+  });
+  cy.contains("button", `Check Status`).click();
+  cy.window().then((win) => {
+    (win as any).__setCurrentYear("2024");
+    (win as any).next.router.push("/more-information-needed");
+  });
+  cy.contains(
+    "p",
+    "We need additional information to continue processing your application. Please contact the Division by using one of the following:",
+  ).should("be.visible");
+  moreInformationNeededAssertions(CurrentYear.YEAR2024);
 });

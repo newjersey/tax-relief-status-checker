@@ -2,15 +2,17 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LandingPage from "./page";
-import { FormCode, type StatusRecord } from "@/components/types";
-import { TaxReliefDataProvider } from "@/components/TaxReliefDataProvider";
+import { FormCode } from "@/components/types";
+import { TaxReliefDataProvider, YearRecord } from "@/components/TaxReliefDataProvider";
 import { logGAEvent } from "./utils/analytics";
 import { determineRoute } from "./utils/determineRoute";
+import { formatDate } from "./utils/formatDate";
 
 const mockPush = vi.fn();
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: mockPush }),
+  usePathname: () => "/",
 }));
 
 vi.mock("./utils/analytics", () => ({
@@ -43,9 +45,9 @@ const fillAndSubmitForm = async () => {
   await user.click(submitButton);
 };
 
-const buildStatusRecord = (overrides?: Partial<StatusRecord>): StatusRecord => ({
+const buildYearRecord = (overrides?: Partial<YearRecord>): YearRecord => ({
   return_year: "2025",
-  application_date: "2026-03-19T00:00:00.000Z",
+  application_date: formatDate("2026-03-19T00:00:00.000Z"),
   form_code: FormCode.PAS1,
   anchor: [],
   ptr: [],
@@ -67,8 +69,9 @@ beforeEach(() => {
 
 describe("onSubmit handler", () => {
   it("calls status API, if record found, sets data store and calls determineRoute", async () => {
-    const record = buildStatusRecord();
-    globalThis.fetch = mockFetchResponse({ records: [record] });
+    const yearRecord = buildYearRecord();
+
+    globalThis.fetch = mockFetchResponse({ records: [yearRecord] });
 
     renderLandingPage();
     await fillAndSubmitForm();
@@ -77,7 +80,8 @@ describe("onSubmit handler", () => {
       "/api/status",
       expect.objectContaining({ method: "POST" }),
     );
-    expect(determineRoute).toHaveBeenCalledWith(record);
+
+    expect(determineRoute).toHaveBeenCalledWith(yearRecord);
     expect(logGAEvent).toHaveBeenCalledWith("api_200_record_found");
   });
 
@@ -95,7 +99,8 @@ describe("onSubmit handler", () => {
   });
 
   describe("when status API record not found", () => {
-    const statusResponseNoRecord = { records: [buildStatusRecord({ return_year: "2024" })] };
+    const yearRecord = buildYearRecord({ return_year: "2024" });
+    const statusResponseNoRecord = { records: [yearRecord] };
 
     it("it calls missed mailer API, when missed mailer record is found, sets datastore and routes user to missed-mailer", async () => {
       globalThis.fetch = vi
