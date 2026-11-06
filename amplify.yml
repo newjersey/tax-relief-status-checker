@@ -6,7 +6,7 @@ applications:
         preBuild:
           commands:
             - if [ "$(TZ='America/New_York' date +%u)" -ge "6" ]; then echo "Deploys are not allowed
-              on Saturday, or Sunday."; exit 1; fi
+              on Saturday or Sunday."; exit 1; fi
             - npm ci --cache .npm --prefer-offline
         build:
           commands:
