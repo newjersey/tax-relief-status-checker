@@ -2,10 +2,204 @@
 import { Alert, Logo } from "@trussworks/react-uswds";
 import { useEffect } from "react";
 import { Trans, useTranslation } from "react-i18next";
+import {
+  useDataStore,
+  CurrentYear,
+  DataType,
+  YearRecord,
+} from "@/components/TaxReliefDataProvider";
+import { useRouter } from "next/navigation";
+import { determineRoute } from "@/app/utils/determineRoute";
+
+export const YearSelector = ({
+  currentYear,
+  setCurrentYear,
+  records,
+}: {
+  currentYear: CurrentYear;
+  setCurrentYear: (year: CurrentYear) => void;
+  records: Readonly<Partial<Record<CurrentYear, YearRecord>>>;
+}) => {
+  const { t } = useTranslation("common");
+  const router = useRouter();
+  const selectYear = (year: CurrentYear) => {
+    const record = records[year];
+    if (!record) return;
+
+    setCurrentYear(year);
+    router.push(determineRoute(record, year));
+  };
+
+  if (currentYear === CurrentYear.YEAR2024) {
+    return (
+      <>
+        <button
+          className="usa-accordion__button usa-nav__link usa-current"
+          style={{ fontSize: "1.25rem", color: "#005ea2" }}
+          aria-expanded="false"
+          aria-controls="basic-nav-section-one-acc-99bd76fa-64bc-4adc-be98-8947e5e9703b"
+        >
+          <span>{t("year2024")}</span>
+        </button>
+        <ul
+          className="usa-nav__submenu"
+          hidden={true}
+          id="basic-nav-section-one-acc-99bd76fa-64bc-4adc-be98-8947e5e9703b"
+        >
+          <li className="usa-nav__submenu-item">
+            <a
+              href="#2025"
+              onClick={(e) => {
+                e.preventDefault();
+                selectYear(CurrentYear.YEAR2025);
+                document
+                  .querySelector(".usa-accordion__button")
+                  ?.setAttribute("aria-expanded", "false");
+                document.querySelector(".usa-nav__submenu")?.setAttribute("hidden", "true");
+              }}
+              className=""
+              style={{ fontSize: "1.25rem" }}
+            >
+              {t("year2025")}
+            </a>
+          </li>
+        </ul>
+      </>
+    );
+  }
+  return (
+    <>
+      <button
+        className="usa-accordion__button usa-nav__link"
+        style={{ fontSize: "1.25rem" }}
+        aria-expanded="false"
+        aria-controls="basic-nav-section-one-acc-99bd76fa-64bc-4adc-be98-8947e5e9703b"
+      >
+        <span>{t("priorTaxYears")}</span>
+      </button>
+      <ul
+        className="usa-nav__submenu"
+        hidden={true}
+        id="basic-nav-section-one-acc-99bd76fa-64bc-4adc-be98-8947e5e9703b"
+      >
+        <li className="usa-nav__submenu-item">
+          <a
+            href="#2024"
+            onClick={(e) => {
+              e.preventDefault();
+              selectYear(CurrentYear.YEAR2024);
+              document
+                .querySelector(".usa-accordion__button")
+                ?.setAttribute("aria-expanded", "false");
+              document.querySelector(".usa-nav__submenu")?.setAttribute("hidden", "true");
+            }}
+            className=""
+            style={{ fontSize: "1.25rem" }}
+          >
+            {" "}
+            {t("year2024")}
+          </a>
+        </li>
+      </ul>
+    </>
+  );
+};
+
+//new name?
+export const CurrentYearLink = ({
+  currentYear,
+  setCurrentYear,
+  records,
+}: {
+  currentYear: CurrentYear;
+  setCurrentYear: (year: CurrentYear) => void;
+  records: Readonly<Partial<Record<CurrentYear, YearRecord>>>;
+}) => {
+  const { t } = useTranslation("common");
+  const router = useRouter();
+
+  const selectYear = (year: CurrentYear) => {
+    const record = records[year];
+    if (!record) return;
+
+    setCurrentYear(year);
+    router.push(determineRoute(record, year));
+  };
+
+  //has 2024 + 2025 record
+  if (records[CurrentYear.YEAR2024] && records[CurrentYear.YEAR2025]) {
+    if (currentYear === CurrentYear.YEAR2025) {
+      return (
+        <>
+          <a
+            className="usa-nav__link usa-current"
+            style={{ color: "#005ea2", pointerEvents: "none", fontSize: "1.25rem" }}
+          >
+            <span>{t("year2025")}</span>
+          </a>
+        </>
+      );
+    } else if (currentYear === CurrentYear.YEAR2024) {
+      return (
+        <>
+          <a
+            href="#2025"
+            onClick={(e) => {
+              e.preventDefault();
+              selectYear(CurrentYear.YEAR2025);
+            }}
+            className="usa-nav__link"
+            style={{ fontSize: "1.25rem" }}
+          >
+            <span>{t("year2025")}</span>
+          </a>
+        </>
+      );
+    }
+
+    //has only 2024 record
+  } else if (records[CurrentYear.YEAR2024]) {
+    return (
+      <>
+        <a
+          className="usa-nav__link usa-current"
+          style={{ color: "#005ea2", pointerEvents: "none", fontSize: "1.25rem" }}
+        >
+          <span>{t("year2024")}</span>
+        </a>
+      </>
+    );
+  }
+
+  //has only 2025 record
+  return (
+    <>
+      <a
+        className="usa-nav__link usa-current"
+        style={{ color: "#005ea2", pointerEvents: "none", fontSize: "1.25rem" }}
+      >
+        <span>{t("year2025")}</span>
+      </a>
+    </>
+  );
+};
 
 /** Property Tax Relief Status Checker and logo */
 export const SessionHeader = () => {
   const { t } = useTranslation("common");
+  const { setCurrentYear, dataStore } = useDataStore();
+  const router = useRouter();
+  useEffect(() => {
+    if (!dataStore || dataStore.type !== DataType.STATUS) {
+      router.replace("/");
+    }
+  }, [dataStore, router]);
+
+  if (!dataStore || dataStore.type !== DataType.STATUS) {
+    return null;
+  }
+
+  const { currentYear, records } = dataStore;
 
   useEffect(() => {
     const menuButton = document.querySelector(".usa-menu-btn");
@@ -43,16 +237,24 @@ export const SessionHeader = () => {
       subMenu?.setAttribute("hidden", "true");
     };
 
+    const closeOnOutsideClick = (e: MouseEvent) => {
+      if (subMenu && !subMenu.contains(e.target as Node)) {
+        closeSubMenu();
+      }
+    };
+
     menuButton?.addEventListener("click", openMenu);
     closeButton?.addEventListener("click", closeMenu);
     overlay?.addEventListener("click", closeMenu);
     yearsNavigator?.addEventListener("click", toggleSubMenu);
+    document.addEventListener("mousedown", closeOnOutsideClick);
 
     return () => {
       menuButton?.removeEventListener("click", openMenu);
       closeButton?.removeEventListener("click", closeMenu);
       overlay?.removeEventListener("click", closeMenu);
       yearsNavigator?.removeEventListener("click", toggleSubMenu);
+      document.removeEventListener("mousedown", closeOnOutsideClick);
     };
   }, []);
 
@@ -109,40 +311,22 @@ export const SessionHeader = () => {
 
             <ul className="usa-nav__primary usa-accordion">
               <li className="usa-nav__primary-item">
-                <a
-                  className="usa-nav__link usa-current"
-                  style={{ color: "#005ea2", pointerEvents: "none", fontSize: "1.25rem" }}
-                >
-                  <span>{t("year2025")}</span>
-                </a>
+                <CurrentYearLink
+                  currentYear={currentYear}
+                  setCurrentYear={setCurrentYear}
+                  records={records}
+                />
               </li>
-              <li className="usa-nav__primary-item">
-                <button
-                  className="usa-accordion__button usa-nav__link"
-                  aria-expanded="false"
-                  aria-controls="basic-nav-section-one-acc-99bd76fa-64bc-4adc-be98-8947e5e9703b"
-                >
-                  <span>Prior Tax Years</span>
-                </button>
-                <ul
-                  className="usa-nav__submenu"
-                  hidden={true}
-                  id="basic-nav-section-one-acc-99bd76fa-64bc-4adc-be98-8947e5e9703b"
-                >
-                  <li className="usa-nav__submenu-item">
-                    <a href="#" className="">
-                      {" "}
-                      2025
-                    </a>
-                  </li>
-                  <li className="usa-nav__submenu-item">
-                    <a href="#" className="">
-                      {" "}
-                      2024
-                    </a>
-                  </li>
-                </ul>
-              </li>
+              {records[CurrentYear.YEAR2024] && records[CurrentYear.YEAR2025] && (
+                <li className="usa-nav__primary-item">
+                  <YearSelector
+                    currentYear={currentYear}
+                    setCurrentYear={setCurrentYear}
+                    records={records}
+                  />
+                </li>
+              )}
+
               <li className="usa-nav__primary-item">
                 <a className="usa-nav__link" href="/" style={{ fontSize: "1.25rem" }}>
                   <span className="padding-right-1">{t("appFoundHeader.logout")}</span>

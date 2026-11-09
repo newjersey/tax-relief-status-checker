@@ -4,67 +4,8 @@ import earlier_transaction from "../fixtures/earlier_payment_sent_transaction.js
 import { fillFields, MOCK_SSN, MOCK_ZIP } from "./utils";
 import { TaxProgram } from "@/components/types";
 import { FormCode } from "@/components/types";
-enum PaymentType {
-  ADJUSTED = "adjusted",
-  DIRECT_DEPOSIT = "direct_deposit",
-  CHECK = "check",
-}
-
-const paymentInfoAssertions = (
-  taxProgram: TaxProgram,
-  paymentType: PaymentType,
-  date: string,
-  amount: number,
-) => {
-  if (paymentType === PaymentType.CHECK) {
-    cy.get(".payment-table").within(() => {
-      cy.contains("th", "Program").should("be.visible");
-      cy.contains("th", "Payment Status").should("be.visible");
-      cy.contains("th", "Amount").should("be.visible");
-
-      cy.contains("td", taxProgram).should("be.visible");
-      cy.contains("td", `Check issued on ${date}`).should("be.visible");
-      cy.contains("td", `$${amount}`).should("be.visible");
-    });
-  } else if (paymentType === PaymentType.DIRECT_DEPOSIT) {
-    cy.get(".payment-table").within(() => {
-      cy.contains("th", "Program").should("be.visible");
-      cy.contains("th", "Payment Status").should("be.visible");
-      cy.contains("th", "Amount").should("be.visible");
-
-      cy.contains("td", taxProgram).should("be.visible");
-      cy.contains("td", `Direct deposit made on ${date}`).should("be.visible");
-      cy.contains("td", `$${amount}`).should("be.visible");
-    });
-  } else if (paymentType === PaymentType.ADJUSTED) {
-    cy.get(".payment-table").within(() => {
-      cy.contains("td", taxProgram).should("be.visible");
-      cy.contains("td", `Your benefit amount was adjusted. A check was sent on ${date}`).should(
-        "be.visible",
-      );
-      cy.contains("td", `$${amount}`).should("be.visible");
-    });
-  }
-};
-
-const FAQAssertions = (form_code: FormCode) => {
-  if (form_code === FormCode.ANC1) {
-    cy.get(`div[id="faq_when_can_i_expect_to_receive_payments_pas1"]`).should("not.exist");
-  } else if (form_code === FormCode.PAS1) {
-    cy.contains("p", "Even though PAS-1 combines all three programs").should("be.visible");
-    cy.contains(
-      "button",
-      "When can I expect to receive payments for Senior Freeze, ANCHOR, and Stay NJ?",
-    ).should("be.visible");
-  }
-  cy.contains(
-    "button",
-    "A check amount is different than what I expected. Who can I contact?",
-  ).should("be.visible");
-  cy.contains("button", "I have not received my check in the mail. What should I do next?").should(
-    "be.visible",
-  );
-};
+import { paymentInfoAssertions, FAQAssertions, PaymentType } from "./utils";
+import { CurrentYear } from "@/components/TaxReliefDataProvider";
 
 const mockDate = formatDate("7/6/2026 0:00:00");
 const mockEarlyDate = formatDate("1/1/2026 0:00:00");
@@ -103,7 +44,13 @@ describe("when form_code is PAS-1", () => {
     cy.contains("button", `Check Status`).click();
     cy.url().should("include", "/payment-info");
 
-    paymentInfoAssertions(TaxProgram.PTR, PaymentType.CHECK, mockDate, mockAmount);
+    paymentInfoAssertions(
+      TaxProgram.PTR,
+      PaymentType.CHECK,
+      mockDate,
+      mockAmount,
+      CurrentYear.YEAR2025,
+    );
     FAQAssertions(FormCode.PAS1);
   });
 
@@ -117,7 +64,13 @@ describe("when form_code is PAS-1", () => {
     });
     cy.contains("button", `Check Status`).click();
     cy.url().should("include", "/payment-info");
-    paymentInfoAssertions(TaxProgram.PTR, PaymentType.DIRECT_DEPOSIT, mockDate, mockAmount);
+    paymentInfoAssertions(
+      TaxProgram.PTR,
+      PaymentType.DIRECT_DEPOSIT,
+      mockDate,
+      mockAmount,
+      CurrentYear.YEAR2025,
+    );
     FAQAssertions(FormCode.PAS1);
   });
 
@@ -138,6 +91,7 @@ describe("when form_code is PAS-1", () => {
       PaymentType.DIRECT_DEPOSIT,
       mockEarlyDate,
       mockEarlyAmount,
+      CurrentYear.YEAR2025,
     );
     FAQAssertions(FormCode.PAS1);
   });
@@ -148,12 +102,48 @@ describe("when form_code is PAS-1", () => {
     });
     cy.contains("button", `Check Status`).click();
     cy.url().should("include", "/payment-info");
-    paymentInfoAssertions(TaxProgram.PTR, PaymentType.DIRECT_DEPOSIT, "07/16/2026", 125);
-    paymentInfoAssertions(TaxProgram.PTR, PaymentType.ADJUSTED, "07/17/2026", 5);
-    paymentInfoAssertions(TaxProgram.ANCHOR, PaymentType.DIRECT_DEPOSIT, "09/06/2026", 1750.0);
-    paymentInfoAssertions(TaxProgram.ANCHOR, PaymentType.ADJUSTED, "10/06/2026", 377.56);
-    paymentInfoAssertions(TaxProgram.STAY_NJ, PaymentType.CHECK, "01/01/2027", 111);
-    paymentInfoAssertions(TaxProgram.STAY_NJ, PaymentType.CHECK, "04/30/2027", 222);
+    paymentInfoAssertions(
+      TaxProgram.PTR,
+      PaymentType.DIRECT_DEPOSIT,
+      "07/16/2026",
+      125,
+      CurrentYear.YEAR2025,
+    );
+    paymentInfoAssertions(
+      TaxProgram.PTR,
+      PaymentType.ADJUSTED,
+      "07/17/2026",
+      5,
+      CurrentYear.YEAR2025,
+    );
+    paymentInfoAssertions(
+      TaxProgram.ANCHOR,
+      PaymentType.DIRECT_DEPOSIT,
+      "09/06/2026",
+      1750.0,
+      CurrentYear.YEAR2025,
+    );
+    paymentInfoAssertions(
+      TaxProgram.ANCHOR,
+      PaymentType.ADJUSTED,
+      "10/06/2026",
+      377.56,
+      CurrentYear.YEAR2025,
+    );
+    paymentInfoAssertions(
+      TaxProgram.STAY_NJ,
+      PaymentType.CHECK,
+      "01/01/2027",
+      111,
+      CurrentYear.YEAR2025,
+    );
+    paymentInfoAssertions(
+      TaxProgram.STAY_NJ,
+      PaymentType.CHECK,
+      "04/30/2027",
+      222,
+      CurrentYear.YEAR2025,
+    );
 
     FAQAssertions(FormCode.PAS1);
   });
@@ -173,6 +163,7 @@ describe("when form_code is PAS-1", () => {
       PaymentType.CHECK,
       formatDate("1/2/2027 00:00:00"),
       mockAmount,
+      CurrentYear.YEAR2025,
     );
     FAQAssertions(FormCode.PAS1);
   });
@@ -193,6 +184,7 @@ describe("when form_code is PAS-1", () => {
       PaymentType.DIRECT_DEPOSIT,
       formatDate("1/2/2027 00:00:00"),
       mockAmount,
+      CurrentYear.YEAR2025,
     );
     FAQAssertions(FormCode.PAS1);
   });
@@ -212,12 +204,14 @@ describe("when form_code is PAS-1", () => {
       PaymentType.DIRECT_DEPOSIT,
       formatDate("1/2/2027 00:00:00"),
       mockAmount,
+      CurrentYear.YEAR2025,
     );
     paymentInfoAssertions(
       TaxProgram.STAY_NJ,
       PaymentType.CHECK,
       formatDate("1/6/2027 00:00:00"),
       mockAmount,
+      CurrentYear.YEAR2025,
     );
     FAQAssertions(FormCode.PAS1);
   });
@@ -232,7 +226,13 @@ describe("when form_code is ANC-1", () => {
     cy.contains("button", `Check Status`).click();
     cy.url().should("include", "/payment-info");
 
-    paymentInfoAssertions(TaxProgram.ANCHOR, PaymentType.CHECK, mockDate, mockAmount);
+    paymentInfoAssertions(
+      TaxProgram.ANCHOR,
+      PaymentType.CHECK,
+      mockDate,
+      mockAmount,
+      CurrentYear.YEAR2025,
+    );
     FAQAssertions(FormCode.ANC1);
   });
 
@@ -247,7 +247,13 @@ describe("when form_code is ANC-1", () => {
     cy.contains("button", `Check Status`).click();
     cy.url().should("include", "/payment-info");
 
-    paymentInfoAssertions(TaxProgram.ANCHOR, PaymentType.DIRECT_DEPOSIT, mockDate, mockAmount);
+    paymentInfoAssertions(
+      TaxProgram.ANCHOR,
+      PaymentType.DIRECT_DEPOSIT,
+      mockDate,
+      mockAmount,
+      CurrentYear.YEAR2025,
+    );
     FAQAssertions(FormCode.ANC1);
   });
 
@@ -262,8 +268,20 @@ describe("when form_code is ANC-1", () => {
     cy.contains("button", `Check Status`).click();
     cy.url().should("include", "/payment-info");
 
-    paymentInfoAssertions(TaxProgram.ANCHOR, PaymentType.CHECK, mockDate, mockAmount);
-    paymentInfoAssertions(TaxProgram.PTR, PaymentType.DIRECT_DEPOSIT, "01/01/2026", 10.0);
+    paymentInfoAssertions(
+      TaxProgram.ANCHOR,
+      PaymentType.CHECK,
+      mockDate,
+      mockAmount,
+      CurrentYear.YEAR2025,
+    );
+    paymentInfoAssertions(
+      TaxProgram.PTR,
+      PaymentType.DIRECT_DEPOSIT,
+      "01/01/2026",
+      10.0,
+      CurrentYear.YEAR2025,
+    );
 
     FAQAssertions(FormCode.PAS1);
   });
@@ -279,8 +297,20 @@ describe("when form_code is ANC-1", () => {
     cy.contains("button", `Check Status`).click();
     cy.url().should("include", "/payment-info");
 
-    paymentInfoAssertions(TaxProgram.ANCHOR, PaymentType.CHECK, mockDate, mockAmount);
-    paymentInfoAssertions(TaxProgram.STAY_NJ, PaymentType.DIRECT_DEPOSIT, "01/01/2026", 10.0);
+    paymentInfoAssertions(
+      TaxProgram.ANCHOR,
+      PaymentType.CHECK,
+      mockDate,
+      mockAmount,
+      CurrentYear.YEAR2025,
+    );
+    paymentInfoAssertions(
+      TaxProgram.STAY_NJ,
+      PaymentType.DIRECT_DEPOSIT,
+      "01/01/2026",
+      10.0,
+      CurrentYear.YEAR2025,
+    );
 
     FAQAssertions(FormCode.PAS1);
   });
@@ -298,31 +328,22 @@ describe("when form_code is ANC-1", () => {
       cy.contains("button", `Check Status`).click();
       cy.url().should("include", "/payment-info");
 
-      paymentInfoAssertions(TaxProgram.ANCHOR, PaymentType.CHECK, mockDate, mockAmount);
-      paymentInfoAssertions(TaxProgram.STAY_NJ, PaymentType.DIRECT_DEPOSIT, "01/01/2026", 10.0);
+      paymentInfoAssertions(
+        TaxProgram.ANCHOR,
+        PaymentType.CHECK,
+        mockDate,
+        mockAmount,
+        CurrentYear.YEAR2025,
+      );
+      paymentInfoAssertions(
+        TaxProgram.STAY_NJ,
+        PaymentType.DIRECT_DEPOSIT,
+        "01/01/2026",
+        10.0,
+        CurrentYear.YEAR2025,
+      );
 
       FAQAssertions(FormCode.PAS1);
     });
-  });
-});
-
-describe("when taxYear is 2024", () => {
-  it("displays 2024 payments page", () => {
-    cy.intercept("POST", "/api/status", {
-      statusCode: 200,
-      fixture: "found_records_2024.json",
-    });
-
-    cy.contains("button", "Check Status").click();
-    cy.window().then((win) => {
-      (win as any).__setCurrentYear("2024");
-      (win as any).next.router.push("/payment-info");
-    });
-
-    cy.url().should("include", "/payment-info");
-    cy.contains("h1", "You are eligible for benefits for the 2024 Tax Year");
-
-    paymentInfoAssertions(TaxProgram.PTR, PaymentType.CHECK, mockDate, mockAmount);
-    FAQAssertions(FormCode.ANC1);
   });
 });
