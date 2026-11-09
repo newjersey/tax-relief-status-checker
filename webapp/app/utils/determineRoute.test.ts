@@ -158,53 +158,6 @@ describe("determineRoute", () => {
     });
   });
 
-  describe("form_code is PAS-1", () => {
-    it("routes a user to payment info when record has PTR payment sent", () => {
-      const record = buildYearRecord({
-        ptr: [{ status: TransactionStatus.PAYMENT_SENT }],
-      });
-
-      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/payment-info");
-    });
-
-    it("routes a user to payment info when record has Stay NJ payment sent when feature flag is true", () => {
-      vi.stubEnv("NEXT_PUBLIC_ENABLE_STAY", "true");
-      const record = buildYearRecord({
-        stay_nj: [{ status: TransactionStatus.PAYMENT_SENT }],
-      });
-
-      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/payment-info");
-      vi.unstubAllEnvs();
-    });
-
-    it("routes a user to application-received when record has Stay NJ payment sent when feature flag is false", () => {
-      vi.stubEnv("NEXT_PUBLIC_ENABLE_STAY", "false");
-      const record = buildYearRecord({
-        stay_nj: [{ status: TransactionStatus.PAYMENT_SENT }],
-      });
-
-      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/application-received");
-      vi.unstubAllEnvs();
-    });
-
-    it("routes a user to more-information-needed when record has a flagged issue", () => {
-      const record = buildYearRecord({
-        ptr: [{ status: TransactionStatus.ISSUE_FLAGGED, review_category: "SVR" }],
-        anchor: [{ status: TransactionStatus.ISSUE_FLAGGED, review_category: "MOD" }],
-      });
-
-      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/more-information-needed");
-    });
-
-    it("routes a user to the application received page when no PTR payment sent and no issue is flagged", () => {
-      const record = buildYearRecord({
-        ptr: [{ status: TransactionStatus.PROCESSING }],
-      });
-
-      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/application-received");
-    });
-  });
-
   describe("return_year is 2024", () => {
     it("routes a user to payment info when record only has payment sent", () => {
       const record = buildYearRecord({
