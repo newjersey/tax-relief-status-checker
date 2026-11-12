@@ -70,6 +70,15 @@ export const TaxReliefDataProvider = ({ children }: { children: ReactNode }) => 
   );
 };
 
+/**
+ * Whether the stored data cannot back any results page: nothing is stored, or status data has no
+ * record for the selected year. Missed-mailer data never has a status record but is still valid.
+ */
+const isMissingResultsData = (
+  dataStore: TaxReliefStatusData | null,
+  record: YearRecord | null,
+): boolean => !dataStore || (dataStore.type === DataType.STATUS && !record);
+
 export const useDataStore = () => {
   const context = useContext(TaxReliefDataContext);
   const dataStore = context?.dataStore ?? null;
@@ -77,12 +86,13 @@ export const useDataStore = () => {
   const pathname = usePathname();
   const record =
     dataStore?.type === DataType.STATUS ? (dataStore.records[dataStore.currentYear] ?? null) : null;
+  const shouldRedirectHome = pathname !== "/" && isMissingResultsData(dataStore, record);
 
   useEffect(() => {
-    if (pathname !== "/" && !record) {
+    if (shouldRedirectHome) {
       router.replace("/");
     }
-  }, [pathname, record, router]);
+  }, [shouldRedirectHome, router]);
 
   if (!context) {
     throw new Error("useDataStore must be used within a TaxReliefDataContext");
