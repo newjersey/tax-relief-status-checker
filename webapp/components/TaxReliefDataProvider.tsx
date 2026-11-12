@@ -70,6 +70,16 @@ export const TaxReliefDataProvider = ({ children }: { children: ReactNode }) => 
   );
 };
 
+/**
+ * Decides whether a non-landing page must send the user back to the landing page. Missed-mailer
+ * data never carries a year record, so it is exempt; the missed-mailer page guards its own data
+ * type.
+ */
+const shouldRedirectHome = (
+  dataStore: TaxReliefStatusData | null,
+  record: YearRecord | null,
+): boolean => dataStore?.type !== DataType.MISSED_MAILER && !record;
+
 export const useDataStore = () => {
   const context = useContext(TaxReliefDataContext);
   const dataStore = context?.dataStore ?? null;
@@ -79,10 +89,10 @@ export const useDataStore = () => {
     dataStore?.type === DataType.STATUS ? (dataStore.records[dataStore.currentYear] ?? null) : null;
 
   useEffect(() => {
-    if (pathname !== "/" && !record) {
+    if (pathname !== "/" && shouldRedirectHome(dataStore, record)) {
       router.replace("/");
     }
-  }, [pathname, record, router]);
+  }, [pathname, dataStore, record, router]);
 
   if (!context) {
     throw new Error("useDataStore must be used within a TaxReliefDataContext");
