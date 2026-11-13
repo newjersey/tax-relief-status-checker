@@ -37,15 +37,11 @@ export const YearSelector = ({
           className="usa-accordion__button usa-nav__link usa-current"
           style={{ fontSize: "1.25rem", color: "#005ea2" }}
           aria-expanded="false"
-          aria-controls="basic-nav-section-one-acc-99bd76fa-64bc-4adc-be98-8947e5e9703b"
+          aria-controls="basic-nav-section-one"
         >
           <span>{t("year2024")}</span>
         </button>
-        <ul
-          className="usa-nav__submenu"
-          hidden={true}
-          id="basic-nav-section-one-acc-99bd76fa-64bc-4adc-be98-8947e5e9703b"
-        >
+        <ul className="usa-nav__submenu" hidden={true} id="basic-nav-section-one">
           <li className="usa-nav__submenu-item">
             <a
               href="#2025"
@@ -73,15 +69,11 @@ export const YearSelector = ({
         className="usa-accordion__button usa-nav__link"
         style={{ fontSize: "1.25rem" }}
         aria-expanded="false"
-        aria-controls="basic-nav-section-one-acc-99bd76fa-64bc-4adc-be98-8947e5e9703b"
+        aria-controls="basic-nav-section-one"
       >
         <span>{t("priorTaxYears")}</span>
       </button>
-      <ul
-        className="usa-nav__submenu"
-        hidden={true}
-        id="basic-nav-section-one-acc-99bd76fa-64bc-4adc-be98-8947e5e9703b"
-      >
+      <ul className="usa-nav__submenu" hidden={true} id="basic-nav-section-one">
         <li className="usa-nav__submenu-item">
           <a
             href="#2024"
@@ -105,7 +97,6 @@ export const YearSelector = ({
   );
 };
 
-//new name?
 export const CurrentYearLink = ({
   currentYear,
   setCurrentYear,

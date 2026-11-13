@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { DataType, useDataStore } from "@/components/TaxReliefDataProvider";
 import { ProcessList, ProcessListHeading, ProcessListItem } from "@trussworks/react-uswds";
-import { ApplicationReceivedFaqContent } from "./ApplicationReceivedFaqContent";
+import { ApplicationReceivedFaqContent2025 } from "./ApplicationReceivedFaqContent2025";
 import { ApplicationReceivedFaqContent2024 } from "./ApplicationReceivedFaqContent2024";
 import { FaqSection } from "@/components/FaqSection";
 import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
@@ -25,7 +25,7 @@ export const ApplicationReceivedFaq = ({ currentYear }: { currentYear: CurrentYe
   return (
     <>
       <FaqSection
-        items={ApplicationReceivedFaqContent()}
+        items={ApplicationReceivedFaqContent2025()}
         titleHeadingLevel="h2"
         itemHeadingLevel="h3"
       />
