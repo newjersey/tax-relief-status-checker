@@ -56,13 +56,6 @@ export const TaxReliefDataProvider = ({ children }: { children: ReactNode }) => 
     );
   };
 
-  //so cypress can see setCurrentYear, will be removed once year navigator is added
-  useEffect(() => {
-    if (typeof window !== "undefined" && (window as any).Cypress) {
-      (window as any).__setCurrentYear = setCurrentYear;
-    }
-  }, [setCurrentYear]);
-
   return (
     <TaxReliefDataContext value={{ dataStore, setDataStore, setCurrentYear }}>
       {children}

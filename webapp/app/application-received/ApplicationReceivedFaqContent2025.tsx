@@ -1,7 +1,7 @@
 import { fireEventWhenFaqOpened, type FaqItem } from "@/components/FaqSection";
 import { Trans, useTranslation } from "react-i18next";
 
-export const ApplicationReceivedFaqContent = (): FaqItem[] => {
+export const ApplicationReceivedFaqContent2025 = (): FaqItem[] => {
   const { t } = useTranslation(["appRec", "common"]);
   return [
     {
