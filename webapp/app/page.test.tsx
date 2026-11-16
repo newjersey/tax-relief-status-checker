@@ -52,6 +52,7 @@ const buildYearRecord = (overrides?: Partial<YearRecord>): YearRecord => ({
   anchor: [],
   ptr: [],
   stay_nj: [],
+  issueFlagged: undefined,
   ...overrides,
 });
 
@@ -81,7 +82,7 @@ describe("onSubmit handler", () => {
       expect.objectContaining({ method: "POST" }),
     );
 
-    expect(determineRoute).toHaveBeenCalledWith(yearRecord);
+    expect(determineRoute).toHaveBeenCalledWith(yearRecord, "2025");
     expect(logGAEvent).toHaveBeenCalledWith("api_200_record_found");
   });
 

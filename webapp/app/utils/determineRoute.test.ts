@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { determineRoute } from "./determineRoute";
 import { TransactionStatus } from "@/components/types";
 import { FormCode } from "@/components/types";
-import { YearRecord } from "@/components/TaxReliefDataProvider";
+import { CurrentYear, YearRecord } from "@/components/TaxReliefDataProvider";
 
 const buildYearRecord = (overrides?: Partial<YearRecord>): YearRecord => ({
   return_year: "2025",
@@ -21,7 +21,7 @@ describe("determineRoute", () => {
         ptr: [{ status: TransactionStatus.PAYMENT_SENT }],
       });
 
-      expect(determineRoute(record)).toBe("/payment-info");
+      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/payment-info");
     });
 
     it("routes a user to payment info when record has Stay NJ payment", () => {
@@ -29,7 +29,7 @@ describe("determineRoute", () => {
         stay_nj: [{ status: TransactionStatus.PAYMENT_SENT }],
       });
 
-      expect(determineRoute(record)).toBe("/payment-info");
+      expect(determineRoute(record, CurrentYear.YEAR2024)).toBe("/payment-info");
     });
 
     it("routes a user to more-information-needed when record has a flagged issue", () => {
@@ -38,7 +38,7 @@ describe("determineRoute", () => {
         anchor: [{ status: TransactionStatus.ISSUE_FLAGGED, review_category: "MOD" }],
       });
 
-      expect(determineRoute(record)).toBe("/more-information-needed");
+      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/more-information-needed");
     });
 
     it("routes a user to the application received page when no PTR payment sent and no issue is flagged", () => {
@@ -46,7 +46,7 @@ describe("determineRoute", () => {
         ptr: [{ status: TransactionStatus.PROCESSING }],
       });
 
-      expect(determineRoute(record)).toBe("/application-received");
+      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/application-received");
     });
   });
 
@@ -56,7 +56,7 @@ describe("determineRoute", () => {
         anchor: [{ status: TransactionStatus.PAYMENT_SENT }],
         form_code: FormCode.ANC1,
       });
-      expect(determineRoute(record)).toBe("/payment-info");
+      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/payment-info");
     });
     it("routes a user to regular payment info when record has ANCHOR and PTR payment sent", () => {
       const record = buildYearRecord({
@@ -64,7 +64,7 @@ describe("determineRoute", () => {
         ptr: [{ status: TransactionStatus.PAYMENT_SENT }],
         form_code: FormCode.ANC1,
       });
-      expect(determineRoute(record)).toBe("/payment-info");
+      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/payment-info");
     });
     it("routes a user to regular payment info when record has ANCHOR and Stay payment sent", () => {
       const record = buildYearRecord({
@@ -72,7 +72,7 @@ describe("determineRoute", () => {
         stay_nj: [{ status: TransactionStatus.PAYMENT_SENT }],
         form_code: FormCode.ANC1,
       });
-      expect(determineRoute(record)).toBe("/payment-info");
+      expect(determineRoute(record, CurrentYear.YEAR2024)).toBe("/payment-info");
     });
     it("routes a user to more-information-needed when record has a flagged issue", () => {
       const record = buildYearRecord({
@@ -80,14 +80,14 @@ describe("determineRoute", () => {
         anchor: [{ status: TransactionStatus.ISSUE_FLAGGED, review_category: "MOD" }],
         form_code: FormCode.ANC1,
       });
-      expect(determineRoute(record)).toBe("/more-information-needed");
+      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/more-information-needed");
     });
     it("routes a user to the anchor application received page when no ANCHOR payment sent and no issue is flagged", () => {
       const record = buildYearRecord({
         anchor: [{ status: TransactionStatus.PROCESSING }],
         form_code: FormCode.ANC1,
       });
-      expect(determineRoute(record)).toBe("/anchor-application-received");
+      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/anchor-application-received");
     });
   });
 
@@ -98,7 +98,7 @@ describe("determineRoute", () => {
         ptr: [{ status: TransactionStatus.PAYMENT_SENT }],
       });
 
-      expect(determineRoute(record)).toBe("/payment-info");
+      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/payment-info");
     });
 
     it("routes a user to payment info when record has Stay NJ payment", () => {
@@ -108,7 +108,7 @@ describe("determineRoute", () => {
         stay_nj: [{ status: TransactionStatus.PAYMENT_SENT }],
       });
 
-      expect(determineRoute(record)).toBe("/payment-info");
+      expect(determineRoute(record, CurrentYear.YEAR2024)).toBe("/payment-info");
     });
 
     it("routes a user to more-information-needed when record has a flagged issue", () => {
@@ -118,7 +118,7 @@ describe("determineRoute", () => {
         anchor: [{ status: TransactionStatus.ISSUE_FLAGGED, review_category: "MOD" }],
       });
 
-      expect(determineRoute(record)).toBe("/more-information-needed");
+      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/more-information-needed");
     });
 
     it("routes a user to the application received page when no PTR payment sent and no issue is flagged", () => {
@@ -127,7 +127,7 @@ describe("determineRoute", () => {
         ptr: [{ status: TransactionStatus.PROCESSING }],
       });
 
-      expect(determineRoute(record)).toBe("/application-received");
+      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/application-received");
     });
   });
 });

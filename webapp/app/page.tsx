@@ -182,7 +182,7 @@ const LandingPage = () => {
       records: recordsByYear,
     });
     logGAEvent(`api_200_record_found`);
-    router.push(determineRoute(recordsByYear[CurrentYear.YEAR2025]!));
+    router.push(determineRoute(recordsByYear[CurrentYear.YEAR2025]!, CurrentYear.YEAR2025));
   };
 
   const onSubmit: SubmitHandler<UserData> = async (data) => {
