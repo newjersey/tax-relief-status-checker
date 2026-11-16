@@ -203,7 +203,7 @@ const PaymentInfoPage = () => {
                 return showProgramTransactions(anchor, TaxProgram.ANCHOR);
               })()}
               {(() => {
-                if (currentYear === CurrentYear.YEAR2025 || stay_nj.length === 0) return null;
+                if (currentYear !== CurrentYear.YEAR2024 || stay_nj.length === 0) return null;
                 return showProgramTransactions(stay_nj, TaxProgram.STAY_NJ);
               })()}
             </tbody>
