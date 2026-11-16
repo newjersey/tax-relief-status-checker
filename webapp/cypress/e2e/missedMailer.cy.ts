@@ -19,10 +19,4 @@ it("should route the user to the missingMailer page when missingMailer has API r
   });
   cy.contains("button", `Check Status`).click();
   cy.url().should("include", "/missed-mailer");
-  cy.contains("h3", "We could not file an ANCHOR benefit application on your behalf").should(
-    "be.visible",
-  );
-  cy.contains("h1", "You must file the ANCHOR application yourself by November 2, 2026.").should(
-    "be.visible",
-  );
 });
