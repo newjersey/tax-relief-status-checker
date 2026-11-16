@@ -1,8 +1,11 @@
-import { YearRecord } from "@/components/TaxReliefDataProvider";
+import { CurrentYear, YearRecord } from "@/components/TaxReliefDataProvider";
 import { TransactionStatus } from "@/components/types";
 
 /** Returns an boolean array based on a records payment sent transaction per program */
-export const hasPaymentSentTransaction = (record: YearRecord): boolean[] => {
+export const hasPaymentSentTransaction = (
+  record: YearRecord,
+  currentYear: CurrentYear,
+): boolean[] => {
   const hasAnchorPayment = [...record.anchor].some(
     (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
   );
@@ -11,7 +14,7 @@ export const hasPaymentSentTransaction = (record: YearRecord): boolean[] => {
   );
 
   let hasStayPayment = false;
-  if (process.env.NEXT_PUBLIC_ENABLE_STAY == "true") {
+  if (currentYear === CurrentYear.YEAR2024) {
     hasStayPayment = [...record.stay_nj].some(
       (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
     );

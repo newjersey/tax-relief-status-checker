@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LandingPage from "./page";
 import { FormCode } from "@/components/types";
-import { TaxReliefDataProvider, YearRecord } from "@/components/TaxReliefDataProvider";
+import { CurrentYear, TaxReliefDataProvider, YearRecord } from "@/components/TaxReliefDataProvider";
 import { logGAEvent } from "./utils/analytics";
 import { determineRoute } from "./utils/determineRoute";
 import { formatDate } from "./utils/formatDate";
@@ -52,6 +52,7 @@ const buildYearRecord = (overrides?: Partial<YearRecord>): YearRecord => ({
   anchor: [],
   ptr: [],
   stay_nj: [],
+  issueFlagged: undefined,
   ...overrides,
 });
 
@@ -81,7 +82,7 @@ describe("onSubmit handler", () => {
       expect.objectContaining({ method: "POST" }),
     );
 
-    expect(determineRoute).toHaveBeenCalledWith(yearRecord);
+    expect(determineRoute).toHaveBeenCalledWith(yearRecord, CurrentYear.YEAR2025);
     expect(logGAEvent).toHaveBeenCalledWith("api_200_record_found");
   });
 
@@ -99,7 +100,7 @@ describe("onSubmit handler", () => {
   });
 
   describe("when status API record not found", () => {
-    const yearRecord = buildYearRecord({ return_year: "2024" });
+    const yearRecord = buildYearRecord({ return_year: "2023" });
     const statusResponseNoRecord = { records: [yearRecord] };
 
     it("it calls missed mailer API, when missed mailer record is found, sets datastore and routes user to missed-mailer", async () => {

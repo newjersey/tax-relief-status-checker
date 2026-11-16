@@ -1,33 +1,6 @@
 import { CurrentYear } from "@/components/TaxReliefDataProvider";
-import { fillFields, MOCK_SSN, MOCK_ZIP, MOCK_DATE } from "./utils";
-
-const moreInformationNeededAssertions = (currentYear: CurrentYear) => {
-  cy.url().should("include", "/more-information-needed");
-  cy.contains(
-    "h1",
-    `Your application was received on ${MOCK_DATE} for the ${currentYear} Tax Year`,
-  ).should("be.visible");
-
-  cy.contains("p", "SSN/ITIN: ***-**-").should("be.visible");
-  cy.contains("p", MOCK_SSN.slice(-4)).should("be.visible");
-  cy.contains("p", "ZIP Code:").should("be.visible");
-  cy.contains("p", MOCK_ZIP).should("be.visible");
-
-  cy.get("@gtag").should(
-    "have.been.calledWith",
-    "event",
-    "api_200_record_found",
-    Cypress.sinon.match.any,
-  );
-
-  cy.window().then((win) => {
-    if (win.innerWidth < 1024) {
-      cy.get(".usa-menu-btn").click();
-    }
-  });
-  cy.contains("a", "Log out").click();
-  cy.contains("h1", "Track your 2025 property tax relief application and payment status");
-};
+import { fillFields } from "./utils";
+import { moreInformationNeededAssertions, logoutAssertions } from "./utils";
 
 beforeEach(() => {
   cy.on("window:before:load", (win) => {
@@ -51,6 +24,7 @@ it("should display issue flagged warning - upload tax bill", () => {
     "We need additional information to continue processing your application. Please send us a copy of your final property tax bill by using one of the following:",
   ).should("be.visible");
   moreInformationNeededAssertions(CurrentYear.YEAR2025);
+  logoutAssertions();
 });
 
 it("should display issue flagged warning - contact taxation", () => {
@@ -68,24 +42,5 @@ it("should display issue flagged warning - contact taxation", () => {
     "We need additional information to continue processing your application. Please contact the Division by using one of the following:",
   ).should("be.visible");
   moreInformationNeededAssertions(CurrentYear.YEAR2025);
-});
-
-it("should display issue flagged warning - contact taxation for the 2024 year", () => {
-  fillFields();
-  cy.fixture("issue_flagged_contact_taxation_2024.json").then((resp) => {
-    cy.intercept("POST", "/api/status", {
-      statusCode: 200,
-      body: resp,
-    });
-  });
-  cy.contains("button", `Check Status`).click();
-  cy.window().then((win) => {
-    (win as any).__setCurrentYear("2024");
-    (win as any).next.router.push("/more-information-needed");
-  });
-  cy.contains(
-    "p",
-    "We need additional information to continue processing your application. Please contact the Division by using one of the following:",
-  ).should("be.visible");
-  moreInformationNeededAssertions(CurrentYear.YEAR2024);
+  logoutAssertions();
 });

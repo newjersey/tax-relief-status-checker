@@ -167,22 +167,29 @@ const LandingPage = () => {
     }
   };
 
-  const handleRecordFound = (records: YearRecord[], data: UserData) => {
+  const handleRecordFound = (records: YearRecord[], data: UserData, currentYear: CurrentYear) => {
     const lastFourSsnDigits = maskSsn(data.ssn);
     const recordsByYear: Partial<Record<CurrentYear, YearRecord>> = {};
     for (const r of records) {
       recordsByYear[String(r.return_year) as CurrentYear] = withIssueFlagged(r);
     }
+    const selectedRecord = recordsByYear[currentYear];
+
+    if (!selectedRecord) {
+      handleStatusApiError();
+      return;
+    }
 
     setDataStore({
-      currentYear: CurrentYear.YEAR2025,
+      currentYear: currentYear,
       type: DataType.STATUS,
       lastFourSsnDigits: lastFourSsnDigits,
       zipCode: data.zipCode,
       records: recordsByYear,
     });
+
     logGAEvent(`api_200_record_found`);
-    router.push(determineRoute(recordsByYear[CurrentYear.YEAR2025]!));
+    router.push(determineRoute(selectedRecord, currentYear));
   };
 
   const onSubmit: SubmitHandler<UserData> = async (data) => {
@@ -191,13 +198,17 @@ const LandingPage = () => {
     try {
       const statusResult = await callStatusApi({ ssn: data.ssn, zip: data.zipCode });
       const record2025 = statusResult.records.find((r) => r.return_year === "2025");
+      const record2024 = statusResult.records.find((r) => r.return_year === "2024");
 
-      if (!record2025) {
+      if (!record2025 && !record2024) {
         await handleNoRecord(data);
         return;
       }
-
-      handleRecordFound(statusResult.records, data);
+      if (record2025) {
+        handleRecordFound(statusResult.records, data, CurrentYear.YEAR2025);
+      } else if (record2024) {
+        handleRecordFound(statusResult.records, data, CurrentYear.YEAR2024);
+      }
     } catch {
       handleStatusApiError();
     }
