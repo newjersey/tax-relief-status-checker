@@ -203,8 +203,7 @@ const PaymentInfoPage = () => {
                 return showProgramTransactions(anchor, TaxProgram.ANCHOR);
               })()}
               {(() => {
-                if (!(process.env.NEXT_PUBLIC_ENABLE_STAY == "true") || stay_nj.length === 0)
-                  return null;
+                if (stay_nj.length === 0) return null;
                 return showProgramTransactions(stay_nj, TaxProgram.STAY_NJ);
               })()}
             </tbody>

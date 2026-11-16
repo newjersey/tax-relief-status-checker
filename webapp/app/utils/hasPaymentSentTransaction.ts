@@ -10,12 +10,9 @@ export const hasPaymentSentTransaction = (record: YearRecord): boolean[] => {
     (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
   );
 
-  let hasStayPayment = false;
-  if (process.env.NEXT_PUBLIC_ENABLE_STAY == "true") {
-    hasStayPayment = [...record.stay_nj].some(
-      (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
-    );
-  }
+  const hasStayPayment = [...record.stay_nj].some(
+    (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
+  );
 
   return [hasAnchorPayment, hasPTRPayment, hasStayPayment];
 };

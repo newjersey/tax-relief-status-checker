@@ -29,20 +29,12 @@ describe("hasPaymentSentTransaction", () => {
 
     expect(hasPaymentSentTransaction(record)).toStrictEqual([false, true, false]);
   });
-  it("returns [0,0,0] for a record with stay payment sent (feature flag false)", () => {
-    vi.stubEnv("NEXT_PUBLIC_ENABLE_STAY", "false");
-    const record = buildYearRecord({ stay_nj: [{ status: TransactionStatus.PAYMENT_SENT }] });
-
-    expect(hasPaymentSentTransaction(record)).toStrictEqual([false, false, false]);
-    vi.unstubAllEnvs();
-  });
-  it("returns [0,0,1] for a record with stay payment sent (feature flag true)", () => {
-    vi.stubEnv("NEXT_PUBLIC_ENABLE_STAY", "true");
+  it("returns [0,0,1] for a record with stay payment sent", () => {
     const record = buildYearRecord({ stay_nj: [{ status: TransactionStatus.PAYMENT_SENT }] });
 
     expect(hasPaymentSentTransaction(record)).toStrictEqual([false, false, true]);
-    vi.unstubAllEnvs();
   });
+
   it("returns [1,1,0] for a record with anchor,ptr payment", () => {
     const record = buildYearRecord({
       anchor: [{ status: TransactionStatus.PAYMENT_SENT }],
@@ -50,35 +42,26 @@ describe("hasPaymentSentTransaction", () => {
     });
     expect(hasPaymentSentTransaction(record)).toStrictEqual([true, true, false]);
   });
-  it("returns [1,0,1] for a record with anchor,stay payment (feature flag true)", () => {
-    vi.stubEnv("NEXT_PUBLIC_ENABLE_STAY", "true");
-
+  it("returns [1,0,1] for a record with anchor,stay payment", () => {
     const record = buildYearRecord({
       anchor: [{ status: TransactionStatus.PAYMENT_SENT }],
       stay_nj: [{ status: TransactionStatus.PAYMENT_SENT }],
     });
     expect(hasPaymentSentTransaction(record)).toStrictEqual([true, false, true]);
-    vi.unstubAllEnvs;
   });
-  it("returns [0,1,1] for a record with ptr,stay payment (feature flag true)", () => {
-    vi.stubEnv("NEXT_PUBLIC_ENABLE_STAY", "true");
-
+  it("returns [0,1,1] for a record with ptr,stay payment", () => {
     const record = buildYearRecord({
       ptr: [{ status: TransactionStatus.PAYMENT_SENT }],
       stay_nj: [{ status: TransactionStatus.PAYMENT_SENT }],
     });
     expect(hasPaymentSentTransaction(record)).toStrictEqual([false, true, true]);
-    vi.unstubAllEnvs;
   });
-  it("returns [1,1,1] for a record with anchor,ptr,stay payment (feature flag true)", () => {
-    vi.stubEnv("NEXT_PUBLIC_ENABLE_STAY", "true");
-
+  it("returns [1,1,1] for a record with anchor,ptr,stay payment", () => {
     const record = buildYearRecord({
       anchor: [{ status: TransactionStatus.PAYMENT_SENT }],
       ptr: [{ status: TransactionStatus.PAYMENT_SENT }],
       stay_nj: [{ status: TransactionStatus.PAYMENT_SENT }],
     });
     expect(hasPaymentSentTransaction(record)).toStrictEqual([true, true, true]);
-    vi.unstubAllEnvs;
   });
 });

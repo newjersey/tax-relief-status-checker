@@ -24,24 +24,12 @@ describe("determineRoute", () => {
       expect(determineRoute(record)).toBe("/payment-info");
     });
 
-    it("routes a user to payment info when record has Stay NJ payment sent when feature flag is true", () => {
-      vi.stubEnv("NEXT_PUBLIC_ENABLE_STAY", "true");
+    it("routes a user to payment info when record has Stay NJ payment", () => {
       const record = buildYearRecord({
         stay_nj: [{ status: TransactionStatus.PAYMENT_SENT }],
       });
 
       expect(determineRoute(record)).toBe("/payment-info");
-      vi.unstubAllEnvs();
-    });
-
-    it("routes a user to application-received when record has Stay NJ payment sent when feature flag is false", () => {
-      vi.stubEnv("NEXT_PUBLIC_ENABLE_STAY", "false");
-      const record = buildYearRecord({
-        stay_nj: [{ status: TransactionStatus.PAYMENT_SENT }],
-      });
-
-      expect(determineRoute(record)).toBe("/application-received");
-      vi.unstubAllEnvs();
     });
 
     it("routes a user to more-information-needed when record has a flagged issue", () => {
@@ -79,14 +67,12 @@ describe("determineRoute", () => {
       expect(determineRoute(record)).toBe("/payment-info");
     });
     it("routes a user to regular payment info when record has ANCHOR and Stay payment sent", () => {
-      vi.stubEnv("NEXT_PUBLIC_ENABLE_STAY", "true");
       const record = buildYearRecord({
         anchor: [{ status: TransactionStatus.PAYMENT_SENT }],
         stay_nj: [{ status: TransactionStatus.PAYMENT_SENT }],
         form_code: FormCode.ANC1,
       });
       expect(determineRoute(record)).toBe("/payment-info");
-      vi.unstubAllEnvs;
     });
     it("routes a user to more-information-needed when record has a flagged issue", () => {
       const record = buildYearRecord({
@@ -115,8 +101,7 @@ describe("determineRoute", () => {
       expect(determineRoute(record)).toBe("/payment-info");
     });
 
-    it("routes a user to payment info when record has Stay NJ payment sent when feature flag is true", () => {
-      vi.stubEnv("NEXT_PUBLIC_ENABLE_STAY", "true");
+    it("routes a user to payment info when record has Stay NJ payment", () => {
       const record = buildYearRecord({
         form_code: null,
 
@@ -124,18 +109,6 @@ describe("determineRoute", () => {
       });
 
       expect(determineRoute(record)).toBe("/payment-info");
-      vi.unstubAllEnvs();
-    });
-
-    it("routes a user to application-received when record has Stay NJ payment sent when feature flag is false", () => {
-      vi.stubEnv("NEXT_PUBLIC_ENABLE_STAY", "false");
-      const record = buildYearRecord({
-        form_code: null,
-        stay_nj: [{ status: TransactionStatus.PAYMENT_SENT }],
-      });
-
-      expect(determineRoute(record)).toBe("/application-received");
-      vi.unstubAllEnvs();
     });
 
     it("routes a user to more-information-needed when record has a flagged issue", () => {
