@@ -5,7 +5,10 @@ import { CurrentYear, YearRecord } from "@/components/TaxReliefDataProvider";
 
 /** Determines the route to navigate to based on the status record's transaction data. */
 export const determineRoute = (record: YearRecord, currentYear: CurrentYear): string => {
-  const [hasAnchorPayment, hasPtrPayment, hasStayPayment] = hasPaymentSentTransaction(record);
+  const [hasAnchorPayment, hasPtrPayment, hasStayPayment] = hasPaymentSentTransaction(
+    record,
+    currentYear,
+  );
   if (hasAnchorPayment || hasPtrPayment || hasStayPayment) {
     return "/payment-info";
   }

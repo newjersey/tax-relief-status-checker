@@ -1,7 +1,7 @@
 import { formatDate } from "@/app/utils/formatDate";
 import payment_sent_transaction from "../fixtures/payment_sent_transaction.json";
 import earlier_transaction from "../fixtures/earlier_payment_sent_transaction.json";
-import { fillFields, MOCK_SSN, MOCK_ZIP } from "./utils";
+import { fillFields, MOCK_SSN, MOCK_ZIP, switchTaxYears } from "./utils";
 import { TaxProgram } from "@/components/types";
 import { FormCode } from "@/components/types";
 import { paymentInfoAssertions, FAQAssertions, PaymentType } from "./utils";
@@ -96,9 +96,12 @@ describe("when form_code is PAS-1", () => {
     FAQAssertions(FormCode.PAS1);
   });
   it("displays first check and update payment for PTR and ANCHOR and all regular payments for STAYNJ", () => {
-    cy.intercept("POST", "/api/status", {
-      statusCode: 200,
-      fixture: "pas1_update_payment_records.json",
+    cy.fixture("pas1_update_payment_records").then((resp) => {
+      resp.records[0].return_year = "2024";
+      cy.intercept("POST", "/api/status", {
+        statusCode: 200,
+        body: resp,
+      });
     });
     cy.contains("button", `Check Status`).click();
     cy.url().should("include", "/payment-info");
@@ -145,12 +148,14 @@ describe("when form_code is PAS-1", () => {
       CurrentYear.YEAR2025,
     );
 
-    FAQAssertions(FormCode.PAS1);
+    FAQAssertions(FormCode.ANC1);
   });
 
-  it("displays PAS-1 payments page if records has stay NJ CHECK", () => {
+  it("displays PAS-1 payments page if records has stay NJ CHECK (2024)", () => {
     cy.fixture("pas1_stay_record").then((resp) => {
       resp.records[0].stay_nj[1] = null;
+      resp.records[0].return_year = "2024";
+
       cy.intercept("POST", "/api/status", {
         statusCode: 200,
         body: resp,
@@ -163,15 +168,16 @@ describe("when form_code is PAS-1", () => {
       PaymentType.CHECK,
       formatDate("1/2/2027 00:00:00"),
       mockAmount,
-      CurrentYear.YEAR2025,
+      CurrentYear.YEAR2024,
     );
-    FAQAssertions(FormCode.PAS1);
+    FAQAssertions(FormCode.ANC1);
   });
 
-  it("displays PAS-1 payments page if records has stay NJ DIRECT DEPOSIT", () => {
+  it("displays PAS-1 payments page if records has stay NJ DIRECT DEPOSIT (2024)", () => {
     cy.fixture("pas1_stay_record").then((resp) => {
       resp.records[0].stay_nj[0].payment_details.method = PaymentType.DIRECT_DEPOSIT;
       resp.records[0].stay_nj[1] = null;
+      resp.records[0].return_year = "2024";
       cy.intercept("POST", "/api/status", {
         statusCode: 200,
         body: resp,
@@ -184,13 +190,14 @@ describe("when form_code is PAS-1", () => {
       PaymentType.DIRECT_DEPOSIT,
       formatDate("1/2/2027 00:00:00"),
       mockAmount,
-      CurrentYear.YEAR2025,
+      CurrentYear.YEAR2024,
     );
-    FAQAssertions(FormCode.PAS1);
+    FAQAssertions(FormCode.ANC1);
   });
 
-  it("displays both payments as regular if records has 2 stay NJ transaction in the same quarter", () => {
+  it("displays both payments as regular if records has 2 stay NJ transaction in the same quarter (2024)", () => {
     cy.fixture("pas1_stay_record").then((resp) => {
+      resp.records[0].return_year = "2024";
       resp.records[0].stay_nj[0].payment_details.method = PaymentType.DIRECT_DEPOSIT;
       cy.intercept("POST", "/api/status", {
         statusCode: 200,
@@ -213,7 +220,7 @@ describe("when form_code is PAS-1", () => {
       mockAmount,
       CurrentYear.YEAR2025,
     );
-    FAQAssertions(FormCode.PAS1);
+    FAQAssertions(FormCode.ANC1);
   });
 });
 
@@ -286,8 +293,9 @@ describe("when form_code is ANC-1", () => {
     FAQAssertions(FormCode.PAS1);
   });
 
-  it("displays PAS-1 payments page if records has anchor and stay payments", () => {
+  it("displays PAS-1 payments page if records has anchor and stay payments (2024)", () => {
     cy.fixture("anc1_found_records.json").then((resp) => {
+      resp.records[0].return_year = "2024";
       resp.records[0].stay_nj[0] = earlier_transaction;
       cy.intercept("POST", "/api/status", {
         statusCode: 200,
@@ -312,38 +320,79 @@ describe("when form_code is ANC-1", () => {
       CurrentYear.YEAR2025,
     );
 
-    FAQAssertions(FormCode.PAS1);
+    FAQAssertions(FormCode.ANC1);
   });
+});
 
-  describe("when form_code is NULL", () => {
-    it("displays PAS-1 payments page if records has payments", () => {
-      cy.fixture("anc1_found_records.json").then((resp) => {
-        resp.records[0].stay_nj[0] = earlier_transaction;
-        resp.records[0].form_code = null;
-        cy.intercept("POST", "/api/status", {
-          statusCode: 200,
-          body: resp,
-        });
+describe("when form_code is NULL", () => {
+  it("displays PAS-1 payments page if records has payments", () => {
+    cy.fixture("anc1_found_records.json").then((resp) => {
+      resp.records[0].stay_nj[0] = earlier_transaction;
+      resp.records[0].form_code = null;
+      resp.records[0].return_year = "2024";
+
+      cy.intercept("POST", "/api/status", {
+        statusCode: 200,
+        body: resp,
       });
-      cy.contains("button", `Check Status`).click();
-      cy.url().should("include", "/payment-info");
-
-      paymentInfoAssertions(
-        TaxProgram.ANCHOR,
-        PaymentType.CHECK,
-        mockDate,
-        mockAmount,
-        CurrentYear.YEAR2025,
-      );
-      paymentInfoAssertions(
-        TaxProgram.STAY_NJ,
-        PaymentType.DIRECT_DEPOSIT,
-        "01/01/2026",
-        10.0,
-        CurrentYear.YEAR2025,
-      );
-
-      FAQAssertions(FormCode.PAS1);
     });
+    cy.contains("button", `Check Status`).click();
+    cy.url().should("include", "/payment-info");
+
+    paymentInfoAssertions(
+      TaxProgram.ANCHOR,
+      PaymentType.CHECK,
+      mockDate,
+      mockAmount,
+      CurrentYear.YEAR2025,
+    );
+    paymentInfoAssertions(
+      TaxProgram.STAY_NJ,
+      PaymentType.DIRECT_DEPOSIT,
+      "01/01/2026",
+      10.0,
+      CurrentYear.YEAR2025,
+    );
+
+    FAQAssertions(FormCode.ANC1);
+  });
+});
+
+describe("when user has stay NJ payments", () => {
+  it("displays stay NJ payments for 2024, but not for 2025", () => {
+    cy.fixture("stay_records.json").then((resp) => {
+      cy.intercept("POST", "/api/status", {
+        statusCode: 200,
+        body: resp,
+      });
+    });
+    cy.contains("button", `Check Status`).click();
+    cy.url().should("include", "/payment-info");
+
+    paymentInfoAssertions(
+      TaxProgram.PTR,
+      PaymentType.CHECK,
+      mockDate,
+      mockAmount,
+      CurrentYear.YEAR2025,
+    );
+    cy.contains("td", "Stay NJ").should("not.be.visible");
+
+    switchTaxYears(CurrentYear.YEAR2025);
+
+    paymentInfoAssertions(
+      TaxProgram.PTR,
+      PaymentType.CHECK,
+      mockDate,
+      mockAmount,
+      CurrentYear.YEAR2024,
+    );
+    paymentInfoAssertions(
+      TaxProgram.STAY_NJ,
+      PaymentType.CHECK,
+      formatDate("7/5/2026 0:00:00"),
+      333.33,
+      CurrentYear.YEAR2024,
+    );
   });
 });
