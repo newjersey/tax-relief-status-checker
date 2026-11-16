@@ -222,7 +222,7 @@ describe("when form_code is ANC-1", () => {
 });
 
 describe("when taxYear is 2024", () => {
-  it("displays 2024 payments page with stay NJ payments", () => {
+  it("displays 2024 payments page if records has stay NJ CHECK", () => {
     cy.intercept("POST", "/api/status", {
       statusCode: 200,
       fixture: "stay_nj_found_records_2024.json",
@@ -240,10 +240,28 @@ describe("when taxYear is 2024", () => {
     paymentInfoAssertions(TaxProgram.STAY_NJ, PaymentType.CHECK, mockDate, mockAmount);
     FAQAssertions(FormCode.ANC1);
   });
+
+  it("displays 2024 payments page if records has stay NJ DIRECT DEPOSIT", () => {
+    cy.fixture("stay_nj_found_records_2024").then((resp) => {
+      resp.records[1].stay_nj[0].payment_details.method = PaymentType.DIRECT_DEPOSIT;
+      cy.intercept("POST", "/api/status", {
+        statusCode: 200,
+        body: resp,
+      });
+    });
+    cy.contains("button", `Check Status`).click();
+    cy.window().then((win) => {
+      (win as any).__setCurrentYear("2024");
+      (win as any).next.router.push("/payment-info");
+    });
+    cy.url().should("include", "/payment-info");
+    paymentInfoAssertions(TaxProgram.STAY_NJ, PaymentType.DIRECT_DEPOSIT, mockDate, mockAmount);
+    FAQAssertions(FormCode.ANC1);
+  });
 });
 
 describe("when taxYear is 2025", () => {
-  it("displays 2025 payments page without stay NJ", () => {
+  it("displays 2025 payments page without stay NJ payments", () => {
     cy.intercept("POST", "/api/status", {
       statusCode: 200,
       fixture: "stay_nj_found_records_2024.json",
