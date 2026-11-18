@@ -18,6 +18,7 @@ import {
 import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
 import { useTranslation, Trans } from "react-i18next";
 import { PaymentInfoFaqContent2024 } from "./PaymentInfoFaqContent2024";
+import { formatCheckAmount } from "../utils/formatCheckAmount";
 
 export const getEarliestTransaction = (transactions: Transaction[]) => {
   const valid = transactions.filter(
@@ -62,7 +63,7 @@ export const showRegularTransaction = (transaction: Transaction, taxProgram: Tax
           />
         </td>
       )}
-      <td>${transaction.payment_details.amount}</td>
+      <td>${formatCheckAmount(transaction.payment_details.amount)}</td>
     </tr>
   );
 };
@@ -84,7 +85,7 @@ export const showUpdatedTransaction = (
           />
         </div>
       </td>
-      <td>${transaction.payment_details.amount}</td>
+      <td>${formatCheckAmount(transaction.payment_details.amount)}</td>
     </tr>
   );
 };
