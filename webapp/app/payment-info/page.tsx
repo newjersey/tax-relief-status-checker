@@ -23,7 +23,6 @@ import {
 import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
 import { useTranslation, Trans } from "react-i18next";
 import { PaymentInfoFaqContent2024 } from "./PaymentInfoFaqContent2024";
-import router from "next/router";
 
 export const getEarliestTransaction = (transactions: Transaction[]) => {
   const valid = transactions.filter(
