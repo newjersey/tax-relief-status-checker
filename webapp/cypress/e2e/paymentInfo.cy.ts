@@ -395,4 +395,53 @@ describe("when user has stay NJ payments", () => {
       CurrentYear.YEAR2024,
     );
   });
+  it("displays signposting on 2025 record for someone with a 2024 stay NJ payment", () => {
+    cy.fixture("stay_records.json").then((resp) => {
+      cy.intercept("POST", "/api/status", {
+        statusCode: 200,
+        body: resp,
+      });
+    });
+    cy.contains("button", `Check Status`).click();
+    cy.url().should("include", "/payment-info");
+
+    cy.contains("td", "Stay NJ").should("not.be.visible");
+    cy.contains("p", "For Stay NJ payments that went out in 2026, visit your").should("be.visible");
+    cy.contains("span", "2024 Tax Year page.").should("be.visible");
+
+    cy.contains("a", "2024 Tax Year page.").click();
+    cy.url().should("include", "/payment-info");
+    paymentInfoAssertions(
+      TaxProgram.PTR,
+      PaymentType.CHECK,
+      mockDate,
+      mockAmount,
+      CurrentYear.YEAR2024,
+    );
+    paymentInfoAssertions(
+      TaxProgram.STAY_NJ,
+      PaymentType.CHECK,
+      formatDate("7/5/2026 0:00:00"),
+      333.33,
+      CurrentYear.YEAR2024,
+    );
+  });
+});
+
+describe("when user has NO 2024 stay NJ payments", () => {
+  it("does not display signposting on 2025 record", () => {
+    cy.fixture("stay_records.json").then((resp) => {
+      resp.records[1].stay_nj[0] = { status: "processing" };
+      cy.intercept("POST", "/api/status", {
+        statusCode: 200,
+        body: resp,
+      });
+    });
+    cy.contains("button", `Check Status`).click();
+    cy.url().should("include", "/payment-info");
+
+    cy.contains("td", "Stay NJ").should("not.be.visible");
+    cy.contains("p", "For Stay NJ payments that went out in 2026, visit your").should("not.exist");
+    cy.contains("span", "2024 Tax Year page.").should("not.exist");
+  });
 });

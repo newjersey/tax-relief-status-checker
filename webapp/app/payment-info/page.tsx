@@ -2,7 +2,12 @@
 
 import { JSX, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { CurrentYear, DataType, useDataStore } from "@/components/TaxReliefDataProvider";
+import {
+  CurrentYear,
+  DataType,
+  useDataStore,
+  YearRecord,
+} from "@/components/TaxReliefDataProvider";
 import { Table } from "@trussworks/react-uswds";
 import { formatDate } from "../utils/formatDate";
 import { PASPaymentInfoFaqContent } from "@/app/payment-info/PASPaymentInfoFaqContent";
@@ -18,6 +23,7 @@ import {
 import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
 import { useTranslation, Trans } from "react-i18next";
 import { PaymentInfoFaqContent2024 } from "./PaymentInfoFaqContent2024";
+import router from "next/router";
 
 export const getEarliestTransaction = (transactions: Transaction[]) => {
   const valid = transactions.filter(
@@ -116,13 +122,18 @@ export const PaymentFaq = ({
   hasPtrPayment,
   hasStayPayment,
   taxYear,
+  records,
+  setCurrentYear,
 }: {
   formCode: FormCode | null;
   hasPtrPayment: boolean;
   hasStayPayment: boolean;
   taxYear: CurrentYear;
+  records: Readonly<Partial<Record<CurrentYear, YearRecord>>>;
+  setCurrentYear: (year: CurrentYear) => void;
 }) => {
   const { t } = useTranslation("paymentInfo");
+  const router = useRouter();
 
   if (taxYear === CurrentYear.YEAR2024) {
     return (
@@ -142,6 +153,27 @@ export const PaymentFaq = ({
   return (
     <>
       <p>{t("pasPaymentSchedule")}</p>
+      {records[CurrentYear.YEAR2024] &&
+        records[CurrentYear.YEAR2024].stay_nj.some(
+          (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
+        ) && (
+          <>
+            <p>
+              {t("stayPayments2026")}
+              <a
+                href="#2024"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentYear(CurrentYear.YEAR2024);
+                  router.push("/payment-info");
+                }}
+                className="usa-nav__link"
+              >
+                <span>{t("taxYearPage2024")}</span>
+              </a>
+            </p>
+          </>
+        )}
       <FaqSection items={PASPaymentInfoFaqContent()} titleHeadingLevel="h2" itemHeadingLevel="h3" />
     </>
   );
@@ -150,7 +182,7 @@ export const PaymentFaq = ({
 const PaymentInfoPage = () => {
   const { t } = useTranslation(["paymentInfo", "common"]);
   const router = useRouter();
-  const { dataStore, record } = useDataStore();
+  const { dataStore, record, setCurrentYear } = useDataStore();
   if (!record) return null;
 
   useEffect(() => {
@@ -165,7 +197,7 @@ const PaymentInfoPage = () => {
     return null;
   }
 
-  const { lastFourSsnDigits, zipCode, currentYear } = dataStore;
+  const { lastFourSsnDigits, zipCode, currentYear, records } = dataStore;
   const { anchor, ptr, stay_nj, form_code } = record;
 
   const hasPtrPayment = [...ptr].some(
@@ -214,6 +246,8 @@ const PaymentInfoPage = () => {
             hasPtrPayment={hasPtrPayment}
             hasStayPayment={hasStayPayment}
             taxYear={currentYear}
+            records={records}
+            setCurrentYear={setCurrentYear}
           />
         </div>
       </section>
