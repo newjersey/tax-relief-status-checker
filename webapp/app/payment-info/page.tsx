@@ -159,17 +159,17 @@ export const PaymentFaq = ({
           <>
             <p>
               {t("stayPayments2026")}
-              <a
-                href="#2024"
-                onClick={(e) => {
-                  e.preventDefault();
+              <button
+                type="button"
+                className="usa-link bg-transparent border-0 padding-0 margin-0 text-normal"
+                style={{ font: "inherit", display: "inline", cursor: "pointer" }}
+                onClick={() => {
                   setCurrentYear(CurrentYear.YEAR2024);
-                  router.push("/payment-info");
+                  router.refresh();
                 }}
-                className="usa-nav__link"
               >
-                <span>{t("taxYearPage2024")}</span>
-              </a>
+                {t("taxYearPage2024")}
+              </button>
             </p>
           </>
         )}

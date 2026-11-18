@@ -407,9 +407,8 @@ describe("when user has stay NJ payments", () => {
 
     cy.contains("td", "Stay NJ").should("not.be.visible");
     cy.contains("p", "For Stay NJ payments that went out in 2026, visit your").should("be.visible");
-    cy.contains("span", "2024 Tax Year page.").should("be.visible");
 
-    cy.contains("a", "2024 Tax Year page.").click();
+    cy.contains("button", "2024 Tax Year page.").click();
     cy.url().should("include", "/payment-info");
     paymentInfoAssertions(
       TaxProgram.PTR,
