@@ -57,3 +57,14 @@ p.usa-alert__text {
     height: 45px;
   }
 }
+
+.usa-button.link-button {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-weight: normal;
+  cursor: pointer;
+}
