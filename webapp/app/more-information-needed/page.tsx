@@ -7,6 +7,8 @@ import { IssueFlaggedType } from "@/components/types";
 import { Alert } from "@trussworks/react-uswds";
 import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
 import { Trans, useTranslation } from "react-i18next";
+import { FaqSection } from "@/components/FaqSection";
+import { MoreInformationNeededFaqContent } from "./MoreInformationNeededFaqContent";
 
 const MoreInformationNeededPage = () => {
   const { t } = useTranslation(["moreInfo", "common"]);
@@ -96,6 +98,37 @@ const MoreInformationNeededPage = () => {
           </ul>
         </>
       );
+    } else if (alertType === IssueFlaggedType.PROVE_HOME_OWNERSHIP) {
+      return (
+        <>
+          <p>
+            <Trans i18nKey={"proveHomeOwnershipAlert"} ns="moreInfo">
+              <strong />
+            </Trans>
+          </p>
+          <ul>
+            <li>
+              <Trans
+                i18nKey={"uploadTaxBill"}
+                ns="moreInfo"
+                components={{
+                  1: <a href={t("uploadTaxBillURL")} />,
+                }}
+              ></Trans>
+            </li>
+            <li> {t("mailTaxBill")}</li>
+            <li>
+              <Trans
+                i18nKey={"bringTaxBill"}
+                ns="moreInfo"
+                components={{
+                  1: <a href={t("mailTaxBillURL")} />,
+                }}
+              ></Trans>
+            </li>
+          </ul>
+        </>
+      );
     }
   };
 
@@ -112,13 +145,18 @@ const MoreInformationNeededPage = () => {
             </Alert>
           )}
           <div className="margin-top-4">
-            <h1 className="font-heading-xl">
+            <h1 className="font-heading-xl margin-bottom-10">
               <Trans
                 i18nKey="appReceived"
                 ns="moreInfo"
                 values={{ date: application_date, year: currentYear }}
               />
             </h1>
+            <FaqSection
+              items={MoreInformationNeededFaqContent()}
+              titleHeadingLevel="h2"
+              itemHeadingLevel="h3"
+            />
           </div>
         </div>
       </section>

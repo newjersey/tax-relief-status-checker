@@ -44,3 +44,21 @@ it("should display issue flagged warning - contact taxation", () => {
   moreInformationNeededAssertions(CurrentYear.YEAR2025);
   logoutAssertions();
 });
+
+it("should display issue flagged warning - prove home ownership", () => {
+  fillFields();
+  cy.fixture("pas1_issue_flagged_prove_home_ownership.json").then((resp) => {
+    cy.intercept("POST", "/api/status", {
+      statusCode: 200,
+      body: resp,
+    });
+  });
+  cy.contains("button", `Check Status`).click();
+
+  cy.contains(
+    "p",
+    "We need additional information to continue processing your application. Please send us proof of home ownership, such as a deed, by:",
+  ).should("be.visible");
+  moreInformationNeededAssertions(CurrentYear.YEAR2024);
+  logoutAssertions();
+});
