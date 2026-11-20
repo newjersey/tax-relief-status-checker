@@ -8,7 +8,7 @@ import {
   useDataStore,
   YearRecord,
 } from "@/components/TaxReliefDataProvider";
-import { Table } from "@trussworks/react-uswds";
+import { Button, Table } from "@trussworks/react-uswds";
 import { formatDate } from "../utils/formatDate";
 import { PASPaymentInfoFaqContent } from "@/app/payment-info/PASPaymentInfoFaqContent";
 import { ANCPaymentInfoFaqContent } from "./ANCPaymentInfoFaqContent";
@@ -159,17 +159,17 @@ export const PaymentFaq = ({
           <>
             <p>
               {t("stayPayments2026")}
-              <button
+              <Button
                 type="button"
-                className="usa-link bg-transparent border-0 padding-0 margin-0 text-normal"
-                style={{ font: "inherit", display: "inline", cursor: "pointer" }}
+                unstyled
+                className="usa-link link-button"
                 onClick={() => {
                   setCurrentYear(CurrentYear.YEAR2024);
                   router.refresh();
                 }}
               >
                 {t("taxYearPage2024")}
-              </button>
+              </Button>
             </p>
           </>
         )}
