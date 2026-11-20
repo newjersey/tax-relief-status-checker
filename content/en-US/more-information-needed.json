@@ -1,11 +1,23 @@
 {
   "contactAlert": "We need additional information to continue processing your application. Please contact the Division by using one of the following:",
   "propertyTaxBillAlert": "We need additional information to continue processing your application. <0> Please send us a copy of your final property tax bill </0> by using one of the following:",
-  "uploadTaxBill": "Upload using <1> the secure NJ Online Notice Response Service (ONRS) </1>",
+  "proveHomeOwnershipAlert": "We need additional information to continue processing your application. <0> Please send us proof of home ownership, such as a deed,</0> by:",
+  "uploadTaxBill": "Uploading it to the secure <1> NJ Online Notice Response Service (ONRS) </1>",
   "uploadTaxBillURL": "https://www.njportal.com/dor/onlinenotices/",
-  "mailTaxBill": "Mail to: PO Box 900, Trenton, NJ 08646-0900",
+  "mailTaxBill": "Or mailing it to: PO Box 900, Trenton, NJ 08646-0900",
   "mailTaxBillURL": "https://www.nj.gov/treasury/taxation/contact-office.shtml",
-  "bringTaxBill": "Bring to one of our <1> Regional Information Centers </1>",
+  "bringTaxBill": "Or bringing it to one of our <1> Regional Information Centers </1>",
   "additionalInfoNeeded": "Additional information needed",
-  "appReceived": "Your application was received on {{date}} for the {{year}} Tax Year"
+  "appReceived": "Your application was received on {{date}} for the {{year}} Tax Year",
+  "faq": {
+    "appTakingTooLong": {
+      "title": "My application is taking too long. Who do I contact?",
+      "content": "If you have any questions or if processing has taken longer than expected, call 1-888-238-1233 (Monday to Friday 8:30 a.m. to 5:30 p.m.) or visit a Regional Information Center (RIC), <1>find a location</1> near you.",
+      "link": "https://nj.gov/treasury/taxation/contact-office.shtml"
+    },
+    "updateAfterSubmission": {
+      "title": "What if I need to update something after I\u2019ve submitted my application?",
+      "content": "To update your application after submitting, reach out to us directly via phone or email. In order for us to locate your record, be ready to provide your full name and the full address of the property you applied for:"
+    }
+  }
 }

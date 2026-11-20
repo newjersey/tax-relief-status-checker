@@ -1,0 +1,22 @@
+{
+  "records": [
+    {
+      "return_year": "2024",
+      "application_date": "2026-03-19T00:00:00.000Z",
+      "form_code": "PAS-1",
+      "anchor": [
+        {
+          "status": "issue_flagged",
+          "review_category": "OWN"
+        }
+      ],
+      "ptr": [
+        {
+          "status": "issue_flagged",
+          "review_category": "SVR"
+        }
+      ],
+      "stay_nj": []
+    }
+  ]
+}

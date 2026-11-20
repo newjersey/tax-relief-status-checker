@@ -3,6 +3,7 @@ import { IssueFlaggedType, Transaction, TransactionStatus } from "@/components/t
 
 const ISSUE_FLAGGED_TAX_BILL_NEEDED_REVIEW_CATEGORIES = ["MOD", "MDZ"];
 const ISSUE_FLAGGED_CONTACT_TAXATION_REVIEW_CATEGORIES = ["MAX", "MHX", "PCT", "DSU", "DSO"];
+const ISSUE_FLAGGED_PROVE_HOME_OWNERSHIP_REVIEW_CATEGORIES = ["OWN"];
 
 export const setIssueFlagged = (record: YearRecord): undefined | IssueFlaggedType => {
   if (hasReviewCategory(record.ptr, ["SVR"])) {
@@ -10,6 +11,10 @@ export const setIssueFlagged = (record: YearRecord): undefined | IssueFlaggedTyp
       return IssueFlaggedType.PROPERTY_TAX_BILL_NEEDED;
     } else if (hasReviewCategory(record.anchor, ISSUE_FLAGGED_CONTACT_TAXATION_REVIEW_CATEGORIES)) {
       return IssueFlaggedType.CONTACT_TAXATION;
+    } else if (
+      hasReviewCategory(record.anchor, ISSUE_FLAGGED_PROVE_HOME_OWNERSHIP_REVIEW_CATEGORIES)
+    ) {
+      return IssueFlaggedType.PROVE_HOME_OWNERSHIP;
     }
   }
 };

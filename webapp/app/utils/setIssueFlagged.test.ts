@@ -70,6 +70,11 @@ const testCases: readonly TestCase[] = [
     expected: IssueFlaggedType.CONTACT_TAXATION,
   },
   {
+    description: "returns PROVE_HOME_OWNERSHIP when ptr has SVR and anchor has OWN",
+    record: buildYearRecord({ ptr: ptrWithSVR, anchor: anchorWith("OWN") }),
+    expected: IssueFlaggedType.PROVE_HOME_OWNERSHIP,
+  },
+  {
     description: "returns undefined when ptr does not have issue_flagged status",
     record: buildYearRecord({
       ptr: [buildTransaction(TransactionStatus.PAYMENT_SENT)] as unknown as [],

@@ -42,6 +42,7 @@ export enum TransactionStatus {
 export enum IssueFlaggedType {
   PROPERTY_TAX_BILL_NEEDED,
   CONTACT_TAXATION,
+  PROVE_HOME_OWNERSHIP,
 }
 
 export enum FormCode {
