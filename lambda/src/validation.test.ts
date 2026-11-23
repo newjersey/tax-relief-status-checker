@@ -38,6 +38,8 @@ describe("isRecordValid", () => {
         RETURN_YEAR_DTE: null,
         RNY_APPLIED_DTE: null,
         TRANS_TOTAL_NUM: null,
+        STAY_ELG_REB: null,
+        SAVER_ELG_REB: null,
       });
       expect(() => InquiryRowSchema.parse(row)).toThrow();
     });
