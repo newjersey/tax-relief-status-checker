@@ -48,5 +48,7 @@
     }
   },
   "stayPayments2026": "For Stay NJ payments that went out in 2026, visit your ",
-  "taxYearPage2024": "2024 Tax Year page."
+  "taxYearPage2024": "2024 Tax Year page.",
+  "anchorEstimatedPaymentStatus": "Payment will go out soon. Check back in 3-4 weeks.",
+  "anchorEstimatedAmount": "Estimated amount of ${{amount}}"
 }

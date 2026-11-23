@@ -14,7 +14,12 @@ import {
   earlier_transaction,
   error_payment_sent_transaction,
 } from "./testUtils";
-import { PaymentMethod, TaxProgram, TransactionStatus } from "@/components/types";
+import {
+  EstimatedEligibilityType,
+  PaymentMethod,
+  TaxProgram,
+  TransactionStatus,
+} from "@/components/types";
 
 export enum PaymentType {
   ADJUSTED = "adjusted",
@@ -145,6 +150,8 @@ describe("showAllTransactions", () => {
     const result = showProgramTransactions(
       [payment_sent_transaction, earlier_transaction],
       TaxProgram.ANCHOR,
+      EstimatedEligibilityType.NOT_ELIGIBLE,
+      0,
     );
     render(result);
     const tableRows = document.body.querySelectorAll("tr");
@@ -163,6 +170,25 @@ describe("showAllTransactions", () => {
       earlier_transaction.payment_details.amount,
       PaymentType.DIRECT_DEPOSIT,
     );
+  });
+
+  it("shows estimated payment status and amount for anchor elligible transaction", () => {
+    const result = showProgramTransactions(
+      [payment_sent_transaction, earlier_transaction],
+      TaxProgram.ANCHOR,
+      EstimatedEligibilityType.ANCHOR_ELIGIBLE,
+      1000,
+    );
+    render(result);
+    const tableRows = document.body.querySelectorAll("tr");
+    expect(tableRows.length).toEqual(1);
+    const tableRowsString = tableRows[0].innerHTML.toString();
+
+    expect(tableRowsString).toContain(`<td>${TaxProgram.ANCHOR}</td>`);
+    expect(tableRowsString).toContain(
+      `<td>Payment will go out soon. Check back in 3-4 weeks.</td>`,
+    );
+    expect(tableRowsString).toContain(`<td>Estimated amount of $1000</td>`);
   });
 
   it("returns nothing if there is no payment_details", () => {

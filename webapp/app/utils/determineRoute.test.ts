@@ -2,17 +2,8 @@ import { describe, it, expect } from "vitest";
 import { determineRoute } from "./determineRoute";
 import { TransactionStatus } from "@/components/types";
 import { FormCode } from "@/components/types";
-import { CurrentYear, YearRecord } from "@/components/TaxReliefDataProvider";
-
-const buildYearRecord = (overrides?: Partial<YearRecord>): YearRecord => ({
-  return_year: "2025",
-  application_date: "2026-03-19T00:00:00.000Z",
-  form_code: FormCode.PAS1,
-  anchor: [],
-  ptr: [],
-  stay_nj: [],
-  ...overrides,
-});
+import { CurrentYear } from "@/components/TaxReliefDataProvider";
+import { buildYearRecord } from "./testUtils";
 
 const paymentInfoRecord = buildYearRecord({ ptr: [{ status: TransactionStatus.PAYMENT_SENT }] });
 const applicationReceivedRecord = buildYearRecord({
@@ -72,6 +63,12 @@ describe("determineRoute", () => {
       },
     ])("routes a user to $expectedRoute for $year record", ({ year, record, expectedRoute }) => {
       expect(determineRoute(record, year)).toBe(expectedRoute);
+    });
+    it("routes a user to payment info when record only has ANCHOR payment approved", () => {
+      const record = buildYearRecord({
+        anchor: [{ status: TransactionStatus.APPROVED }],
+      });
+      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/payment-info");
     });
   });
 

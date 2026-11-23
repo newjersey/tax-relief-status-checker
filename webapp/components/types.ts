@@ -49,3 +49,10 @@ export enum FormCode {
   ANC1 = "ANC-1",
   PAS1 = "PAS-1",
 }
+
+export enum EstimatedEligibilityType {
+  ANCHOR_ELIGIBLE,
+  STAY_ELIGIBLE,
+  BOTH_ELIGIBLE,
+  NOT_ELIGIBLE,
+}

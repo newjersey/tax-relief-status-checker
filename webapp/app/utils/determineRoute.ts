@@ -1,7 +1,8 @@
 import { setIssueFlagged } from "./setIssueFlagged";
-import { FormCode } from "@/components/types";
+import { EstimatedEligibilityType, FormCode } from "@/components/types";
 import { hasPaymentSentTransaction } from "./hasPaymentSentTransaction";
 import { CurrentYear, YearRecord } from "@/components/TaxReliefDataProvider";
+import { shouldShowEstimatedTransaction } from "./shouldShowEstimatedTransaction";
 
 /** Determines the route to navigate to based on the status record's transaction data. */
 export const determineRoute = (record: YearRecord, currentYear: CurrentYear): string => {
@@ -9,7 +10,14 @@ export const determineRoute = (record: YearRecord, currentYear: CurrentYear): st
     record,
     currentYear,
   );
-  if (hasAnchorPayment || hasPtrPayment || hasStayPayment) {
+  const estimatedEligibility = shouldShowEstimatedTransaction(record, currentYear);
+
+  if (
+    hasAnchorPayment ||
+    hasPtrPayment ||
+    hasStayPayment ||
+    estimatedEligibility === EstimatedEligibilityType.ANCHOR_ELIGIBLE
+  ) {
     return "/payment-info";
   }
   if (setIssueFlagged(record) !== undefined) {

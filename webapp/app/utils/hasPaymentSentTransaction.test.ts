@@ -1,17 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { FormCode, TransactionStatus } from "@/components/types";
+import { TransactionStatus } from "@/components/types";
 import { hasPaymentSentTransaction } from "./hasPaymentSentTransaction";
-import { YearRecord, CurrentYear } from "@/components/TaxReliefDataProvider";
-
-const buildYearRecord = (overrides?: Partial<YearRecord>): YearRecord => ({
-  return_year: "2025",
-  application_date: "2026-03-19T00:00:00.000Z",
-  form_code: FormCode.PAS1,
-  anchor: [],
-  ptr: [],
-  stay_nj: [],
-  ...overrides,
-});
+import { CurrentYear } from "@/components/TaxReliefDataProvider";
+import { buildYearRecord } from "./testUtils";
 
 describe("hasPaymentSentTransaction (currentYear = 2024)", () => {
   it("returns [0,0,0] for no payments sent", () => {
