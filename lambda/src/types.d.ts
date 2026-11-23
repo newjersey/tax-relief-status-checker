@@ -25,4 +25,6 @@ export interface InquiryRow {
   readonly DLN_NUM: string;
   readonly FORM_CDE: string;
   readonly [key: string]: unknown;
+  readonly STAY_ELG_REB: number;
+  readonly SAVER_ELG_REB: number;
 }

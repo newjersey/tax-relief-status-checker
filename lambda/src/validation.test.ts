@@ -11,6 +11,8 @@ describe("isRecordValid", () => {
       "RETURN_YEAR_DTE",
       "RNY_APPLIED_DTE",
       "TRANS_TOTAL_NUM",
+      "STAY_ELG_REB",
+      "SAVER_ELG_REB",
     ])("When %s is missing, throws error", (missingField: String) => {
       const row = buildMockRow({
         [`${missingField}`]: null,

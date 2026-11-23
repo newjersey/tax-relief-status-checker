@@ -17,6 +17,8 @@ export const InquiryRowSchema = z
     RNY_APPLIED_DTE: z.date("RNY_APPLIED_DTE is required"),
     TRANS_TOTAL_NUM: z.number("TRANS_TOTAL_NUM is required"),
     FORM_CDE: z.string().nullable(),
+    STAY_ELG_REB: z.number().nonnegative("STAY_ELG_REB must be >=0"),
+    SAVER_ELG_REB: z.number().nonnegative("SAVER_ELG_REB must be >=0"),
   })
   .readonly();
 

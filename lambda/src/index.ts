@@ -4,7 +4,6 @@ import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { Transaction, InquiryRow } from "./types";
 import { buildAllTransactions } from "./transaction";
 import { createMetricsLogger, StorageResolution, Unit } from "aws-embedded-metrics";
-import { validateInput } from "./validation";
 import { InputSchema, InquiryRowSchema } from "./validation";
 
 /** SQL query to look up filer records by SSN and ZIP */
@@ -32,6 +31,8 @@ interface ResponseRecord {
   readonly anchor: Transaction[];
   readonly ptr: Transaction[];
   readonly stay_nj: Transaction[];
+  readonly stay_eligible_rebate: number;
+  readonly anchor_eligible_rebate: number;
 }
 
 interface BuildResponseResult {
@@ -63,6 +64,8 @@ const mapRowToRecord = (row: InquiryRow): ResponseRecord => {
     anchor: allTransactions.anchor,
     ptr: allTransactions.ptr,
     stay_nj: allTransactions.stay_nj,
+    stay_eligible_rebate: row.STAY_ELG_REB,
+    anchor_eligible_rebate: row.SAVER_ELG_REB,
   };
 };
 
