@@ -172,7 +172,7 @@ describe("showAllTransactions", () => {
     );
   });
 
-  it("shows estimated payment status and amount for anchor elligible transaction", () => {
+  it("shows estimated payment status and amount for anchor eligible transaction", () => {
     const result = showProgramTransactions(
       [payment_sent_transaction, earlier_transaction],
       TaxProgram.ANCHOR,
@@ -186,7 +186,7 @@ describe("showAllTransactions", () => {
 
     expect(tableRowsString).toContain(`<td>${TaxProgram.ANCHOR}</td>`);
     expect(tableRowsString).toContain(
-      `<td>Payment will go out soon. Check back in 3-4 weeks.</td>`,
+      `<td><div class="transaction-table--payment-status">Payment will go out soon. Check back in 3-4 weeks.</div></td>`,
     );
     expect(tableRowsString).toContain(`<td>Estimated amount of $1000</td>`);
   });
