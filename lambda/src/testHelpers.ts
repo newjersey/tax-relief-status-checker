@@ -13,6 +13,8 @@ export const buildMockRow = (overrides = {}) => ({
   CHECK_1_NUM: "922775385",
   TRANS_1_TAX_CDE: "13",
   FORM_CDE: "PAS1W",
+  STAY_ELG_REB: 1500,
+  SAVER_ELG_REB: 1750,
   ...overrides,
 });
 
