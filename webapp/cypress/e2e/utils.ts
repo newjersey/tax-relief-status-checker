@@ -1,3 +1,4 @@
+import { formatCheckAmount } from "@/app/utils/formatCheckAmount";
 import { formatDate } from "@/app/utils/formatDate";
 import { CurrentYear } from "@/components/TaxReliefDataProvider";
 import { FormCode, TaxProgram } from "@/components/types";
@@ -62,6 +63,47 @@ export const paymentInfoAssertions = (
       cy.contains("td", `$${amount}`).should("be.visible");
     });
   }
+};
+
+export const stayNJEstimationAssertions = (estimationAmount: number) => {
+  if (estimationAmount <= 100) {
+    cy.get(".payment-table").within(() => {
+      cy.contains("th", "Program").should("be.visible");
+      cy.contains("th", "Payment Status").should("be.visible");
+      cy.contains("th", "Amount").should("be.visible");
+
+      cy.contains("td", TaxProgram.STAY_NJ).should("be.visible");
+      cy.contains("td", `Checks will start to go out in February 2027`).should("be.visible");
+      cy.contains("td", `Estimated amount of $${formatCheckAmount(estimationAmount)}`).should(
+        "be.visible",
+      );
+    });
+  } else {
+    cy.get(".payment-table").within(() => {
+      cy.contains("th", "Program").should("be.visible");
+      cy.contains("th", "Payment Status").should("be.visible");
+      cy.contains("th", "Amount").should("be.visible");
+
+      cy.contains("td", TaxProgram.STAY_NJ).should("be.visible");
+      cy.contains("td", `Checks will start to go out in February 2027`).should("be.visible");
+      cy.contains("td", `Checks will start to go out in May 2027`).should("be.visible");
+
+      cy.get("td")
+        .filter(`:contains("Estimated amount of $${formatCheckAmount(estimationAmount / 4)}")`)
+        .should("have.length", 2);
+
+      cy.get("td")
+        .filter(`:contains("This payment is pending next year's State budget*")`)
+        .should("have.length", 2);
+      cy.get("td").filter(':contains("—")').should("have.length", 2);
+    });
+  }
+};
+
+export const noStayNJEstimationAssertions = () => {
+  cy.contains("td", `Checks will start to go out in February 2027`).should("not.exist");
+  cy.contains("td", `Checks will start to go out in May 2027`).should("not.exist");
+  cy.contains("td", `This payment is pending next year's State budget*`).should("not.exist");
 };
 
 export const FAQAssertions = (form_code: FormCode) => {

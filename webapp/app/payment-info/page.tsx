@@ -112,13 +112,87 @@ export const showEstimatedTransaction = (
         </td>
         <td>
           <Trans
-            i18nKey="anchorEstimatedAmount"
+            i18nKey="estimatedAmount"
             ns="paymentInfo"
             values={{ amount: formatCheckAmount(estimationAmount) }}
           />
         </td>
       </tr>
     );
+  }
+  if (taxProgram === TaxProgram.STAY_NJ) {
+    if (estimationAmount <= 100) {
+      return (
+        <tr>
+          <td>{taxProgram}</td>
+          <td>
+            <div className="transaction-table--payment-status">
+              <Trans i18nKey="stayNJChecksFebruary" ns="paymentInfo" />
+            </div>
+          </td>
+          <td>
+            <Trans
+              i18nKey="estimatedAmount"
+              ns="paymentInfo"
+              values={{ amount: formatCheckAmount(estimationAmount) }}
+            />
+          </td>
+        </tr>
+      );
+    } else {
+      return (
+        <>
+          <tr>
+            <td>{taxProgram}</td>
+            <td>
+              <div className="transaction-table--payment-status">
+                <Trans i18nKey="stayNJChecksFebruary" ns="paymentInfo" />
+              </div>
+            </td>
+            <td>
+              <Trans
+                i18nKey="estimatedAmount"
+                ns="paymentInfo"
+                values={{ amount: formatCheckAmount(estimationAmount / 4) }}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>{taxProgram}</td>
+            <td>
+              <div className="transaction-table--payment-status">
+                <Trans i18nKey="stayNJChecksMay" ns="paymentInfo" />
+              </div>
+            </td>
+            <td>
+              <Trans
+                i18nKey="estimatedAmount"
+                ns="paymentInfo"
+                values={{ amount: formatCheckAmount(estimationAmount / 4) }}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>{taxProgram}</td>
+            <td>
+              <div className="transaction-table--payment-status">
+                <Trans i18nKey="stayNJPendingBudget" ns="paymentInfo" />
+              </div>
+            </td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>{taxProgram}</td>
+            <td>
+              <div className="transaction-table--payment-status">
+                <Trans i18nKey="stayNJPendingBudget" ns="paymentInfo" />
+              </div>
+            </td>
+            <td>—</td>
+          </tr>
+        </>
+      );
+    }
   }
   return null;
 };
@@ -225,7 +299,7 @@ const PaymentInfoPage = () => {
   }
 
   const { lastFourSsnDigits, zipCode, currentYear, records } = dataStore;
-  const { anchor, ptr, stay_nj, form_code, anchor_eligible_rebate } = record;
+  const { anchor, ptr, stay_nj, form_code, anchor_eligible_rebate, stay_eligible_rebate } = record;
 
   const hasPtrPayment = [...ptr].some(
     (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
@@ -261,17 +335,42 @@ const PaymentInfoPage = () => {
               })()}
               {(() => {
                 if (anchor.length === 0) return null;
-                if (estimationEligibility === EstimatedEligibilityType.ANCHOR_ELIGIBLE) {
+                if (
+                  estimationEligibility === EstimatedEligibilityType.ANCHOR_ELIGIBLE ||
+                  estimationEligibility === EstimatedEligibilityType.BOTH_ELIGIBLE
+                ) {
                   return showEstimatedTransaction(TaxProgram.ANCHOR, anchor_eligible_rebate);
                 }
                 return showProgramTransactions(anchor, TaxProgram.ANCHOR);
               })()}
               {(() => {
-                if (currentYear !== CurrentYear.YEAR2024 || stay_nj.length === 0) return null;
-                return showProgramTransactions(stay_nj, TaxProgram.STAY_NJ);
+                if (stay_nj.length === 0) return null;
+                if (
+                  estimationEligibility === EstimatedEligibilityType.STAY_ELIGIBLE ||
+                  estimationEligibility === EstimatedEligibilityType.BOTH_ELIGIBLE
+                ) {
+                  return showEstimatedTransaction(TaxProgram.STAY_NJ, stay_eligible_rebate);
+                }
+                if (currentYear === CurrentYear.YEAR2024) {
+                  return showProgramTransactions(stay_nj, TaxProgram.STAY_NJ);
+                } else {
+                  return null;
+                }
               })()}
             </tbody>
           </Table>
+          {(estimationEligibility === EstimatedEligibilityType.STAY_ELIGIBLE ||
+            estimationEligibility === EstimatedEligibilityType.BOTH_ELIGIBLE) && (
+            <i>
+              <Trans
+                i18nKey={"learnMoreAboutBudgets"}
+                ns="paymentInfo"
+                components={{
+                  1: <a href={t("budgetLink")} />,
+                }}
+              ></Trans>
+            </i>
+          )}
 
           <PaymentFaq
             formCode={form_code}

@@ -166,7 +166,13 @@ describe("showAllTransactions", () => {
     );
   });
 
-  it("shows estimated payment status and amount for anchor eligible transaction", () => {
+  it("returns nothing if there is no payment_details", () => {
+    expect(showUpdatedTransaction(error_payment_sent_transaction, TaxProgram.ANCHOR)).toBeNull;
+  });
+});
+
+describe("showEstimatedTransaction", () => {
+  it("shows estimated payment status and amount for ANCHOR eligible transaction", () => {
     const result = showEstimatedTransaction(TaxProgram.ANCHOR, 1000);
     render(result);
     const tableRows = document.body.querySelectorAll("tr");
@@ -179,8 +185,46 @@ describe("showAllTransactions", () => {
     );
     expect(tableRowsString).toContain(`<td>Estimated amount of $1000</td>`);
   });
-
-  it("returns nothing if there is no payment_details", () => {
-    expect(showUpdatedTransaction(error_payment_sent_transaction, TaxProgram.ANCHOR)).toBeNull;
+  it("shows estimated payment status and amount for STAY eligible transaction", () => {
+    const result = showEstimatedTransaction(TaxProgram.STAY_NJ, 1000);
+    render(result);
+    const tableRows = document.body.querySelectorAll("tr");
+    expect(tableRows.length).toEqual(4);
+    const tableRowsString0 = tableRows[0].innerHTML.toString();
+    expect(tableRowsString0).toContain(`<td>${TaxProgram.STAY_NJ}</td>`);
+    expect(tableRowsString0).toContain(
+      `<td><div class="transaction-table--payment-status">Checks will start to go out in February 2027</div></td>`,
+    );
+    expect(tableRowsString0).toContain(`<td>Estimated amount of $250</td>`);
+    const tableRowsString1 = tableRows[1].innerHTML.toString();
+    expect(tableRowsString1).toContain(`<td>${TaxProgram.STAY_NJ}</td>`);
+    expect(tableRowsString1).toContain(
+      `<td><div class="transaction-table--payment-status">Checks will start to go out in May 2027</div></td>`,
+    );
+    expect(tableRowsString1).toContain(`<td>Estimated amount of $250</td>`);
+    const tableRowsString2 = tableRows[2].innerHTML.toString();
+    expect(tableRowsString2).toContain(`<td>${TaxProgram.STAY_NJ}</td>`);
+    expect(tableRowsString2).toContain(
+      `<td><div class="transaction-table--payment-status">This payment is pending next year's State budget*</div></td>`,
+    );
+    expect(tableRowsString2).toContain(`<td>—</td>`);
+    const tableRowsString3 = tableRows[3].innerHTML.toString();
+    expect(tableRowsString3).toContain(`<td>${TaxProgram.STAY_NJ}</td>`);
+    expect(tableRowsString3).toContain(
+      `<td><div class="transaction-table--payment-status">This payment is pending next year's State budget*</div></td>`,
+    );
+    expect(tableRowsString3).toContain(`<td>—</td>`);
+  });
+  it("shows estimated payment status and amount for STAY eligible transaction (<$100)", () => {
+    const result = showEstimatedTransaction(TaxProgram.STAY_NJ, 95);
+    render(result);
+    const tableRows = document.body.querySelectorAll("tr");
+    expect(tableRows.length).toEqual(1);
+    const tableRowsString0 = tableRows[0].innerHTML.toString();
+    expect(tableRowsString0).toContain(`<td>${TaxProgram.STAY_NJ}</td>`);
+    expect(tableRowsString0).toContain(
+      `<td><div class="transaction-table--payment-status">Checks will start to go out in February 2027</div></td>`,
+    );
+    expect(tableRowsString0).toContain(`<td>Estimated amount of $95</td>`);
   });
 });

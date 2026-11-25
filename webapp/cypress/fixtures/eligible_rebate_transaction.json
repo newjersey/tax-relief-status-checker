@@ -6,8 +6,9 @@
       "form_code": "PAS-1",
       "anchor": [{ "status": "approved" }],
       "ptr": [{ "status": "processing" }],
-      "stay_nj": [{ "status": "processing" }],
-      "anchor_eligible_rebate": 1750
+      "stay_nj": [{ "status": "approved" }],
+      "anchor_eligible_rebate": 1750,
+      "stay_eligible_rebate": 1000
     }
   ]
 }

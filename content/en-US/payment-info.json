@@ -4,6 +4,8 @@
   "paymentStatus": "Payment Status",
   "amount": "Amount",
   "pasPaymentSchedule": "Even though PAS-1 combines all three programs into one application, each program has a different payment schedule. Find specific payment periods for each program below.",
+  "budgetLink": "https://reportcard.nj.gov/how-budgets-work",
+  "learnMoreAboutBudgets": "*To learn more about the process visit <1>How Budgets Work.</1>",
   "payment": {
     "check": "Check issued on {{date}}",
     "directDeposit": "Direct deposit made on {{date}}",
@@ -50,5 +52,8 @@
   "stayPayments2026": "For Stay NJ payments that went out in 2026, visit your ",
   "taxYearPage2024": "2024 Tax Year page.",
   "anchorEstimatedPaymentStatus": "Payment will go out soon. Check back in 3-4 weeks.",
-  "anchorEstimatedAmount": "Estimated amount of ${{amount}}"
+  "estimatedAmount": "Estimated amount of ${{amount}}",
+  "stayNJChecksFebruary": "Checks will start to go out in February 2027",
+  "stayNJChecksMay": "Checks will start to go out in May 2027",
+  "stayNJPendingBudget": "This payment is pending next year's State budget*"
 }

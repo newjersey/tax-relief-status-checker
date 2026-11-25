@@ -1,7 +1,14 @@
 import { formatDate } from "@/app/utils/formatDate";
 import payment_sent_transaction from "../fixtures/payment_sent_transaction.json";
 import earlier_transaction from "../fixtures/earlier_payment_sent_transaction.json";
-import { fillFields, MOCK_SSN, MOCK_ZIP, switchTaxYears } from "./utils";
+import {
+  fillFields,
+  MOCK_SSN,
+  MOCK_ZIP,
+  noStayNJEstimationAssertions,
+  stayNJEstimationAssertions,
+  switchTaxYears,
+} from "./utils";
 import { TaxProgram } from "@/components/types";
 import { FormCode } from "@/components/types";
 import { paymentInfoAssertions, FAQAssertions, PaymentType } from "./utils";
@@ -11,6 +18,8 @@ const mockDate = formatDate("7/6/2026 0:00:00");
 const mockEarlyDate = formatDate("1/1/2026 0:00:00");
 const mockAmount = 377.56;
 const mockEarlyAmount = 10;
+const mockEstimatedAnchorAmount = 1750;
+const mockEstimatedStayAmount = 1000;
 
 beforeEach(() => {
   cy.on("window:before:load", (win) => {
@@ -447,9 +456,8 @@ describe("when user has NO 2024 stay NJ payments", () => {
 
 describe("when user is ANCHOR eligible but has not been paid yet", () => {
   it("displays the estimated payment status and amount for ANCHOR", () => {
-    const mockEstimatedAmount = 1750;
-
-    cy.fixture("anchor_payment_approved.json").then((resp) => {
+    cy.fixture("eligible_rebate_transaction.json").then((resp) => {
+      resp.records[0].stay_nj[0] = { status: "processing" };
       cy.intercept("POST", "/api/status", {
         statusCode: 200,
         body: resp,
@@ -461,9 +469,80 @@ describe("when user is ANCHOR eligible but has not been paid yet", () => {
 
     cy.contains("td", TaxProgram.ANCHOR).should("be.visible");
     cy.contains("td", "Payment will go out soon. Check back in 3-4 weeks.").should("be.visible");
-    cy.contains("td", `Estimated amount of $${mockEstimatedAmount}`).should("be.visible");
+    cy.contains("td", `Estimated amount of $${mockEstimatedAnchorAmount}`).should("be.visible");
 
     cy.contains("td", PaymentType.CHECK).should("not.exist");
     cy.contains("td", PaymentType.DIRECT_DEPOSIT).should("not.exist");
+  });
+});
+
+describe("when user has a STAY approved transaction", () => {
+  describe("when there no other approved transactions", () => {
+    it("displays the estimated payment status and amount for STAY", () => {
+      cy.fixture("eligible_rebate_transaction.json").then((resp) => {
+        resp.records[0].anchor[0] = { status: "processing" };
+        cy.intercept("POST", "/api/status", {
+          statusCode: 200,
+          body: resp,
+        });
+      });
+
+      cy.contains("button", "Check Status").click();
+      cy.url().should("include", "/payment-info");
+
+      stayNJEstimationAssertions(mockEstimatedStayAmount);
+    });
+    it("displays the estimated payment status and amount for STAY (<=$100)", () => {
+      cy.fixture("eligible_rebate_transaction.json").then((resp) => {
+        resp.records[0].anchor[0] = { status: "processing" };
+        resp.records[0].stay_eligible_rebate = 95;
+        cy.intercept("POST", "/api/status", {
+          statusCode: 200,
+          body: resp,
+        });
+      });
+
+      cy.contains("button", "Check Status").click();
+      cy.url().should("include", "/payment-info");
+
+      stayNJEstimationAssertions(95);
+    });
+  });
+
+  describe("when user has a PTR payment sent transaction", () => {
+    it("does not display the estimated payment status and amount for STAY", () => {
+      cy.fixture("eligible_rebate_transaction.json").then((resp) => {
+        resp.records[0].ptr[0] = payment_sent_transaction;
+        resp.records[0].anchor[0] = { status: "processing" };
+        cy.intercept("POST", "/api/status", {
+          statusCode: 200,
+          body: resp,
+        });
+      });
+
+      cy.contains("button", "Check Status").click();
+      cy.url().should("include", "/payment-info");
+
+      noStayNJEstimationAssertions();
+    });
+  });
+  describe("when user has a ANCHOR approved transaction", () => {
+    it("display the estimated payment status and amount for STAY + ANCHOR", () => {
+      cy.fixture("eligible_rebate_transaction.json").then((resp) => {
+        resp.records[0].anchor[0] = { status: "approved" };
+        cy.intercept("POST", "/api/status", {
+          statusCode: 200,
+          body: resp,
+        });
+      });
+
+      cy.contains("button", "Check Status").click();
+      cy.url().should("include", "/payment-info");
+
+      cy.contains("td", TaxProgram.ANCHOR).should("be.visible");
+      cy.contains("td", "Payment will go out soon. Check back in 3-4 weeks.").should("be.visible");
+      cy.contains("td", `Estimated amount of $${mockEstimatedAnchorAmount}`).should("be.visible");
+      stayNJEstimationAssertions(mockEstimatedStayAmount);
+    });
   });
 });
