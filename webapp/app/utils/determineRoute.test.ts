@@ -70,6 +70,26 @@ describe("determineRoute", () => {
       });
       expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/payment-info");
     });
+    it("routes a user to payment info when record only has STAY payment approved", () => {
+      const record = buildYearRecord({
+        stay_nj: [{ status: TransactionStatus.APPROVED }],
+      });
+      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/payment-info");
+    });
+    it("routes a user to payment info when record only has ANCHOR + STAY payment approved", () => {
+      const record = buildYearRecord({
+        anchor: [{ status: TransactionStatus.APPROVED }],
+        stay_nj: [{ status: TransactionStatus.APPROVED }],
+      });
+      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/payment-info");
+    });
+    it("routes a user to app received when record only has PTR + STAY payment approved", () => {
+      const record = buildYearRecord({
+        ptr: [{ status: TransactionStatus.APPROVED }],
+        stay_nj: [{ status: TransactionStatus.APPROVED }],
+      });
+      expect(determineRoute(record, CurrentYear.YEAR2025)).toBe("/application-received");
+    });
   });
 
   describe("form_code is ANC-1", () => {

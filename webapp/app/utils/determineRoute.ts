@@ -16,7 +16,7 @@ export const determineRoute = (record: YearRecord, currentYear: CurrentYear): st
     hasAnchorPayment ||
     hasPtrPayment ||
     hasStayPayment ||
-    estimatedEligibility === EstimatedEligibilityType.ANCHOR_ELIGIBLE
+    estimatedEligibility !== EstimatedEligibilityType.NOT_ELIGIBLE
   ) {
     return "/payment-info";
   }
