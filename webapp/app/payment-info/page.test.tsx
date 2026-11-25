@@ -3,6 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 
 import {
   getEarliestTransaction,
+  showEstimatedTransaction,
   showProgramTransactions,
   showRegularTransaction,
   showUpdatedTransaction,
@@ -14,12 +15,7 @@ import {
   earlier_transaction,
   error_payment_sent_transaction,
 } from "./testUtils";
-import {
-  EstimatedEligibilityType,
-  PaymentMethod,
-  TaxProgram,
-  TransactionStatus,
-} from "@/components/types";
+import { PaymentMethod, TaxProgram, TransactionStatus } from "@/components/types";
 
 export enum PaymentType {
   ADJUSTED = "adjusted",
@@ -150,8 +146,6 @@ describe("showAllTransactions", () => {
     const result = showProgramTransactions(
       [payment_sent_transaction, earlier_transaction],
       TaxProgram.ANCHOR,
-      EstimatedEligibilityType.NOT_ELIGIBLE,
-      0,
     );
     render(result);
     const tableRows = document.body.querySelectorAll("tr");
@@ -173,12 +167,7 @@ describe("showAllTransactions", () => {
   });
 
   it("shows estimated payment status and amount for anchor eligible transaction", () => {
-    const result = showProgramTransactions(
-      [payment_sent_transaction, earlier_transaction],
-      TaxProgram.ANCHOR,
-      EstimatedEligibilityType.ANCHOR_ELIGIBLE,
-      1000,
-    );
+    const result = showEstimatedTransaction(TaxProgram.ANCHOR, 1000);
     render(result);
     const tableRows = document.body.querySelectorAll("tr");
     expect(tableRows.length).toEqual(1);

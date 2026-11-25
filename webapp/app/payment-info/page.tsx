@@ -123,29 +123,20 @@ export const showEstimatedTransaction = (
   return null;
 };
 
-export const showProgramTransactions = (
-  transactions: Transaction[],
-  taxProgram: TaxProgram,
-  estimationEligibility: EstimatedEligibilityType,
-  anchor_eligible_rebate: number,
-) => {
+export const showProgramTransactions = (transactions: Transaction[], taxProgram: TaxProgram) => {
   if (taxProgram === TaxProgram.PTR || taxProgram === TaxProgram.ANCHOR) {
-    if (estimationEligibility === EstimatedEligibilityType.ANCHOR_ELIGIBLE) {
-      return <>{showEstimatedTransaction(taxProgram, anchor_eligible_rebate)}</>;
-    } else {
-      const earliest = getEarliestTransaction(transactions);
-      if (!earliest?.payment_details) return null;
-      const remainingTransactions = transactions.filter((transaction) => transaction !== earliest);
+    const earliest = getEarliestTransaction(transactions);
+    if (!earliest?.payment_details) return null;
+    const remainingTransactions = transactions.filter((transaction) => transaction !== earliest);
 
-      return (
-        <>
-          {showRegularTransaction(earliest, taxProgram)}
-          {remainingTransactions.map((transaction) =>
-            showUpdatedTransaction(transaction, taxProgram),
-          )}
-        </>
-      );
-    }
+    return (
+      <>
+        {showRegularTransaction(earliest, taxProgram)}
+        {remainingTransactions.map((transaction) =>
+          showUpdatedTransaction(transaction, taxProgram),
+        )}
+      </>
+    );
   } else if (taxProgram === TaxProgram.STAY_NJ) {
     return transactions.map((transaction) =>
       showRegularTransaction(transaction, TaxProgram.STAY_NJ),
@@ -266,30 +257,18 @@ const PaymentInfoPage = () => {
             <tbody>
               {(() => {
                 if (ptr.length === 0) return null;
-                return showProgramTransactions(
-                  ptr,
-                  TaxProgram.PTR,
-                  estimationEligibility,
-                  anchor_eligible_rebate,
-                );
+                return showProgramTransactions(ptr, TaxProgram.PTR);
               })()}
               {(() => {
                 if (anchor.length === 0) return null;
-                return showProgramTransactions(
-                  anchor,
-                  TaxProgram.ANCHOR,
-                  estimationEligibility,
-                  anchor_eligible_rebate,
-                );
+                if (estimationEligibility === EstimatedEligibilityType.ANCHOR_ELIGIBLE) {
+                  return showEstimatedTransaction(TaxProgram.ANCHOR, anchor_eligible_rebate);
+                }
+                return showProgramTransactions(anchor, TaxProgram.ANCHOR);
               })()}
               {(() => {
                 if (currentYear !== CurrentYear.YEAR2024 || stay_nj.length === 0) return null;
-                return showProgramTransactions(
-                  stay_nj,
-                  TaxProgram.STAY_NJ,
-                  estimationEligibility,
-                  anchor_eligible_rebate,
-                );
+                return showProgramTransactions(stay_nj, TaxProgram.STAY_NJ);
               })()}
             </tbody>
           </Table>
