@@ -359,6 +359,18 @@ const PaymentInfoPage = () => {
               })()}
             </tbody>
           </Table>
+          {(estimationEligibility === EstimatedEligibilityType.STAY_ELIGIBLE ||
+            estimationEligibility === EstimatedEligibilityType.BOTH_ELIGIBLE) && (
+            <i>
+              <Trans
+                i18nKey={"learnMoreAboutBudgets"}
+                ns="paymentInfo"
+                components={{
+                  1: <a href={t("budgetLink")} />,
+                }}
+              ></Trans>
+            </i>
+          )}
 
           <PaymentFaq
             formCode={form_code}
