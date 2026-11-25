@@ -6,7 +6,7 @@ export const shouldShowEstimatedTransaction = (
   currentYear: CurrentYear,
 ): EstimatedEligibilityType => {
   if (
-    record.anchor.length > 0 &&
+    record.anchor.length === 1 &&
     currentYear === CurrentYear.YEAR2025 &&
     record.anchor[0].status === TransactionStatus.APPROVED
   ) {
