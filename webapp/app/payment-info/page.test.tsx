@@ -3,6 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 
 import {
   getEarliestTransaction,
+  showEstimatedTransaction,
   showProgramTransactions,
   showRegularTransaction,
   showUpdatedTransaction,
@@ -163,6 +164,20 @@ describe("showAllTransactions", () => {
       earlier_transaction.payment_details.amount,
       PaymentType.DIRECT_DEPOSIT,
     );
+  });
+
+  it("shows estimated payment status and amount for anchor eligible transaction", () => {
+    const result = showEstimatedTransaction(TaxProgram.ANCHOR, 1000);
+    render(result);
+    const tableRows = document.body.querySelectorAll("tr");
+    expect(tableRows.length).toEqual(1);
+    const tableRowsString = tableRows[0].innerHTML.toString();
+
+    expect(tableRowsString).toContain(`<td>${TaxProgram.ANCHOR}</td>`);
+    expect(tableRowsString).toContain(
+      `<td><div class="transaction-table--payment-status">Payment will go out soon. Check back in 3-4 weeks.</div></td>`,
+    );
+    expect(tableRowsString).toContain(`<td>Estimated amount of $1000</td>`);
   });
 
   it("returns nothing if there is no payment_details", () => {

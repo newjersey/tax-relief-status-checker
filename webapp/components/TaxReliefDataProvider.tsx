@@ -31,6 +31,8 @@ export interface YearRecord {
   readonly anchor: Transaction[];
   readonly ptr: Transaction[];
   readonly stay_nj: Transaction[];
+  readonly stay_eligible_rebate: number;
+  readonly anchor_eligible_rebate: number;
 }
 
 export interface MissedMailerData {

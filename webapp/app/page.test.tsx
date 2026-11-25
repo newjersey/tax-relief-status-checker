@@ -2,10 +2,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LandingPage from "./page";
-import { FormCode } from "@/components/types";
-import { CurrentYear, TaxReliefDataProvider, YearRecord } from "@/components/TaxReliefDataProvider";
+import { CurrentYear, TaxReliefDataProvider } from "@/components/TaxReliefDataProvider";
 import { logGAEvent } from "./utils/analytics";
 import { determineRoute } from "./utils/determineRoute";
+import { buildYearRecord } from "./utils/testUtils";
 import { formatDate } from "./utils/formatDate";
 
 const mockPush = vi.fn();
@@ -45,17 +45,6 @@ const fillAndSubmitForm = async () => {
   await user.click(submitButton);
 };
 
-const buildYearRecord = (overrides?: Partial<YearRecord>): YearRecord => ({
-  return_year: "2025",
-  application_date: formatDate("2026-03-19T00:00:00.000Z"),
-  form_code: FormCode.PAS1,
-  anchor: [],
-  ptr: [],
-  stay_nj: [],
-  issueFlagged: undefined,
-  ...overrides,
-});
-
 const mockFetchResponse = (body: unknown, ok = true, status = 200) =>
   vi.fn().mockResolvedValue({
     ok,
@@ -70,7 +59,9 @@ beforeEach(() => {
 
 describe("onSubmit handler", () => {
   it("calls status API, if record found, sets data store and calls determineRoute", async () => {
-    const yearRecord = buildYearRecord();
+    const yearRecord = buildYearRecord({
+      application_date: formatDate("2026-03-19T00:00:00.000Z"),
+    });
 
     globalThis.fetch = mockFetchResponse({ records: [yearRecord] });
 

@@ -444,3 +444,26 @@ describe("when user has NO 2024 stay NJ payments", () => {
     cy.contains("span", "2024 Tax Year page.").should("not.exist");
   });
 });
+
+describe("when user is ANCHOR eligible but has not been paid yet", () => {
+  it("displays the estimated payment status and amount for ANCHOR", () => {
+    const mockEstimatedAmount = 1750;
+
+    cy.fixture("anchor_payment_approved.json").then((resp) => {
+      cy.intercept("POST", "/api/status", {
+        statusCode: 200,
+        body: resp,
+      });
+    });
+
+    cy.contains("button", "Check Status").click();
+    cy.url().should("include", "/payment-info");
+
+    cy.contains("td", TaxProgram.ANCHOR).should("be.visible");
+    cy.contains("td", "Payment will go out soon. Check back in 3-4 weeks.").should("be.visible");
+    cy.contains("td", `Estimated amount of $${mockEstimatedAmount}`).should("be.visible");
+
+    cy.contains("td", PaymentType.CHECK).should("not.exist");
+    cy.contains("td", PaymentType.DIRECT_DEPOSIT).should("not.exist");
+  });
+});

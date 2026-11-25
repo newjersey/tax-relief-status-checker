@@ -19,11 +19,13 @@ import {
   PaymentMethod,
   TransactionStatus,
   FormCode,
+  EstimatedEligibilityType,
 } from "@/components/types";
 import { TaxpayerInfoHeader } from "@/components/TaxpayerInfoHeader";
 import { useTranslation, Trans } from "react-i18next";
 import { PaymentInfoFaqContent2024 } from "./PaymentInfoFaqContent2024";
 import { formatCheckAmount } from "../utils/formatCheckAmount";
+import { shouldShowEstimatedTransaction } from "../utils/shouldShowEstimatedTransaction";
 
 export const getEarliestTransaction = (transactions: Transaction[]) => {
   const valid = transactions.filter(
@@ -95,11 +97,36 @@ export const showUpdatedTransaction = (
   );
 };
 
+export const showEstimatedTransaction = (
+  taxProgram: TaxProgram,
+  estimationAmount: number,
+): JSX.Element | null => {
+  if (taxProgram === TaxProgram.ANCHOR) {
+    return (
+      <tr>
+        <td>{taxProgram}</td>
+        <td>
+          <div className="transaction-table--payment-status">
+            <Trans i18nKey="anchorEstimatedPaymentStatus" ns="paymentInfo" />
+          </div>
+        </td>
+        <td>
+          <Trans
+            i18nKey="anchorEstimatedAmount"
+            ns="paymentInfo"
+            values={{ amount: formatCheckAmount(estimationAmount) }}
+          />
+        </td>
+      </tr>
+    );
+  }
+  return null;
+};
+
 export const showProgramTransactions = (transactions: Transaction[], taxProgram: TaxProgram) => {
   if (taxProgram === TaxProgram.PTR || taxProgram === TaxProgram.ANCHOR) {
     const earliest = getEarliestTransaction(transactions);
     if (!earliest?.payment_details) return null;
-
     const remainingTransactions = transactions.filter((transaction) => transaction !== earliest);
 
     return (
@@ -198,7 +225,7 @@ const PaymentInfoPage = () => {
   }
 
   const { lastFourSsnDigits, zipCode, currentYear, records } = dataStore;
-  const { anchor, ptr, stay_nj, form_code } = record;
+  const { anchor, ptr, stay_nj, form_code, anchor_eligible_rebate } = record;
 
   const hasPtrPayment = [...ptr].some(
     (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
@@ -206,6 +233,8 @@ const PaymentInfoPage = () => {
   const hasStayPayment = [...stay_nj].some(
     (transaction) => transaction.status === TransactionStatus.PAYMENT_SENT,
   );
+
+  const estimationEligibility = shouldShowEstimatedTransaction(record, currentYear);
 
   return (
     <main id="main-content">
@@ -232,6 +261,9 @@ const PaymentInfoPage = () => {
               })()}
               {(() => {
                 if (anchor.length === 0) return null;
+                if (estimationEligibility === EstimatedEligibilityType.ANCHOR_ELIGIBLE) {
+                  return showEstimatedTransaction(TaxProgram.ANCHOR, anchor_eligible_rebate);
+                }
                 return showProgramTransactions(anchor, TaxProgram.ANCHOR);
               })()}
               {(() => {

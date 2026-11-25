@@ -123,6 +123,8 @@ const withIssueFlagged = (record: YearRecord): YearRecord => ({
   ptr: record.ptr,
   stay_nj: record.stay_nj,
   issueFlagged: setIssueFlagged(record),
+  stay_eligible_rebate: record.stay_eligible_rebate,
+  anchor_eligible_rebate: record.anchor_eligible_rebate,
 });
 
 const LandingPage = () => {
